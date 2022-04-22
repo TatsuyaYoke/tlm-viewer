@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Flex, Spacer, Text, Box } from '@chakra-ui/react'
+import { Flex, Spacer, Text, Box, useColorModeValue } from '@chakra-ui/react'
 
 const AppBar = () => {
   const [isMaximize, setMaximize] = useState(true)
+  const bgColor = useColorModeValue('gray.200', 'gray.600')
 
   const handleToggle = () => {
     if (isMaximize) {
@@ -14,7 +15,7 @@ const AppBar = () => {
   }
 
   return (
-    <Flex align="center" h="30px" className="draggable">
+    <Flex align="center" h="30px" bg={bgColor} className="draggable">
       <Text fontSize="xs" pl={3}>
         TLM VIEWER
       </Text>

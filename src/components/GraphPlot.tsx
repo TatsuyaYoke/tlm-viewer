@@ -1,36 +1,8 @@
-import sqlite3 from 'sqlite3'
+import { useState, useEffect } from 'react'
 import { useRecoilValue } from 'recoil'
 import { Box, Button, Flex } from '@chakra-ui/react'
 import { isStoredState, isChoosedState, isMultiState, testCaseListState, tlmListState } from '../atoms/PlotSettingAtom'
 import Graph from './Graph'
-
-const toObjectArray = (records) => {
-  const objectArray = {}
-  const keys = Object.keys(records[0])
-  keys.forEach((key) => {
-    objectArray[key] = []
-  })
-  records.forEach((record) => {
-    keys.forEach((key) => {
-      objectArray[key].push(record[key])
-    })
-  })
-  return objectArray
-}
-
-// const readDbSyns = async (path: string) =>
-//   new Promise((resolve) => {
-//     const db = new sqlite3.Database(path)
-//     db.serialize(() => {
-//       db.all(
-//         'select distinct DATE, PCDU_BAT_VOLTAGE, PCDU_BAT_CURRENT from DSX0201_tlm_id_1 limit 10',
-//         (err, records) => {
-//           const data = toObjectArray(records)
-//           resolve(data)
-//         }
-//       )
-//     })
-//   })
 
 const GraphPlot = () => {
   const isStored = useRecoilValue(isStoredState)
@@ -38,14 +10,30 @@ const GraphPlot = () => {
   const isMulti = useRecoilValue(isMultiState)
   const testCaseList = useRecoilValue(testCaseListState)
   const tlmList = useRecoilValue(tlmListState)
+
+  const [isSent, setSent] = useState(false)
+  // const [fromMain, setFromMain] = useState<string | null>(null)
+
   const plot = async () => {
     console.log(tlmList)
-    // const data = await readDbSyns('./db/system_test.db')
-    // console.log(data)
   }
+  const send = () => {
+    window.Main.getData()
+    setSent(true)
+  }
+
+  useEffect(() => {
+    if (isSent && window.Main)
+      window.Main.on('data', (data: string) => {
+        // setFromMain(message)
+        console.log(data)
+      })
+  }, [isSent])
+
   return (
     <Box p={8}>
       <Flex justify="right">
+        <Button onClick={send}>Send</Button>
         <Button colorScheme="teal" onClick={plot} mr="10">
           Plot
         </Button>

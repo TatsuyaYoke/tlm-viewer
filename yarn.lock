@@ -1335,6 +1335,13 @@
   "resolved" "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.2.tgz"
   "version" "0.16.2"
 
+"@types/sqlite3@^3.1.8":
+  "integrity" "sha512-sQMt/qnyUWnqiTcJXm5ZfNPIBeJ/DVvJDwxw+0tAxPJvadzfiP1QhryO1JOR6t1yfb8NpzQb/Rud06mob5laIA=="
+  "resolved" "https://registry.npmjs.org/@types/sqlite3/-/sqlite3-3.1.8.tgz"
+  "version" "3.1.8"
+  dependencies:
+    "@types/node" "*"
+
 "@types/warning@^3.0.0":
   "integrity" "sha1-DSUBJorY+ZYrdA04fEZU9fjiPlI="
   "resolved" "https://registry.npmjs.org/@types/warning/-/warning-3.0.0.tgz"
