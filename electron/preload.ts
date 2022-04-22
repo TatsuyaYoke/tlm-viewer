@@ -1,33 +1,5 @@
 import { ipcRenderer, contextBridge } from 'electron'
-import sqlite3 from 'sqlite3'
-
-const toObjectArray = (records: any) => {
-  const objectArray: any = {}
-  const keys = Object.keys(records[0])
-  keys.forEach((key) => {
-    objectArray[key] = []
-  })
-  records.forEach((record: any) => {
-    keys.forEach((key) => {
-      objectArray[key].push(record[key])
-    })
-  })
-  return objectArray
-}
-
-const readDbSyns = async (path: string) =>
-  new Promise((resolve) => {
-    const db = new sqlite3.Database(path)
-    db.serialize(() => {
-      db.all(
-        "select distinct DATE, PCDU_BAT_VOLTAGE, PCDU_BAT_CURRENT from DSX0201_tlm_id_1 where DATE between '2022-04-18' and '2022-04-19'",
-        (_err, records) => {
-          const data = toObjectArray(records)
-          resolve(data)
-        }
-      )
-    })
-  })
+import { readDbSync } from './functions'
 
 declare global {
   interface Window {
@@ -47,8 +19,8 @@ const api = {
   sendMessage: (message: string) => {
     ipcRenderer.send('message', message)
   },
-  getData: async () => {
-    const data = await readDbSyns('G:/共有ドライブ/0705_Sat_Dev_Tlm/system_test.db')
+  getData: async (path: string, query: string) => {
+    const data = await readDbSync(path, query)
     ipcRenderer.send('data', data)
   },
   /**

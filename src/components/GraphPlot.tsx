@@ -3,6 +3,7 @@ import { useRecoilValue } from 'recoil'
 import { Box, Button, Flex } from '@chakra-ui/react'
 import { isStoredState, isChoosedState, isMultiState, testCaseListState, tlmListState } from '../atoms/PlotSettingAtom'
 import Graph from './Graph'
+import { ObjectArrayType } from '../../electron/functions'
 
 const GraphPlot = () => {
   const isStored = useRecoilValue(isStoredState)
@@ -12,20 +13,21 @@ const GraphPlot = () => {
   const tlmList = useRecoilValue(tlmListState)
 
   const [isSent, setSent] = useState(false)
-  // const [fromMain, setFromMain] = useState<string | null>(null)
 
   const plot = async () => {
     console.log(tlmList)
   }
   const send = () => {
-    window.Main.getData()
+    const path = 'G:/共有ドライブ/0705_Sat_Dev_Tlm/system_test.db'
+    const query =
+      "select distinct DATE, PCDU_BAT_VOLTAGE, PCDU_BAT_CURRENT from DSX0201_tlm_id_1 where DATE between '2022-04-18' and '2022-04-19'"
+    window.Main.getData(path, query)
     setSent(true)
   }
 
   useEffect(() => {
     if (isSent && window.Main)
-      window.Main.on('data', (data: string) => {
-        // setFromMain(message)
+      window.Main.on('data', (data: ObjectArrayType) => {
         console.log(data)
       })
   }, [isSent])

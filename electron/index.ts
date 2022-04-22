@@ -5,6 +5,8 @@ import { join } from 'path'
 import { BrowserWindow, app, ipcMain, IpcMainEvent } from 'electron'
 import isDev from 'electron-is-dev'
 
+import { ObjectArrayType } from './functions'
+
 // const height = 600
 // const width = 800
 
@@ -83,6 +85,6 @@ ipcMain.on('message', (event: IpcMainEvent, message: any) => {
   event.sender.send('message', 'hi from electron')
 })
 
-ipcMain.on('data', (event: IpcMainEvent, data: number) => {
+ipcMain.on('data', (event: IpcMainEvent, data: ObjectArrayType) => {
   event.sender.send('data', data)
 })
