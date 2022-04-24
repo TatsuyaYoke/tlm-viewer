@@ -1,5 +1,5 @@
 import { ipcRenderer, contextBridge } from 'electron'
-import { readDbSync } from './functions'
+import { readDbSync, resolvePath } from './functions'
 
 declare global {
   interface Window {
@@ -16,12 +16,13 @@ const api = {
    *
    * The function below can accessed using `window.Main.sayHello`
    */
-  sendMessage: (message: string) => {
-    ipcRenderer.send('message', message)
-  },
   getData: async (path: string, query: string) => {
-    const data = await readDbSync(path, query)
-    ipcRenderer.send('data', data)
+    const resolvedPath = resolvePath(path, '共有ドライブ', 'Shared drives')
+    if (resolvedPath) {
+      const data = await readDbSync(resolvedPath, query)
+      return data
+    }
+    return null
   },
   /**
     Here function for AppBar
@@ -43,8 +44,3 @@ const api = {
   },
 }
 contextBridge.exposeInMainWorld('Main', api)
-/**
- * Using the ipcRenderer directly in the browser through the contextBridge ist not really secure.
- * I advise using the Main/api way !!
- */
-contextBridge.exposeInMainWorld('ipcRenderer', ipcRenderer)

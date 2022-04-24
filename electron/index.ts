@@ -2,15 +2,10 @@
 import { join } from 'path'
 
 // Packages
-import { BrowserWindow, app, ipcMain, IpcMainEvent } from 'electron'
+import { BrowserWindow, app, ipcMain } from 'electron'
 import isDev from 'electron-is-dev'
 
-import { ObjectArrayType } from './functions'
-
-// const height = 600
-// const width = 800
-
-function createWindow() {
+const createWindow = () => {
   // Create the browser window.
   const window = new BrowserWindow({
     // width,
@@ -78,13 +73,12 @@ app.on('window-all-closed', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-// listen the channel `message` and resend the received message to the renderer process
-ipcMain.on('message', (event: IpcMainEvent, message: any) => {
-  console.log(message)
-  // setTimeout(() => event.sender.send('message', 'hi from electron'), 500)
-  event.sender.send('message', 'hi from electron')
-})
-
-ipcMain.on('data', (event: IpcMainEvent, data: ObjectArrayType) => {
-  event.sender.send('data', data)
-})
+// ipcMain.handle('data', async (_event: IpcMainInvokeEvent, path, query) => {
+//   // event.sender.send('data', data)
+//   const resolvedPath = resolvePath(path, '共有ドライブ', 'Shared drives')
+//   if (resolvedPath) {
+//     const data = await readDbSync(resolvedPath, query)
+//     return data
+//   }
+//   return null
+// })

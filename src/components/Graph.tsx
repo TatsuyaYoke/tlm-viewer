@@ -3,7 +3,7 @@ import { useColorModeValue } from '@chakra-ui/react'
 import Plot from 'react-plotly.js'
 
 type Props = {
-  x: number[]
+  x: number[] | Date[]
   y: number[]
   color: string
 }

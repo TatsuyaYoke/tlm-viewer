@@ -1,13 +1,15 @@
+import * as fs from 'fs'
 import sqlite3 from 'sqlite3'
 
-type DataType = Date | number | null
+export type DataType = number | Date | null
 
 type ArrayObjectType = {
-  [key in string]: DataType
+  DATE: Date
+  [key: string]: DataType
 }
 
 export type ObjectArrayType = {
-  [key in string]: DataType[]
+  [key: string]: DataType[]
 }
 
 type ToObjectArray = (records: ArrayObjectType[]) => ObjectArrayType
@@ -38,3 +40,19 @@ export const readDbSync: ReadDbSync = async (path, query) =>
       })
     })
   })
+
+type ResolvePath = (path: string, resolveName1: string, resolveName2: string) => string | null
+
+export const resolvePath: ResolvePath = (path, resolveName1, resolveName2) => {
+  if (fs.existsSync(path)) return path
+  let resolvedPath = ''
+  if (path.indexOf(resolveName1) !== -1) {
+    resolvedPath = path.replace(resolveName1, resolveName2)
+    if (fs.existsSync(resolvedPath)) return resolvedPath
+  }
+  if (path.indexOf(resolveName2) !== -1) {
+    resolvedPath = path.replace(resolveName2, resolveName1)
+    if (fs.existsSync(resolvedPath)) return resolvedPath
+  }
+  return null
+}
