@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { Box, Button, Flex } from '@chakra-ui/react'
+import { DataType, ObjectArrayType } from 'types'
 import { isStoredState, isChoosedState, isMultiState, testCaseListState, tlmListState } from '../atoms/PlotSettingAtom'
 import Graph from './Graph'
-import { DataType, ObjectArrayType } from '../../electron/functions'
 
 const GraphPlot = () => {
   const isStored = useRecoilValue(isStoredState)
@@ -12,7 +12,7 @@ const GraphPlot = () => {
   const testCaseList = useRecoilValue(testCaseListState)
   const tlmList = useRecoilValue(tlmListState)
 
-  const [graphTime, setGraphTime] = useState<DataType>(null)
+  const [graphTime, setGraphTime] = useState<DataType[] | null>(null)
   const [graphData, setGraphData] = useState<ObjectArrayType | null>(null)
 
   const plot = async () => {
@@ -40,7 +40,8 @@ const GraphPlot = () => {
       </Flex>
       <Flex wrap="wrap">
         {graphData &&
-          Object.keys(graphData).map((key) => <Graph key={key} x={graphTime} y={graphData[key]} color="red" />)}
+          graphTime &&
+          Object.keys(graphData).map((key) => <Graph key={key} x={graphTime} y={graphData[key]} />)}
       </Flex>
     </Box>
   )

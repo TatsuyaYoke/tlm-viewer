@@ -1,15 +1,16 @@
 import type { VFC } from 'react'
 import { useColorModeValue } from '@chakra-ui/react'
 import Plot from 'react-plotly.js'
+import { DataType } from 'types'
 
 type Props = {
-  x: number[] | Date[]
-  y: number[]
-  color: string
+  x: DataType[]
+  y: DataType[]
+  // color: string
 }
 
 const Graph: VFC<Props> = (props) => {
-  const { x, y, color } = props
+  const { x, y } = props
   const graphBgColor = useColorModeValue('#FFFFFF', '#1A202C')
   const graphFontColor = useColorModeValue('#000000', '#FFFFFF')
   const graphGridColor = useColorModeValue('#A0AEC0', '#636363')
@@ -22,7 +23,7 @@ const Graph: VFC<Props> = (props) => {
           y: y,
           type: 'scattergl',
           mode: 'lines+markers',
-          marker: { color: color },
+          // marker: { color: color },
         },
       ]}
       layout={{

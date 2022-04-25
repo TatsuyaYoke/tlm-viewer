@@ -1,15 +1,10 @@
 import * as fs from 'fs'
 import sqlite3 from 'sqlite3'
-
-export type DataType = number | Date | null
+import { DataType, ObjectArrayType } from '../../types'
 
 type ArrayObjectType = {
   DATE: Date
   [key: string]: DataType
-}
-
-export type ObjectArrayType = {
-  [key: string]: DataType[]
 }
 
 type ToObjectArray = (records: ArrayObjectType[]) => ObjectArrayType
