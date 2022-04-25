@@ -1,7 +1,12 @@
-import { useState } from 'react'
+import { type VFC, useState } from 'react'
 import { Flex, Spacer, Text, Box, useColorModeValue } from '@chakra-ui/react'
 
-const AppBar = () => {
+type Props = {
+  height: number | string
+}
+
+const AppBar: VFC<Props> = (props) => {
+  const { height } = props
   const [isMaximize, setMaximize] = useState(true)
   const bgColor = useColorModeValue('gray.200', 'gray.600')
 
@@ -15,7 +20,7 @@ const AppBar = () => {
   }
 
   return (
-    <Flex align="center" h="30px" bg={bgColor} className="draggable">
+    <Flex align="center" h={height} w="100%" bg={bgColor} pos="fixed" top={0} left={0} zIndex={2} className="draggable">
       <Text fontSize="xs" pl={3}>
         TLM VIEWER
       </Text>
