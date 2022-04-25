@@ -16,9 +16,6 @@ const GraphPlot = () => {
   const [graphData, setGraphData] = useState<ObjectArrayType | null>(null)
 
   const plot = async () => {
-    console.log(tlmList)
-  }
-  const send = async () => {
     const path = 'G:/Shared drives/0705_Sat_Dev_Tlm/system_test.db'
     const query =
       "select distinct DATE, PCDU_BAT_VOLTAGE, PCDU_BAT_CURRENT from DSX0201_tlm_id_1 where DATE between '2022-04-18' and '2022-04-19'"
@@ -33,7 +30,6 @@ const GraphPlot = () => {
   return (
     <Box p={8} w="100%">
       <Flex justify="right">
-        <Button onClick={send}>Send</Button>
         <Button colorScheme="teal" onClick={plot} mr="10">
           Plot
         </Button>
