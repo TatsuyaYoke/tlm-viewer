@@ -1,4 +1,6 @@
 import sqlite3 from 'sqlite3'
+// きちんと import できている！
+import { Hoge } from '@types'
 
 type DataType = Date | number | null
 
