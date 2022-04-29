@@ -24,6 +24,14 @@ const api = {
     }
     return null
   },
+  getData2: async (path: string, query: string) => {
+    const resolvedPath = resolvePath(path, '共有ドライブ', 'Shared drives')
+    if (resolvedPath) {
+      const data = await readDbSync(resolvedPath, query)
+      return data
+    }
+    return null
+  },
   /**
     Here function for AppBar
    */

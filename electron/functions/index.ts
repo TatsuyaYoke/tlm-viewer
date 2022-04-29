@@ -1,3 +1,5 @@
+// import glob from 'glob'
+// import path from 'path'
 import * as fs from 'fs'
 import sqlite3 from 'sqlite3'
 import { DataType, ObjectArrayType } from 'types'
@@ -23,11 +25,11 @@ export const toObjectArray: ToObjectArray = (records) => {
   return objectArray
 }
 
-type ReadDbSync = (path: string, query: string) => Promise<ObjectArrayType>
+type ReadDbSync = (dbPath: string, query: string) => Promise<ObjectArrayType>
 
-export const readDbSync: ReadDbSync = async (path, query) =>
+export const readDbSync: ReadDbSync = async (dbPath, query) =>
   new Promise((resolve) => {
-    const db = new sqlite3.Database(path)
+    const db = new sqlite3.Database(dbPath)
     db.serialize(() => {
       db.all(query, (_err, records) => {
         const data = toObjectArray(records)
@@ -36,18 +38,31 @@ export const readDbSync: ReadDbSync = async (path, query) =>
     })
   })
 
-type ResolvePath = (path: string, resolveName1: string, resolveName2: string) => string | null
+type ResolvePath = (initialPath: string, resolveName1: string, resolveName2: string) => string | null
 
-export const resolvePath: ResolvePath = (path, resolveName1, resolveName2) => {
-  if (fs.existsSync(path)) return path
+export const resolvePath: ResolvePath = (initialPath, resolveName1, resolveName2) => {
+  if (fs.existsSync(initialPath)) return initialPath
   let resolvedPath = ''
-  if (path.indexOf(resolveName1) !== -1) {
-    resolvedPath = path.replace(resolveName1, resolveName2)
+  if (initialPath.indexOf(resolveName1) !== -1) {
+    resolvedPath = initialPath.replace(resolveName1, resolveName2)
     if (fs.existsSync(resolvedPath)) return resolvedPath
   }
-  if (path.indexOf(resolveName2) !== -1) {
-    resolvedPath = path.replace(resolveName2, resolveName1)
+  if (initialPath.indexOf(resolveName2) !== -1) {
+    resolvedPath = initialPath.replace(resolveName2, resolveName1)
     if (fs.existsSync(resolvedPath)) return resolvedPath
   }
   return null
+}
+
+type PjSettingsJosnType = {
+  [key: string]: {
+    groundTestPath: string
+  }
+}
+
+type GetPjSettingsJoson = (filePath: string) => PjSettingsJosnType
+
+export const getPjSettingsJson: GetPjSettingsJoson = (filePath) => {
+  const pjSettings = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+  return pjSettings
 }
