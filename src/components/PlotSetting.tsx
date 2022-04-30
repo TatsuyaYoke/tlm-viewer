@@ -1,10 +1,10 @@
 import type { VFC } from 'react'
 import { VStack, StackDivider, IconButton, useColorMode, useColorModeValue } from '@chakra-ui/react'
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
-import IsStoredSwitch from './SettingPart/IsStoredSwitch'
-import DayPicker from './SettingPart/DayPicker'
-import TestCaseSelect from './SettingPart/TestCaseSelect'
-import TelemetrySelect from './SettingPart/TelemetrySelect'
+import IsStoredSwitch from '../parts/IsStoredSwitch'
+import DayPicker from '../parts/DayPicker'
+import TestCaseSelect from '../parts/TestCaseSelect'
+import TelemetrySelect from '../parts/TelemetrySelect'
 
 type Props = {
   minW: number | string

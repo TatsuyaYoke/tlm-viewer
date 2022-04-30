@@ -1,5 +1,5 @@
 import glob from 'glob'
-import path from 'path'
+import { join } from 'path'
 import * as fs from 'fs'
 import sqlite3 from 'sqlite3'
 import { DataType, ObjectArrayType } from '@types'
@@ -25,11 +25,11 @@ export const toObjectArray: ToObjectArray = (records) => {
   return objectArray
 }
 
-type ReadDbSync = (dbPath: string, query: string) => Promise<ObjectArrayType>
+type ReadDbSync = (path: string, query: string) => Promise<ObjectArrayType>
 
-export const readDbSync: ReadDbSync = async (dbPath, query) =>
+export const readDbSync: ReadDbSync = async (path, query) =>
   new Promise((resolve) => {
-    const db = new sqlite3.Database(dbPath)
+    const db = new sqlite3.Database(path)
     db.serialize(() => {
       db.all(query, (_err, records) => {
         const data = toObjectArray(records)
@@ -38,17 +38,17 @@ export const readDbSync: ReadDbSync = async (dbPath, query) =>
     })
   })
 
-type ResolvePath = (initialPath: string, resolveName1: string, resolveName2: string) => string | null
+type ResolvePath = (path: string, resolveName1: string, resolveName2: string) => string | null
 
-export const resolvePath: ResolvePath = (initialPath, resolveName1, resolveName2) => {
-  if (fs.existsSync(initialPath)) return initialPath
+export const resolvePath: ResolvePath = (path, resolveName1, resolveName2) => {
+  if (fs.existsSync(path)) return path
   let resolvedPath = ''
-  if (initialPath.indexOf(resolveName1) !== -1) {
-    resolvedPath = initialPath.replace(resolveName1, resolveName2)
+  if (path.indexOf(resolveName1) !== -1) {
+    resolvedPath = path.replace(resolveName1, resolveName2)
     if (fs.existsSync(resolvedPath)) return resolvedPath
   }
-  if (initialPath.indexOf(resolveName2) !== -1) {
-    resolvedPath = initialPath.replace(resolveName2, resolveName1)
+  if (path.indexOf(resolveName2) !== -1) {
+    resolvedPath = path.replace(resolveName2, resolveName1)
     if (fs.existsSync(resolvedPath)) return resolvedPath
   }
   return null
@@ -56,7 +56,7 @@ export const resolvePath: ResolvePath = (initialPath, resolveName1, resolveName2
 
 export const getTestCaseList = (topPath: string, filePath: string, project: string): string[] => {
   const pjSettings = JSON.parse(fs.readFileSync(filePath, 'utf8'))
-  const files = glob.sync(path.join(topPath, pjSettings[project].groundTestPath, '*'))
+  const files = glob.sync(join(topPath, pjSettings[project].groundTestPath, '*'))
   const testCaseList = files.map((file: string) => file.substring(file.lastIndexOf('/') + 1))
   return testCaseList
 }

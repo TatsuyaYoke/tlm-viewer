@@ -1,5 +1,5 @@
 import { ipcRenderer, contextBridge } from 'electron'
-import path from 'path'
+import { join } from 'path'
 import { readDbSync, resolvePath, getTestCaseList } from './functions'
 
 declare global {
@@ -12,11 +12,11 @@ declare global {
 const TOP_PATH = 'G:/Shared drives/0705_Sat_Dev_Tlm'
 // const DB_NAME = 'system_test.db'
 const PROJECT_SETTING_NAME = 'pj-settings.json'
-const resolvePathGdrive = (inputPath: string): string | null => resolvePath(inputPath, '共有ドライブ', 'Shared drives')
+const resolvePathGdrive = (path: string): string | null => resolvePath(path, '共有ドライブ', 'Shared drives')
 
 const api = {
-  getData: async (dbPath: string, query: string) => {
-    const resolvedPath = resolvePathGdrive(dbPath)
+  getData: async (path: string, query: string) => {
+    const resolvedPath = resolvePathGdrive(path)
     if (resolvedPath) {
       const data = await readDbSync(resolvedPath, query)
       return data
@@ -25,7 +25,7 @@ const api = {
   },
   getTestCaseList: (project: string) => {
     const topPath = resolvePathGdrive(TOP_PATH)
-    const pjSettingPath = resolvePathGdrive(path.join(TOP_PATH, PROJECT_SETTING_NAME))
+    const pjSettingPath = resolvePathGdrive(join(TOP_PATH, PROJECT_SETTING_NAME))
     if (topPath && pjSettingPath) {
       return getTestCaseList(topPath, pjSettingPath, project)
     }
