@@ -27,11 +27,18 @@ const GraphPlot = () => {
     }
   }
 
+  const set = () => {
+    console.log(testCaseList)
+  }
+
   return (
     <Box p={8} w="100%">
       <Flex justify="right">
         <Button colorScheme="teal" onClick={plot} mr="10">
           Plot
+        </Button>
+        <Button colorScheme="teal" onClick={set} mr="10">
+          Set
         </Button>
       </Flex>
       <Flex wrap="wrap">

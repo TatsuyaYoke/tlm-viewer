@@ -1,5 +1,5 @@
-// import glob from 'glob'
-// import path from 'path'
+import glob from 'glob'
+import path from 'path'
 import * as fs from 'fs'
 import sqlite3 from 'sqlite3'
 import { DataType, ObjectArrayType } from 'types'
@@ -54,15 +54,9 @@ export const resolvePath: ResolvePath = (initialPath, resolveName1, resolveName2
   return null
 }
 
-type PjSettingsJosnType = {
-  [key: string]: {
-    groundTestPath: string
-  }
-}
-
-type GetPjSettingsJoson = (filePath: string) => PjSettingsJosnType
-
-export const getPjSettingsJson: GetPjSettingsJoson = (filePath) => {
+export const getTestCaseList = (topPath: string, filePath: string, project: string): string[] => {
   const pjSettings = JSON.parse(fs.readFileSync(filePath, 'utf8'))
-  return pjSettings
+  const files = glob.sync(path.join(topPath, pjSettings[project].groundTestPath, '*'))
+  const testCaseList = files.map((file: string) => file.substring(file.lastIndexOf('/') + 1))
+  return testCaseList
 }
