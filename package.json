@@ -16,7 +16,7 @@
   "repository": {
     "url": "https://github.com/lTimeless/vite-reactts-electron-starter"
   },
-  "productName": "vite-reactts-electron-starter",
+  "productName": "TLM VIEWER",
   "scripts": {
     "dev": "concurrently \"yarn dev:vite\" \" yarn dev:electron\"",
     "dev:vite": "vite",
@@ -83,6 +83,7 @@
     ],
     "directories": {
       "buildResources": "resources"
-    }
+    },
+    "icon": "build/icon.png"
   }
 }

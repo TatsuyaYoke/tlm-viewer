@@ -40,6 +40,9 @@ export default ({ command }: ConfigEnv): UserConfig => {
     resolve: {
       alias: {
         '/@': srcRoot,
+        '@components': resolve(__dirname, 'src/components'),
+        '@parts': resolve(__dirname, 'src/parts'),
+        '@atoms': resolve(__dirname, 'src/atoms'),
       },
     },
     build: {
