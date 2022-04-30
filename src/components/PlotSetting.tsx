@@ -3,7 +3,7 @@ import { VStack, StackDivider, IconButton, useColorMode, useColorModeValue } fro
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import IsStoredSwitch from './SettingPart/IsStoredSwitch'
 import DayPicker from './SettingPart/DayPicker'
-import TestCaseSelect from './SettingPart/TescCaseSelect'
+import TestCaseSelect from './SettingPart/TestCaseSelect'
 import TelemetrySelect from './SettingPart/TelemetrySelect'
 
 type Props = {
