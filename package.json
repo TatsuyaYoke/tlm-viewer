@@ -1,10 +1,10 @@
 {
-  "name": "vite-reactts-electron-starter",
+  "name": "tlm-viewer",
   "version": "0.5.0",
   "license": "MIT",
-  "main": "main/index.js",
+  "main": "main/electron/index.js",
   "author": {
-    "name": "Maximilian Stümpfl"
+    "name": "Yoke"
   },
   "description": "Starter using Vite 2+ React +Typescript + Electron for fast prototyping.",
   "keywords": [

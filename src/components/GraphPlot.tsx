@@ -19,7 +19,7 @@ const GraphPlot = () => {
     const path = 'G:/Shared drives/0705_Sat_Dev_Tlm/system_test.db'
     const query =
       "select distinct DATE, PCDU_BAT_VOLTAGE, PCDU_BAT_CURRENT from DSX0201_tlm_id_1 where DATE between '2022-04-18' and '2022-04-19'"
-    const data = await window.Main.getData2(path, query)
+    const data = await window.Main.getData(path, query)
     if (data) {
       setGraphTime(data.DATE)
       delete data.DATE
