@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { Box, Button, Flex } from '@chakra-ui/react'
-import { DataType, ObjectArrayType } from 'types'
+import { DataType, ObjectArrayType } from '@types'
 import { isStoredState, isChoosedState, isMultiState, testCaseListState, tlmListState } from '../atoms/PlotSettingAtom'
 import Graph from './Graph'
 

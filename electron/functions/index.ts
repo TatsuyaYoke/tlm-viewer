@@ -2,7 +2,7 @@ import glob from 'glob'
 import path from 'path'
 import * as fs from 'fs'
 import sqlite3 from 'sqlite3'
-import { DataType, ObjectArrayType } from 'types'
+import { DataType, ObjectArrayType } from '@types'
 
 type ArrayObjectType = {
   DATE: Date
