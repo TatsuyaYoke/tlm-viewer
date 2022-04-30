@@ -1,6 +1,6 @@
 import react from '@vitejs/plugin-react'
 import { UserConfig, ConfigEnv } from 'vite'
-import { join } from 'path'
+import { join, resolve } from 'path'
 
 const srcRoot = join(__dirname, 'src')
 
@@ -14,6 +14,9 @@ export default ({ command }: ConfigEnv): UserConfig => {
       resolve: {
         alias: {
           '/@': srcRoot,
+          '@components': resolve(__dirname, 'src/components'),
+          '@parts': resolve(__dirname, 'src/parts'),
+          '@atoms': resolve(__dirname, 'src/atoms'),
         },
       },
       build: {

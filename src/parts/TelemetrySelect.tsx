@@ -3,10 +3,9 @@ import { useRecoilState } from 'recoil'
 import { VStack, Text, Flex, IconButton } from '@chakra-ui/react'
 import { SingleValue, MultiValue } from 'chakra-react-select'
 import { SmallCloseIcon, AddIcon } from '@chakra-ui/icons'
-import { selectOptionType } from '@types'
-import MySelectList from './MySelectList'
-import MySwitch from './MySwitch'
-import { isMultiState, tlmListState } from '../atoms/PlotSettingAtom'
+import type { selectOptionType } from '@types'
+import { MySelectList, MySwitch } from '@parts'
+import { isMultiState, tlmListState } from '@atoms/PlotSettingAtom'
 
 const TelemetrySelect = () => {
   const [isMulti, setIsMulti] = useRecoilState(isMultiState)

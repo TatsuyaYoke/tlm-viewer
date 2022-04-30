@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { Box, Button, Flex } from '@chakra-ui/react'
 import { DataType, ObjectArrayType } from '@types'
-import Graph from '../parts/Graph'
-import { isStoredState, isChoosedState, isMultiState, testCaseListState, tlmListState } from '../atoms/PlotSettingAtom'
+import { Graph } from '@parts'
+import { isStoredState, isChoosedState, isMultiState, testCaseListState, tlmListState } from '@atoms/PlotSettingAtom'
 
 const GraphPlot = () => {
   const isStored = useRecoilValue(isStoredState)

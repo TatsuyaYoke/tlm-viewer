@@ -1,7 +1,7 @@
 import type { VFC } from 'react'
 import { useColorModeValue } from '@chakra-ui/react'
 import Plot from 'react-plotly.js'
-import { DataType } from '@types'
+import type { DataType } from '@types'
 
 type Props = {
   x: DataType[]

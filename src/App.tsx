@@ -1,7 +1,5 @@
 import { Container } from '@chakra-ui/react'
-import AppBar from './components/AppBar'
-import PlotSetting from './components/PlotSetting'
-import GraphPlot from './components/GraphPlot'
+import { AppBar, GraphPlot, PlotSetting } from '@components'
 
 const App = () => {
   const headerHeight = '30px'

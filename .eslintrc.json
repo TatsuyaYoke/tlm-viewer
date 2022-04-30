@@ -60,7 +60,9 @@
       "node": {
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       },
-      "typescript": {}
+      "typescript": {
+        "project": ["src/", "electron/"]
+      }
     },
     "import/core-modules": ["electron", "electron-is-dev"],
     "react": {
