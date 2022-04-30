@@ -31,7 +31,7 @@ export const readDbSync: ReadDbSync = async (path, query) =>
   new Promise((resolve) => {
     const db = new sqlite3.Database(path)
     db.serialize(() => {
-      db.all(query, (_err, records) => {
+      db.all(query, (_err, records: ArrayObjectType[]) => {
         const data = toObjectArray(records)
         resolve(data)
       })
