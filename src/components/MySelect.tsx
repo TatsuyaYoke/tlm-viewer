@@ -11,7 +11,7 @@ type Props = {
   selectValue: (value: MultiValue<selectOptionType>) => void
 }
 
-const OriginalSelect: VFC<Props> = (props) => {
+const MySelect: VFC<Props> = (props) => {
   const { instanceId, color, width, height, options, selectValue } = props
 
   return (
@@ -42,4 +42,4 @@ const OriginalSelect: VFC<Props> = (props) => {
   )
 }
 
-export default OriginalSelect
+export default MySelect

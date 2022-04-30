@@ -8,7 +8,7 @@ type Props = {
   toggleValue: (value: boolean) => void
 }
 
-const OriginalSwitch: VFC<Props> = (props) => {
+const MySwitch: VFC<Props> = (props) => {
   const { label, htmlFor, value, toggleValue } = props
   return (
     <FormControl display="flex" alignItems="center">
@@ -20,4 +20,4 @@ const OriginalSwitch: VFC<Props> = (props) => {
   )
 }
 
-export default OriginalSwitch
+export default MySwitch
