@@ -10,9 +10,7 @@ import {
   dateArraySchema,
 } from '../../types'
 
-const includingDate = (
-  value: ObjectArrayType | ObjectArrayTypeIncludingDate
-): value is ObjectArrayTypeIncludingDate => {
+const includeDate = (value: ObjectArrayType | ObjectArrayTypeIncludingDate): value is ObjectArrayTypeIncludingDate => {
   if ((value as ObjectArrayTypeIncludingDate).DATE !== undefined) {
     const result = dateArraySchema.safeParse(value.DATE)
     return result.success
@@ -31,7 +29,7 @@ export const toObjectArray = (records: ArrayObjectType): ObjectArrayTypeIncludin
       objectArray[key].push(record[key])
     })
   })
-  if (includingDate(objectArray)) {
+  if (includeDate(objectArray)) {
     return objectArray
   }
   return null
