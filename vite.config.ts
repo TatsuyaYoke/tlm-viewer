@@ -3,6 +3,12 @@ import { UserConfig, ConfigEnv } from 'vite'
 import { join, resolve } from 'path'
 
 const srcRoot = join(__dirname, 'src')
+const resolveAlias = {
+  '/@': srcRoot,
+  '@components': resolve(__dirname, 'src/components'),
+  '@parts': resolve(__dirname, 'src/parts'),
+  '@atoms': resolve(__dirname, 'src/atoms'),
+}
 
 export default ({ command }: ConfigEnv): UserConfig => {
   // DEV
@@ -12,12 +18,7 @@ export default ({ command }: ConfigEnv): UserConfig => {
       base: '/',
       plugins: [react()],
       resolve: {
-        alias: {
-          '/@': srcRoot,
-          '@components': resolve(__dirname, 'src/components'),
-          '@parts': resolve(__dirname, 'src/parts'),
-          '@atoms': resolve(__dirname, 'src/atoms'),
-        },
+        alias: resolveAlias,
       },
       build: {
         outDir: join(srcRoot, '/out'),
@@ -38,12 +39,7 @@ export default ({ command }: ConfigEnv): UserConfig => {
     base: './',
     plugins: [react()],
     resolve: {
-      alias: {
-        '/@': srcRoot,
-        '@components': resolve(__dirname, 'src/components'),
-        '@parts': resolve(__dirname, 'src/parts'),
-        '@atoms': resolve(__dirname, 'src/atoms'),
-      },
+      alias: resolveAlias,
     },
     build: {
       outDir: join(srcRoot, '/out'),
