@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { Box, Button, Flex } from '@chakra-ui/react'
-import { DataType, ObjectArrayType } from '@types'
+import { ObjectArrayType } from '@types'
 import { Graph } from '@parts'
 import { isStoredState, isChoosedState, isMultiState, testCaseListState, tlmListState } from '@atoms/PlotSettingAtom'
 
@@ -12,7 +12,7 @@ const GraphPlot = () => {
   const testCaseList = useRecoilValue(testCaseListState)
   const tlmList = useRecoilValue(tlmListState)
 
-  const [graphTime, setGraphTime] = useState<DataType[] | null>(null)
+  const [graphTime, setGraphTime] = useState<string[] | null>(null)
   const [graphData, setGraphData] = useState<ObjectArrayType | null>(null)
 
   const plot = async () => {
@@ -21,9 +21,9 @@ const GraphPlot = () => {
       "select distinct DATE, PCDU_BAT_VOLTAGE, PCDU_BAT_CURRENT from DSX0201_tlm_id_1 where DATE between '2022-04-18' and '2022-04-19'"
     const data = await window.Main.getData(path, query)
     if (data) {
-      setGraphTime(data.DATE)
-      delete data.DATE
-      setGraphData(data)
+      const { DATE: dateData, ...dataWithoutDate } = data
+      setGraphTime(dateData)
+      setGraphData(dataWithoutDate)
     }
   }
 

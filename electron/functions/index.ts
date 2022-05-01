@@ -2,16 +2,25 @@ import glob from 'glob'
 import { join } from 'path'
 import * as fs from 'fs'
 import sqlite3 from 'sqlite3'
-import { DataType, ObjectArrayType } from '@types'
+import {
+  ObjectArrayType,
+  ObjectArrayTypeIncludingDate,
+  ArrayObjectType,
+  arrayObjectSchema,
+  dateArraySchema,
+} from '../../types'
 
-type ArrayObjectType = {
-  DATE: Date
-  [key: string]: DataType
+const includingDate = (
+  value: ObjectArrayType | ObjectArrayTypeIncludingDate
+): value is ObjectArrayTypeIncludingDate => {
+  if ((value as ObjectArrayTypeIncludingDate).DATE !== undefined) {
+    const result = dateArraySchema.safeParse(value.DATE)
+    return result.success
+  }
+  return false
 }
 
-type ToObjectArray = (records: ArrayObjectType[]) => ObjectArrayType
-
-export const toObjectArray: ToObjectArray = (records) => {
+export const toObjectArray = (records: ArrayObjectType): ObjectArrayTypeIncludingDate | null => {
   const objectArray: ObjectArrayType = {}
   const keys = Object.keys(records[0])
   keys.forEach((key) => {
@@ -22,25 +31,31 @@ export const toObjectArray: ToObjectArray = (records) => {
       objectArray[key].push(record[key])
     })
   })
-  return objectArray
+  if (includingDate(objectArray)) {
+    return objectArray
+  }
+  return null
 }
 
-type ReadDbSync = (path: string, query: string) => Promise<ObjectArrayType>
-
-export const readDbSync: ReadDbSync = async (path, query) =>
+export const readDbSync = async (path: string, query: string): Promise<ObjectArrayTypeIncludingDate> =>
   new Promise((resolve) => {
     const db = new sqlite3.Database(path)
     db.serialize(() => {
-      db.all(query, (_err, records: ArrayObjectType[]) => {
-        const data = toObjectArray(records)
-        resolve(data)
+      db.all(query, (_err, records) => {
+        const schemaResult = arrayObjectSchema.safeParse(records)
+        if (schemaResult.success) {
+          const data = toObjectArray(schemaResult.data)
+          if (data) {
+            resolve(data)
+          }
+        } else {
+          console.log(schemaResult.error.issues)
+        }
       })
     })
   })
 
-type ResolvePath = (path: string, resolveName1: string, resolveName2: string) => string | null
-
-export const resolvePath: ResolvePath = (path, resolveName1, resolveName2) => {
+export const resolvePath = (path: string, resolveName1: string, resolveName2: string): string | null => {
   if (fs.existsSync(path)) return path
   let resolvedPath = ''
   if (path.indexOf(resolveName1) !== -1) {
