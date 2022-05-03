@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import { VStack } from '@chakra-ui/react'
-import { MultiValue } from 'chakra-react-select'
+import type { MultiValue } from 'chakra-react-select'
 import type { selectOptionType } from '@types'
 import { MySwitch, MySelect } from '@parts'
 import { isChoosedState, testCaseListState } from '@atoms/PlotSettingAtom'

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { VStack, Text, Flex, IconButton } from '@chakra-ui/react'
-import { SingleValue, MultiValue } from 'chakra-react-select'
+import type { SingleValue, MultiValue } from 'chakra-react-select'
 import { SmallCloseIcon, AddIcon } from '@chakra-ui/icons'
 import type { selectOptionType } from '@types'
 import { MySelectList, MySwitch } from '@parts'

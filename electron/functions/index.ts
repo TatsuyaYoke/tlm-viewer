@@ -2,10 +2,11 @@ import glob from 'glob'
 import { join } from 'path'
 import * as fs from 'fs'
 import sqlite3 from 'sqlite3'
-import {
+import type {
   ObjectArrayType,
   ObjectArrayTypeIncludingDate,
-  ArrayObjectType,
+  ArrayObjectType} from '../../types';
+import {
   arrayObjectSchema,
   dateArraySchema,
 } from '../../types'

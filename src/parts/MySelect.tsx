@@ -1,5 +1,6 @@
 import type { VFC } from 'react'
-import { Select, MultiValue } from 'chakra-react-select'
+import type { MultiValue } from 'chakra-react-select';
+import { Select } from 'chakra-react-select'
 import type { selectOptionType } from '@types'
 
 type Props = {
