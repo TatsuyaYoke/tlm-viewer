@@ -12,7 +12,7 @@ declare global {
 
 const TOP_PATH = 'G:/Shared drives/0705_Sat_Dev_Tlm'
 // const DB_NAME = 'system_test.db'
-const PROJECT_SETTING_NAME = 'pj-settings.json'
+const PROJECT_SETTING_NAME = 'settings/pj-settings.json'
 const resolvePathGdrive = (path: string): string | null => resolvePath(path, '共有ドライブ', 'Shared drives')
 
 const api = {
