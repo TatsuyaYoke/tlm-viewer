@@ -25,3 +25,7 @@ export type DataType = z.infer<typeof dataTypeSchema>
 export type ObjectArrayType = z.infer<typeof objectArrayTypeSchema>
 export type ObjectArrayTypeIncludingDate = z.infer<typeof objectArrayTypeIncludeDateSchema>
 export type DateArrayType = z.infer<typeof dateArraySchema>
+
+export type apiSuccess<T> = { success: true; data: T }
+export type apiError<K> = { success: false; error: K }
+export type apiReturnType<T, K> = apiSuccess<T> | apiError<K>

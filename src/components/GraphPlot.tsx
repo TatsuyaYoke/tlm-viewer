@@ -19,9 +19,9 @@ export const GraphPlot = () => {
     const path = 'G:/Shared drives/0705_Sat_Dev_Tlm/system_test.db'
     const query =
       "select distinct DATE, PCDU_BAT_VOLTAGE, PCDU_BAT_CURRENT from DSX0201_tlm_id_1 where DATE between '2022-04-18' and '2022-04-19'"
-    const data = await window.Main.getData(path, query)
-    if (data) {
-      const { DATE: dateData, ...dataWithoutDate } = data
+    const response = await window.Main.getData(path, query)
+    if (response.success) {
+      const { DATE: dateData, ...dataWithoutDate } = response.data
       setGraphTime(dateData)
       setGraphData(dataWithoutDate)
     }

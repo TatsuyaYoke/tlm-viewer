@@ -1,5 +1,6 @@
 import { ipcRenderer, contextBridge } from 'electron'
 import { join } from 'path'
+import type { apiReturnType, apiSuccess, apiError, ObjectArrayTypeIncludingDate } from '../types'
 import { readDbSync, resolvePath, getTestCaseList } from './functions'
 
 declare global {
@@ -15,13 +16,22 @@ const PROJECT_SETTING_NAME = 'pj-settings.json'
 const resolvePathGdrive = (path: string): string | null => resolvePath(path, '共有ドライブ', 'Shared drives')
 
 const api = {
-  getData: async (path: string, query: string) => {
+  getData: async (path: string, query: string): Promise<apiReturnType<ObjectArrayTypeIncludingDate, string>> => {
     const resolvedPath = resolvePathGdrive(path)
     if (resolvedPath) {
       const data = await readDbSync(resolvedPath, query)
-      return data
+      const response: apiSuccess<ObjectArrayTypeIncludingDate> = {
+        success: true,
+        data: data,
+      }
+      return response
     }
-    return null
+
+    const response: apiError<string> = {
+      success: false,
+      error: 'cannot find database',
+    }
+    return response
   },
   getTestCaseList: (project: string) => {
     const topPath = resolvePathGdrive(TOP_PATH)
