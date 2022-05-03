@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { SingleDatepicker } from 'chakra-dayzed-datepicker'
 import { type PropsConfigs } from 'chakra-dayzed-datepicker/dist/utils/commonTypes'
 
-const DayPicker = () => {
+export const DayPicker = () => {
   const [startDate, setStartDate] = useState(new Date())
   const [endDate, setEndDate] = useState(new Date())
   const hoverBg = useColorModeValue('teal.300', 'teal.400')
@@ -41,5 +41,3 @@ const DayPicker = () => {
     </VStack>
   )
 }
-
-export default DayPicker

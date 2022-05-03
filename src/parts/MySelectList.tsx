@@ -1,5 +1,5 @@
 import type { VFC } from 'react'
-import type { SingleValue, MultiValue } from 'chakra-react-select';
+import type { SingleValue, MultiValue } from 'chakra-react-select'
 import { Select } from 'chakra-react-select'
 import type { selectOptionType } from '@types'
 
@@ -13,7 +13,7 @@ type Props = {
   selectValue: (value: SingleValue<selectOptionType> | MultiValue<selectOptionType>, instanceId: number) => void
 }
 
-const MySelectList: VFC<Props> = (props) => {
+export const MySelectList: VFC<Props> = (props) => {
   const { instanceId, color, width, height, options, isMulti, selectValue } = props
 
   return (
@@ -43,5 +43,3 @@ const MySelectList: VFC<Props> = (props) => {
     />
   )
 }
-
-export default MySelectList

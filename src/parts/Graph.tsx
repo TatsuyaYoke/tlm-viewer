@@ -9,7 +9,7 @@ type Props = {
   // color: string
 }
 
-const Graph: VFC<Props> = (props) => {
+export const Graph: VFC<Props> = (props) => {
   const { x, y } = props
   const graphBgColor = useColorModeValue('#FFFFFF', '#1A202C')
   const graphFontColor = useColorModeValue('#000000', '#FFFFFF')
@@ -72,5 +72,3 @@ const Graph: VFC<Props> = (props) => {
     />
   )
 }
-
-export default Graph

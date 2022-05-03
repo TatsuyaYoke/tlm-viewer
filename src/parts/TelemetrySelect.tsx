@@ -7,7 +7,7 @@ import type { selectOptionType } from '@types'
 import { MySelectList, MySwitch } from '@parts'
 import { isMultiState, tlmListState } from '@atoms/PlotSettingAtom'
 
-const TelemetrySelect = () => {
+export const TelemetrySelect = () => {
   const [isMulti, setIsMulti] = useRecoilState(isMultiState)
   const [tlmList, setTlmList] = useRecoilState(tlmListState)
   const [countList, setCountList] = useState(1)
@@ -92,5 +92,3 @@ const TelemetrySelect = () => {
     </VStack>
   )
 }
-
-export default TelemetrySelect

@@ -5,7 +5,7 @@ import type { ObjectArrayType } from '@types'
 import { Graph } from '@parts'
 import { isStoredState, isChoosedState, isMultiState, testCaseListState, tlmListState } from '@atoms/PlotSettingAtom'
 
-const GraphPlot = () => {
+export const GraphPlot = () => {
   const isStored = useRecoilValue(isStoredState)
   const isChoosed = useRecoilValue(isChoosedState)
   const isMulti = useRecoilValue(isMultiState)
@@ -49,5 +49,3 @@ const GraphPlot = () => {
     </Box>
   )
 }
-
-export default GraphPlot

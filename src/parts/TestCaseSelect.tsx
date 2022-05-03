@@ -6,7 +6,7 @@ import type { selectOptionType } from '@types'
 import { MySwitch, MySelect } from '@parts'
 import { isChoosedState, testCaseListState } from '@atoms/PlotSettingAtom'
 
-const TestCaseSelect = () => {
+export const TestCaseSelect = () => {
   const [isChoosed, setIsChoosed] = useRecoilState(isChoosedState)
   const [testCaseOptionList, setTestCaseOptionList] = useState<selectOptionType[]>([])
   const setTestCaseList = useSetRecoilState(testCaseListState)
@@ -45,5 +45,3 @@ const TestCaseSelect = () => {
     </VStack>
   )
 }
-
-export default TestCaseSelect

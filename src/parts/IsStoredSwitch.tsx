@@ -1,8 +1,8 @@
 import { useRecoilState } from 'recoil'
-import MySwitch from '@parts/MySwitch'
+import { MySwitch } from '@parts'
 import { isStoredState } from '@atoms/PlotSettingAtom'
 
-const IsStoredSwitch = () => {
+export const IsStoredSwitch = () => {
   const [isStored, setIsStored] = useRecoilState(isStoredState)
 
   const toggleValue = (value: boolean) => {
@@ -11,5 +11,3 @@ const IsStoredSwitch = () => {
 
   return <MySwitch label="isStored?" htmlFor="is-stored" value={isStored} toggleValue={toggleValue} />
 }
-
-export default IsStoredSwitch

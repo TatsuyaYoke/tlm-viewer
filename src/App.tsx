@@ -1,7 +1,7 @@
 import { Container } from '@chakra-ui/react'
 import { AppBar, GraphPlot, PlotSetting } from '@components'
 
-const App = () => {
+export const App = () => {
   const headerHeight = '30px'
   return (
     <>
@@ -13,5 +13,3 @@ const App = () => {
     </>
   )
 }
-
-export default App

@@ -2,14 +2,8 @@ import glob from 'glob'
 import { join } from 'path'
 import * as fs from 'fs'
 import sqlite3 from 'sqlite3'
-import type {
-  ObjectArrayType,
-  ObjectArrayTypeIncludingDate,
-  ArrayObjectType} from '../../types';
-import {
-  arrayObjectSchema,
-  dateArraySchema,
-} from '../../types'
+import type { ObjectArrayType, ObjectArrayTypeIncludingDate, ArrayObjectType } from '../../types'
+import { arrayObjectSchema, dateArraySchema } from '../../types'
 
 const includeDate = (value: ObjectArrayType | ObjectArrayTypeIncludingDate): value is ObjectArrayTypeIncludingDate => {
   if ((value as ObjectArrayTypeIncludingDate).DATE !== undefined) {

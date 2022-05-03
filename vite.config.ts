@@ -1,3 +1,4 @@
+/* eslint import/no-default-export: off */
 import react from '@vitejs/plugin-react'
 import type { UserConfig, ConfigEnv } from 'vite'
 import { join, resolve } from 'path'

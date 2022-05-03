@@ -5,7 +5,7 @@ type Props = {
   height: number | string
 }
 
-const AppBar: VFC<Props> = (props) => {
+export const AppBar: VFC<Props> = (props) => {
   const { height } = props
   const [isMaximize, setMaximize] = useState(true)
   const bgColor = useColorModeValue('gray.200', 'gray.600')
@@ -61,5 +61,3 @@ const AppBar: VFC<Props> = (props) => {
     </Flex>
   )
 }
-
-export default AppBar

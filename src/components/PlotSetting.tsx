@@ -7,7 +7,7 @@ type Props = {
   minW: number | string
 }
 
-const PlotSetting: VFC<Props> = (props) => {
+export const PlotSetting: VFC<Props> = (props) => {
   const { minW } = props
   const { colorMode, toggleColorMode } = useColorMode()
   const sidebarBg = useColorModeValue('gray.50', 'gray.700')
@@ -33,5 +33,3 @@ const PlotSetting: VFC<Props> = (props) => {
     </VStack>
   )
 }
-
-export default PlotSetting
