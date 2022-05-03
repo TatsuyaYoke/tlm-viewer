@@ -9,4 +9,15 @@ import { IsStoredSwitch } from '@parts/IsStoredSwitch'
 import { TestCaseSelect } from '@parts/TestCaseSelect'
 import { TelemetrySelect } from '@parts/TelemetrySelect'
 
-export { Graph, MySelect, MySelectSingle, MySelectMultiple, MySelectList, MySwitch, DayPicker, IsStoredSwitch, TestCaseSelect, TelemetrySelect }
+export {
+  Graph,
+  MySelect,
+  MySelectSingle,
+  MySelectMultiple,
+  MySelectList,
+  MySwitch,
+  DayPicker,
+  IsStoredSwitch,
+  TestCaseSelect,
+  TelemetrySelect,
+}

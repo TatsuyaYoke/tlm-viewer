@@ -1190,6 +1190,11 @@
   dependencies:
     "defer-to-connect" "^1.0.1"
 
+"@tsconfig/strictest@^1.0.1":
+  "integrity" "sha512-7O8Q537UQdTZSKEV0f5WRLRFtfL9B8agGqIZrCOwOiWvbjZWPP2rAoZ7LHcwjdG4vnjdleHMEE+ZetM+lhRkcA=="
+  "resolved" "https://registry.npmjs.org/@tsconfig/strictest/-/strictest-1.0.1.tgz"
+  "version" "1.0.1"
+
 "@turf/area@^6.4.0":
   "integrity" "sha512-xCZdiuojokLbQ+29qR6qoMD89hv+JAgWjLrwSEWL+3JV8IXKeNFl6XkEJz9HGkVpnXvQKJoRz4/liT+8ZZ5Jyg=="
   "resolved" "https://registry.npmjs.org/@turf/area/-/area-6.5.0.tgz"

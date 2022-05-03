@@ -24,7 +24,7 @@ export const MySelectMultiple: VFC<Props> = (props) => {
       height={height}
       options={options}
       isMulti={true}
-      selectValue={(value) => selectValue(value as MultiValue<selectOptionType>)} 
+      selectValue={(value) => selectValue(value as MultiValue<selectOptionType>)}
     />
     // <Select
     //   instanceId={instanceId}

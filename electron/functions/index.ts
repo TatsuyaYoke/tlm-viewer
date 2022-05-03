@@ -65,7 +65,7 @@ export const resolvePath = (path: string, resolveName1: string, resolveName2: st
 export const getTestCaseList = (topPath: string, filePath: string, project: string): string[] => {
   const pjSettings = JSON.parse(fs.readFileSync(filePath, 'utf8'))
   console.log(project)
-  const files = glob.sync(join(topPath, pjSettings['project-1'].groundTestPath, '*'))
+  const files = glob.sync(join(topPath, pjSettings.project[0].groundTestPath, '*'))
   const testCaseList = files.map((file: string) => file.substring(file.lastIndexOf('/') + 1))
   return testCaseList
 }
