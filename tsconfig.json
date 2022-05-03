@@ -23,5 +23,5 @@
   },
   "exclude": ["node_modules"],
   "include": ["**/*.ts", "**/*.tsx", "**/*.js"],
-  // "extends": "@tsconfig/strictest/tsconfig.json"
+  "extends": "@tsconfig/strictest/tsconfig.json"
 }
