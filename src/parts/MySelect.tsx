@@ -1,4 +1,3 @@
-// import type { VFC } from 'react'
 import { Select } from 'chakra-react-select'
 
 import type { selectOptionType } from '@types'

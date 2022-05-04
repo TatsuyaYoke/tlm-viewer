@@ -4,13 +4,11 @@ import { useEffect } from 'react'
 
 import { ProjectSelect, DayPicker, IsStoredSwitch, TelemetrySelect, TestCaseSelect } from '@parts'
 
-import type { VFC } from 'react'
-
 type Props = {
   minW: number | string
 }
 
-export const PlotSetting: VFC<Props> = (props) => {
+export const PlotSetting = (props: Props) => {
   const { minW } = props
   const { colorMode, toggleColorMode } = useColorMode()
   const sidebarBg = useColorModeValue('gray.50', 'gray.700')

@@ -1,11 +1,11 @@
 import { Flex, Spacer, Text, Box, useColorModeValue } from '@chakra-ui/react'
-import { type VFC, useState } from 'react'
+import { useState } from 'react'
 
 type Props = {
   height: number | string
 }
 
-export const AppBar: VFC<Props> = (props) => {
+export const AppBar = (props: Props) => {
   const { height } = props
   const [isMaximize, setMaximize] = useState(true)
   const bgColor = useColorModeValue('gray.200', 'gray.600')

@@ -2,7 +2,6 @@ import { MySelect } from '@parts'
 
 import type { selectOptionType } from '@types'
 import type { MultiValue } from 'chakra-react-select'
-import type { VFC } from 'react'
 
 type Props = {
   instanceId: string
@@ -14,7 +13,7 @@ type Props = {
   defaultValue?: MultiValue<selectOptionType>
 }
 
-export const MySelectMultiple: VFC<Props> = (props) => {
+export const MySelectMultiple = (props: Props) => {
   const { instanceId, color, width, height, options, selectValue, defaultValue } = props
 
   return (

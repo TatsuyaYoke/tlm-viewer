@@ -2,7 +2,6 @@ import { MySelect } from '@parts'
 
 import type { selectOptionType } from '@types'
 import type { SingleValue } from 'chakra-react-select'
-import type { VFC } from 'react'
 
 type Props = {
   instanceId: string
@@ -14,7 +13,7 @@ type Props = {
   defauleValue?: SingleValue<selectOptionType>
 }
 
-export const MySelectSingle: VFC<Props> = (props) => {
+export const MySelectSingle = (props: Props) => {
   const { instanceId, color, width, height, options, selectValue, defauleValue } = props
 
   return (

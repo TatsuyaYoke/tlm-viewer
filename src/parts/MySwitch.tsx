@@ -1,7 +1,5 @@
 import { FormControl, FormLabel, Switch } from '@chakra-ui/react'
 
-import type { VFC } from 'react'
-
 type Props = {
   label: string
   htmlFor: string
@@ -9,7 +7,7 @@ type Props = {
   toggleValue: (value: boolean) => void
 }
 
-export const MySwitch: VFC<Props> = (props) => {
+export const MySwitch = (props: Props) => {
   const { label, htmlFor, value, toggleValue } = props
   return (
     <FormControl display="flex" alignItems="center">

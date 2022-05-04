@@ -2,7 +2,6 @@ import { useColorModeValue } from '@chakra-ui/react'
 import Plot from 'react-plotly.js'
 
 import type { DataType } from '@types'
-import type { VFC } from 'react'
 
 type Props = {
   x: DataType[]
@@ -10,7 +9,7 @@ type Props = {
   // color: string
 }
 
-export const Graph: VFC<Props> = (props) => {
+export const Graph = (props: Props) => {
   const { x, y } = props
   const graphBgColor = useColorModeValue('#FFFFFF', '#1A202C')
   const graphFontColor = useColorModeValue('#000000', '#FFFFFF')
