@@ -11,10 +11,11 @@ type Props = {
   height: number | string
   options: selectOptionType[]
   selectValue: (value: MultiValue<selectOptionType>) => void
+  defaultValue?: MultiValue<selectOptionType>
 }
 
 export const MySelectMultiple: VFC<Props> = (props) => {
-  const { instanceId, color, width, height, options, selectValue } = props
+  const { instanceId, color, width, height, options, selectValue, defaultValue } = props
 
   return (
     <MySelect
@@ -25,6 +26,7 @@ export const MySelectMultiple: VFC<Props> = (props) => {
       options={options}
       isMulti={true}
       selectValue={(value) => selectValue(value as MultiValue<selectOptionType>)}
+      defaultValue={defaultValue}
     />
     // <Select
     //   instanceId={instanceId}

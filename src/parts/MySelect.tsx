@@ -11,10 +11,11 @@ type Props = {
   options: selectOptionType[]
   isMulti: boolean
   selectValue: (value: SingleValue<selectOptionType> | MultiValue<selectOptionType>) => void
+  defaultValue?: SingleValue<selectOptionType> | MultiValue<selectOptionType>
 }
 
 export const MySelect: VFC<Props> = (props) => {
-  const { instanceId, color, width, height, options, isMulti, selectValue } = props
+  const { instanceId, color, width, height, options, isMulti, selectValue, defaultValue } = props
 
   return (
     <Select
@@ -24,6 +25,7 @@ export const MySelect: VFC<Props> = (props) => {
       options={options}
       placeholder=""
       focusBorderColor={color}
+      defaultValue={defaultValue}
       onChange={selectValue}
       chakraStyles={{
         valueContainer: (provided) => ({

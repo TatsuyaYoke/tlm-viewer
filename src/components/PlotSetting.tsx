@@ -1,7 +1,7 @@
 import type { VFC } from 'react'
 import { VStack, StackDivider, IconButton, useColorMode, useColorModeValue } from '@chakra-ui/react'
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
-import { DayPicker, IsStoredSwitch, TelemetrySelect, TestCaseSelect } from '@parts'
+import { ProjectSelect, DayPicker, IsStoredSwitch, TelemetrySelect, TestCaseSelect } from '@parts'
 
 type Props = {
   minW: number | string
@@ -26,6 +26,7 @@ export const PlotSetting: VFC<Props> = (props) => {
         icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
         onClick={toggleColorMode}
       />
+      <ProjectSelect />
       <IsStoredSwitch />
       <DayPicker />
       <TestCaseSelect />

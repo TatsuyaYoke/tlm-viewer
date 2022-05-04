@@ -1,5 +1,5 @@
 import { atom } from 'recoil'
-import type { MultiValue } from 'chakra-react-select'
+import type { SingleValue, MultiValue } from 'chakra-react-select'
 import type { selectOptionType, tlmListType } from 'types'
 
 export const isStoredState = atom<boolean>({
@@ -19,6 +19,11 @@ export const isMultiState = atom<boolean>({
 export const testCaseListState = atom<MultiValue<selectOptionType>>({
   key: 'testCaseListState',
   default: [],
+})
+
+export const projectState = atom<SingleValue<selectOptionType>>({
+  key: 'projectState',
+  default: null,
 })
 
 export const tlmListState = atom<tlmListType[]>({

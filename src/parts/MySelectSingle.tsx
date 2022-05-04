@@ -11,10 +11,11 @@ type Props = {
   height: number | string
   options: selectOptionType[]
   selectValue: (value: SingleValue<selectOptionType>) => void
+  defauleValue?: SingleValue<selectOptionType>
 }
 
-export const MySelectMultiple: VFC<Props> = (props) => {
-  const { instanceId, color, width, height, options, selectValue } = props
+export const MySelectSingle: VFC<Props> = (props) => {
+  const { instanceId, color, width, height, options, selectValue, defauleValue } = props
 
   return (
     <MySelect
@@ -25,6 +26,7 @@ export const MySelectMultiple: VFC<Props> = (props) => {
       options={options}
       isMulti={false}
       selectValue={(value) => selectValue(value as SingleValue<selectOptionType>)}
+      defaultValue={defauleValue}
     />
     // <Select
     //   instanceId={instanceId}
