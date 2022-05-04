@@ -8,6 +8,7 @@ import { Box, Text } from '@chakra-ui/react'
 
 export const ProjectSelect = () => {
   const [projectOptionList, setProjectOptionList] = useState<selectOptionType[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const setProject = useSetRecoilState(projectState)
 
   const selectValue = (value: SingleValue<selectOptionType>) => {
@@ -17,24 +18,29 @@ export const ProjectSelect = () => {
   useEffect(() => {
     const projects = ['DSX0201', 'DSX0202']
     if (projects) {
-      const projectOptionListTemp: selectOptionType[] = projects.map((element) => ({
-        label: element,
-        value: element,
-      }))
-      setProjectOptionList(() => projectOptionListTemp)
+      setProjectOptionList(() =>
+        projects.map((element) => ({
+          label: element,
+          value: element,
+        }))
+      )
+      setIsLoading(false)
     }
   }, [])
   return (
     <Box>
       <Text fontWeight={600}>Project</Text>
-      <MySelectSingle
-        instanceId="projectSelect"
-        color="teal.500"
-        width="100%"
-        height="40px"
-        options={projectOptionList}
-        selectValue={selectValue}
-      />
+      {!isLoading && (
+        <MySelectSingle
+          instanceId="projectSelect"
+          color="teal.500"
+          width="100%"
+          height="40px"
+          options={projectOptionList}
+          selectValue={selectValue}
+          defauleValue={projectOptionList[0]}
+        />
+      )}
     </Box>
   )
 }

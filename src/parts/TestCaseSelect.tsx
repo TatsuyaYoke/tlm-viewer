@@ -23,11 +23,12 @@ export const TestCaseSelect = () => {
     const project = 'DSX0201'
     const testCaseListOnlyValue = window.Main.getTestCaseList(project)
     if (testCaseListOnlyValue) {
-      const testCaseOptionListTemp: selectOptionType[] = testCaseListOnlyValue.map((element) => ({
-        label: element,
-        value: element,
-      }))
-      setTestCaseOptionList(() => testCaseOptionListTemp)
+      setTestCaseOptionList(() =>
+        testCaseListOnlyValue.map((element) => ({
+          label: element,
+          value: element,
+        }))
+      )
     }
   }, [])
 
