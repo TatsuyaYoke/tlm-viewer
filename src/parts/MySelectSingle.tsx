@@ -1,7 +1,8 @@
 import type { VFC } from 'react'
 import type { SingleValue } from 'chakra-react-select'
-import { Select } from 'chakra-react-select'
+// import { Select } from 'chakra-react-select'
 import type { selectOptionType } from '@types'
+import { MySelect } from '@parts'
 
 type Props = {
   instanceId: string
@@ -12,33 +13,42 @@ type Props = {
   selectValue: (value: SingleValue<selectOptionType>) => void
 }
 
-export const MySelectSingle: VFC<Props> = (props) => {
+export const MySelectMultiple: VFC<Props> = (props) => {
   const { instanceId, color, width, height, options, selectValue } = props
 
   return (
-    <Select
+    <MySelect
       instanceId={instanceId}
-      size="sm"
-      isMulti={false}
+      color={color}
+      width={width}
+      height={height}
       options={options}
-      placeholder=""
-      focusBorderColor={color}
-      onChange={(value) => selectValue(value)}
-      chakraStyles={{
-        valueContainer: (provided) => ({
-          ...provided,
-          minHeight: height,
-        }),
-        control: (provided) => ({
-          ...provided,
-          borderRadius: '0.375rem',
-          width: width,
-        }),
-        container: (provided) => ({
-          ...provided,
-          width: width,
-        }),
-      }}
+      isMulti={false}
+      selectValue={(value) => selectValue(value as SingleValue<selectOptionType>)}
     />
+    // <Select
+    //   instanceId={instanceId}
+    //   size="sm"
+    //   isMulti={true}
+    //   options={options}
+    //   placeholder=""
+    //   focusBorderColor={color}
+    //   onChange={(value) => selectValue(value)}
+    //   chakraStyles={{
+    //     valueContainer: (provided) => ({
+    //       ...provided,
+    //       minHeight: height,
+    //     }),
+    //     control: (provided) => ({
+    //       ...provided,
+    //       borderRadius: '0.375rem',
+    //       width: width,
+    //     }),
+    //     container: (provided) => ({
+    //       ...provided,
+    //       width: width,
+    //     }),
+    //   }}
+    // />
   )
 }
