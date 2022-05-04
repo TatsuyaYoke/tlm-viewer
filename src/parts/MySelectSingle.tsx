@@ -1,6 +1,5 @@
 import type { VFC } from 'react'
 import type { SingleValue } from 'chakra-react-select'
-// import { Select } from 'chakra-react-select'
 import type { selectOptionType } from '@types'
 import { MySelect } from '@parts'
 
@@ -25,32 +24,8 @@ export const MySelectSingle: VFC<Props> = (props) => {
       height={height}
       options={options}
       isMulti={false}
-      selectValue={(value) => selectValue(value as SingleValue<selectOptionType>)}
+      selectValue={selectValue}
       defaultValue={defauleValue}
     />
-    // <Select
-    //   instanceId={instanceId}
-    //   size="sm"
-    //   isMulti={true}
-    //   options={options}
-    //   placeholder=""
-    //   focusBorderColor={color}
-    //   onChange={(value) => selectValue(value)}
-    //   chakraStyles={{
-    //     valueContainer: (provided) => ({
-    //       ...provided,
-    //       minHeight: height,
-    //     }),
-    //     control: (provided) => ({
-    //       ...provided,
-    //       borderRadius: '0.375rem',
-    //       width: width,
-    //     }),
-    //     container: (provided) => ({
-    //       ...provided,
-    //       width: width,
-    //     }),
-    //   }}
-    // />
   )
 }

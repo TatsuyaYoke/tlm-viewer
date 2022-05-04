@@ -1,6 +1,5 @@
 /**
- * Array.isArray が ReadonlyArray の場合に正しく型がつかない問題があるので、型を拡張する。
- *
+ * issue: Array.isArray type narrows to any[] for ReadonlyArray<T>
  * @see https://github.com/microsoft/TypeScript/issues/17002#issuecomment-494937708
  */
 interface ArrayConstructor {

@@ -24,6 +24,6 @@
     "outDir": "../main"
   },
   "exclude": ["node_modules"],
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js"]
-  // "extends": "@tsconfig/strictest/tsconfig.json"
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "../types"],
+  "extends": "@tsconfig/strictest/tsconfig.json"
 }

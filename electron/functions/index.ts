@@ -24,13 +24,13 @@ const includeDate = (value: ObjectArrayType | ObjectArrayTypeIncludingDate): val
 
 export const toObjectArray = (records: ArrayObjectType): ObjectArrayTypeIncludingDate | null => {
   const objectArray: ObjectArrayType = {}
-  const keys = Object.keys(records[0])
+  const keys = Object.keys(records[0] ?? {})
   keys.forEach((key) => {
     objectArray[key] = []
   })
   records.forEach((record) => {
     keys.forEach((key) => {
-      objectArray[key].push(record[key])
+      objectArray[key]?.push(record[key] ?? null)
     })
   })
   if (includeDate(objectArray)) {

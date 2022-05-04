@@ -1,20 +1,20 @@
-import type { VFC } from 'react'
+// import type { VFC } from 'react'
 import type { SingleValue, MultiValue } from 'chakra-react-select'
 import { Select } from 'chakra-react-select'
 import type { selectOptionType } from '@types'
 
-type Props = {
+type Props<IsMulti extends boolean> = {
   instanceId: string
   color: string
   width: number | string
   height: number | string
   options: selectOptionType[]
-  isMulti: boolean
-  selectValue: (value: SingleValue<selectOptionType> | MultiValue<selectOptionType>) => void
-  defaultValue?: SingleValue<selectOptionType> | MultiValue<selectOptionType>
+  isMulti?: IsMulti
+  selectValue: (value: IsMulti extends true ? MultiValue<selectOptionType> : SingleValue<selectOptionType>) => void
+  defaultValue?: IsMulti extends true ? MultiValue<selectOptionType> : SingleValue<selectOptionType>
 }
 
-export const MySelect: VFC<Props> = (props) => {
+export const MySelect = <IsMulti extends boolean = false>(props: Props<IsMulti>) => {
   const { instanceId, color, width, height, options, isMulti, selectValue, defaultValue } = props
 
   return (
