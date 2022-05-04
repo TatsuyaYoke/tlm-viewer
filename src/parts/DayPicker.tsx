@@ -1,7 +1,7 @@
 import { VStack, Box, Text, useColorModeValue } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 import { SingleDatepicker } from 'chakra-dayzed-datepicker'
-import type{ PropsConfigs } from 'chakra-dayzed-datepicker/dist/utils/commonTypes'
+import type { PropsConfigs } from 'chakra-dayzed-datepicker/dist/utils/commonTypes'
 
 export const DayPicker = () => {
   const [startDate, setStartDate] = useState(new Date())
