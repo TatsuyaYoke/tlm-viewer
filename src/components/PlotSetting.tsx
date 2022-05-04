@@ -1,4 +1,5 @@
 import type { VFC } from 'react'
+import { useEffect } from 'react'
 import { VStack, StackDivider, IconButton, useColorMode, useColorModeValue } from '@chakra-ui/react'
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import { ProjectSelect, DayPicker, IsStoredSwitch, TelemetrySelect, TestCaseSelect } from '@parts'
@@ -11,6 +12,11 @@ export const PlotSetting: VFC<Props> = (props) => {
   const { minW } = props
   const { colorMode, toggleColorMode } = useColorMode()
   const sidebarBg = useColorModeValue('gray.50', 'gray.700')
+
+  useEffect(() => {
+    const settings = window.Main.getSettngs()
+    console.log(settings)
+  }, [])
 
   return (
     <VStack

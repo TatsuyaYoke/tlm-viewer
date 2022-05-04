@@ -22,6 +22,6 @@
     "jsx": "react-jsx"
   },
   "exclude": ["node_modules"],
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js"]
   // "extends": "@tsconfig/strictest/tsconfig.json"
 }

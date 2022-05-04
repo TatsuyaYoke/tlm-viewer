@@ -2,8 +2,17 @@ import glob from 'glob'
 import { join } from 'path'
 import * as fs from 'fs'
 import sqlite3 from 'sqlite3'
-import type { ObjectArrayType, ObjectArrayTypeIncludingDate, ArrayObjectType } from '../../types'
-import { arrayObjectSchema, dateArraySchema } from '../../types'
+import type {
+  ObjectArrayType,
+  ObjectArrayTypeIncludingDate,
+  ArrayObjectType,
+  pjSettingsType,
+  pjSettingWithTlmIdType,
+} from '../../types'
+import { arrayObjectSchema, dateArraySchema, appSettingsSchema, tlmIdSchema } from '../../types'
+
+export const isNotNull = <T>(item: T): item is Exclude<T, null> => item !== null
+export const isNotUndefined = <T>(item: T): item is Exclude<T, undefined> => item !== undefined
 
 const includeDate = (value: ObjectArrayType | ObjectArrayTypeIncludingDate): value is ObjectArrayTypeIncludingDate => {
   if ((value as ObjectArrayTypeIncludingDate).DATE !== undefined) {
@@ -62,10 +71,38 @@ export const resolvePath = (path: string, resolveName1: string, resolveName2: st
   return null
 }
 
+export const resolvePathGdrive = (path: string): string | null => resolvePath(path, '共有ドライブ', 'Shared drives')
+
 export const getTestCaseList = (topPath: string, filePath: string, project: string): string[] => {
   const pjSettings = JSON.parse(fs.readFileSync(filePath, 'utf8'))
   console.log(project)
   const files = glob.sync(join(topPath, pjSettings.project[0].groundTestPath, '*'))
   const testCaseList = files.map((file: string) => file.substring(file.lastIndexOf('/') + 1))
   return testCaseList
+}
+
+export const getSettings = (topPath: string, pjSettingPath: string) => {
+  let pjSettings: pjSettingsType | undefined
+  const settingsBeforeParse = JSON.parse(fs.readFileSync(pjSettingPath, 'utf8'))
+  const schemaResult = appSettingsSchema.safeParse(settingsBeforeParse)
+  if (schemaResult.success) {
+    pjSettings = schemaResult.data.project
+  }
+
+  if (pjSettings) {
+    const pjSettingWithTlmIdList = pjSettings.map((value) => {
+      const tlmIdfilePath = resolvePathGdrive(join(topPath, 'settings', value.pjName, 'tlm_id.json'))
+      const response: pjSettingWithTlmIdType = value
+      if (tlmIdfilePath) {
+        const tlmIdsettingsBeforeParse = JSON.parse(fs.readFileSync(tlmIdfilePath, 'utf-8'))
+        const tlmIdSchemaResult = tlmIdSchema.safeParse(tlmIdsettingsBeforeParse)
+        if (tlmIdSchemaResult.success) {
+          response.tlmId = tlmIdSchemaResult.data
+        }
+      }
+      return response
+    })
+    return pjSettingWithTlmIdList
+  }
+  return null
 }

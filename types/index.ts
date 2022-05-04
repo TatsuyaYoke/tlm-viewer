@@ -26,6 +26,27 @@ export type ObjectArrayType = z.infer<typeof objectArrayTypeSchema>
 export type ObjectArrayTypeIncludingDate = z.infer<typeof objectArrayTypeIncludeDateSchema>
 export type DateArrayType = z.infer<typeof dateArraySchema>
 
+export const pjSettingSchema = z.object({
+  pjName: z.string().regex(/^DSX[0-9]{4}/),
+  groundTestPath: z.string(),
+  orbitDatasetPath: z.string().regex(/^syns-sol-grdsys-external-prod.strix_/),
+})
+export const pjSettingsSchema = z.array(pjSettingSchema)
+export const appSettingsSchema = z.object({
+  project: pjSettingsSchema,
+})
+
+export type pjSettingType = z.infer<typeof pjSettingSchema>
+export type pjSettingsType = z.infer<typeof pjSettingsSchema>
+export type pjSettingsKeyType = keyof pjSettingType
+export type appSettingsType = z.infer<typeof appSettingsSchema>
+
+export const tlmIdSchema = z.record(z.number())
+export type tlmIdType = z.infer<typeof tlmIdSchema>
+export type pjSettingWithTlmIdType = pjSettingType & {
+  tlmId?: tlmIdType
+}
+
 export type apiSuccess<T> = { success: true; data: T }
 export type apiError<K> = { success: false; error: K }
 export type apiReturnType<T, K> = apiSuccess<T> | apiError<K>
