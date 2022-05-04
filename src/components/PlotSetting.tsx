@@ -1,8 +1,10 @@
-import type { VFC } from 'react'
-import { useEffect } from 'react'
-import { VStack, StackDivider, IconButton, useColorMode, useColorModeValue } from '@chakra-ui/react'
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
+import { VStack, StackDivider, IconButton, useColorMode, useColorModeValue } from '@chakra-ui/react'
+import { useEffect } from 'react'
+
 import { ProjectSelect, DayPicker, IsStoredSwitch, TelemetrySelect, TestCaseSelect } from '@parts'
+
+import type { VFC } from 'react'
 
 type Props = {
   minW: number | string

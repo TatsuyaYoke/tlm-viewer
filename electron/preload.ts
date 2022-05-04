@@ -1,7 +1,9 @@
 import { ipcRenderer, contextBridge } from 'electron'
 import { join } from 'path'
-import type { apiReturnType, ObjectArrayTypeIncludingDate } from '../types'
+
 import { readDbSync, resolvePathGdrive, getTestCaseList, getSettings } from './functions'
+
+import type { apiReturnType, ObjectArrayTypeIncludingDate } from '../types'
 
 declare global {
   interface Window {

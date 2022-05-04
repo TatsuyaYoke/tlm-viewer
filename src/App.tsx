@@ -1,4 +1,5 @@
 import { Container } from '@chakra-ui/react'
+
 import { AppBar, GraphPlot, PlotSetting } from '@components'
 
 export const App = () => {

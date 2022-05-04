@@ -1,9 +1,6 @@
-// Native
-import { join } from 'path'
-
-// Packages
 import { BrowserWindow, app, ipcMain } from 'electron'
 import isDev from 'electron-is-dev'
+import { join } from 'path'
 
 const createWindow = () => {
   // Create the browser window.

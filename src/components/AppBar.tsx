@@ -1,5 +1,5 @@
-import { type VFC, useState } from 'react'
 import { Flex, Spacer, Text, Box, useColorModeValue } from '@chakra-ui/react'
+import { type VFC, useState } from 'react'
 
 type Props = {
   height: number | string

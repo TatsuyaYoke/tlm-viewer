@@ -1,5 +1,6 @@
-import type { MultiValue } from 'chakra-react-select'
 import * as z from 'zod'
+
+import type { MultiValue } from 'chakra-react-select'
 
 export type selectOptionType = {
   label: string

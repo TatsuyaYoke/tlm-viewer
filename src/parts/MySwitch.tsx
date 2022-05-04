@@ -1,5 +1,6 @@
-import type { VFC } from 'react'
 import { FormControl, FormLabel, Switch } from '@chakra-ui/react'
+
+import type { VFC } from 'react'
 
 type Props = {
   label: string

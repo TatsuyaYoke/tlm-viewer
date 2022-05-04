@@ -1,7 +1,8 @@
 // import type { VFC } from 'react'
-import type { SingleValue, MultiValue } from 'chakra-react-select'
 import { Select } from 'chakra-react-select'
+
 import type { selectOptionType } from '@types'
+import type { SingleValue, MultiValue } from 'chakra-react-select'
 
 type Props<IsMulti extends boolean> = {
   instanceId: string

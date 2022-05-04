@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
-import { MySelectSingle } from '@parts'
-import type { SingleValue } from 'chakra-react-select'
-import type { selectOptionType } from '@types'
-import { useSetRecoilState } from 'recoil'
-import { projectState } from '@atoms/PlotSettingAtom'
 import { Box, Text } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { useSetRecoilState } from 'recoil'
+
+import { projectState } from '@atoms/PlotSettingAtom'
+import { MySelectSingle } from '@parts'
+
+import type { selectOptionType } from '@types'
+import type { SingleValue } from 'chakra-react-select'
 
 export const ProjectSelect = () => {
   const [projectOptionList, setProjectOptionList] = useState<selectOptionType[]>([])

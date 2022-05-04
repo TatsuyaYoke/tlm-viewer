@@ -1,7 +1,11 @@
-import glob from 'glob'
-import { join } from 'path'
 import * as fs from 'fs'
+import { join } from 'path'
+
+import glob from 'glob'
 import sqlite3 from 'sqlite3'
+
+import { arrayObjectSchema, dateArraySchema, appSettingsSchema, tlmIdSchema } from '../../types'
+
 import type {
   ObjectArrayType,
   ObjectArrayTypeIncludingDate,
@@ -9,7 +13,6 @@ import type {
   pjSettingsType,
   pjSettingWithTlmIdType,
 } from '../../types'
-import { arrayObjectSchema, dateArraySchema, appSettingsSchema, tlmIdSchema } from '../../types'
 
 export const isNotNull = <T>(item: T): item is Exclude<T, null> => item !== null
 export const isNotUndefined = <T>(item: T): item is Exclude<T, undefined> => item !== undefined

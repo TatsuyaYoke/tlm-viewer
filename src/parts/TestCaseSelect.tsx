@@ -1,10 +1,12 @@
+import { VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
-import { VStack } from '@chakra-ui/react'
-import type { MultiValue } from 'chakra-react-select'
-import type { selectOptionType } from '@types'
-import { MySwitch, MySelectMultiple } from '@parts'
+
 import { isChoosedState, testCaseListState } from '@atoms/PlotSettingAtom'
+import { MySwitch, MySelectMultiple } from '@parts'
+
+import type { selectOptionType } from '@types'
+import type { MultiValue } from 'chakra-react-select'
 
 export const TestCaseSelect = () => {
   const [isChoosed, setIsChoosed] = useRecoilState(isChoosedState)

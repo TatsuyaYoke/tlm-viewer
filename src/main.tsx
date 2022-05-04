@@ -1,9 +1,12 @@
+import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
-import { ChakraProvider, extendTheme, type ThemeConfig } from '@chakra-ui/react'
 import { RecoilRoot } from 'recoil'
+
 import { App } from './App'
+
+import type { ThemeConfig } from '@chakra-ui/react'
+import './index.css'
 
 const config: ThemeConfig = {
   initialColorMode: 'light',
