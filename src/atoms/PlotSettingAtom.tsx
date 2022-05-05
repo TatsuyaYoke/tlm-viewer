@@ -7,6 +7,12 @@ export const isStoredState = atom<boolean>({
   key: 'isStoredState',
   default: false,
 })
+
+export const isOrbitState = atom<boolean>({
+  key: 'isOrbitState',
+  default: false,
+})
+
 export const isChoosedState = atom<boolean>({
   key: 'isChoosedState',
   default: false,

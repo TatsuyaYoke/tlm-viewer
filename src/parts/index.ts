@@ -1,5 +1,6 @@
 import { DayPicker } from '@parts/DayPicker'
 import { Graph } from '@parts/Graph'
+import { IsOrbitSwitch } from '@parts/IsOrbitSwitch'
 import { IsStoredSwitch } from '@parts/IsStoredSwitch'
 import { MySelect } from '@parts/MySelect'
 import { MySelectList } from '@parts/MySelectList'
@@ -20,6 +21,7 @@ export {
   ProjectSelect,
   DayPicker,
   IsStoredSwitch,
+  IsOrbitSwitch,
   TestCaseSelect,
   TelemetrySelect,
 }
