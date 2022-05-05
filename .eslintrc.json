@@ -59,15 +59,22 @@
     "import/order": [
       "warn",
       {
-        "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"],
-        "newlines-between": "always",
+        "groups": ["builtin", "external", "internal", ["parent", "sibling"], "index", "object", "type"],
+        "pathGroups": [
+          {
+            "pattern": "{react,react-dom**,react-router-dom}",
+            "group": "builtin",
+            "position": "before"
+          },
+          {
+            "pattern": "@components,@parts,@atoms**",
+            "group": "internal",
+            "position": "before"
+          }
+        ],
         "pathGroupsExcludedImportTypes": ["builtin"],
-        "alphabetize": { "order": "asc", "caseInsensitive": true }
-        // "pathGroups": [
-        //   { "pattern": "types/**", "group": "internal", "position": "before" },
-        //   { "pattern": "src/**", "group": "internal", "position": "before" },
-        //   { "pattern": "*.css", "group": "type", "position": "after" }
-        // ]
+        "alphabetize": { "order": "asc", "caseInsensitive": true },
+        "newlines-between": "always"
       }
     ]
   },

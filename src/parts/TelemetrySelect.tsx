@@ -1,6 +1,7 @@
+import { useState } from 'react'
+
 import { SmallCloseIcon, AddIcon } from '@chakra-ui/icons'
 import { VStack, Text, Flex, IconButton } from '@chakra-ui/react'
-import { useState } from 'react'
 import { useRecoilState } from 'recoil'
 
 import { isMultiState, tlmListState } from '@atoms/PlotSettingAtom'

@@ -1,5 +1,6 @@
-import { VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+
+import { VStack } from '@chakra-ui/react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
 import { isChoosedState, testCaseListState } from '@atoms/PlotSettingAtom'

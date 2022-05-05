@@ -1,5 +1,6 @@
-import { Box, Text } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+
+import { Box, Text } from '@chakra-ui/react'
 import { useSetRecoilState } from 'recoil'
 
 import { projectState } from '@atoms/PlotSettingAtom'
