@@ -10,7 +10,7 @@ type Props = {
   height: number | string
   options: selectOptionType[]
   selectValue: (value: SingleValue<selectOptionType>) => void
-  defauleValue?: SingleValue<selectOptionType>
+  defauleValue?: SingleValue<selectOptionType> | undefined
 }
 
 export const MySelectSingle: VFC<Props> = (props) => {
