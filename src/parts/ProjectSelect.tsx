@@ -4,7 +4,7 @@ import { Box, Text } from '@chakra-ui/react'
 import { useSetRecoilState } from 'recoil'
 
 import { projectState } from '@atoms/PlotSettingAtom'
-import { MySelect} from '@parts'
+import { MySelect } from '@parts'
 
 import type { selectOptionType } from '@types'
 import type { SingleValue } from 'chakra-react-select'
@@ -21,12 +21,15 @@ export const ProjectSelect = () => {
   useEffect(() => {
     const projects = ['DSX0201', 'DSX0202']
     if (projects) {
-      setProjectOptionList(() =>
-        projects.map((element) => ({
-          label: element,
-          value: element,
-        }))
-      )
+      const projectOptionListBeforeSet = projects.map((element) => ({
+        label: element,
+        value: element,
+      }))
+      setProjectOptionList(() => projectOptionListBeforeSet)
+      const initialProject = projectOptionListBeforeSet[0]
+      if (initialProject) {
+        selectValue(initialProject)
+      }
       setIsLoading(false)
     }
   }, [])

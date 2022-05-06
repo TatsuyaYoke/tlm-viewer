@@ -10,7 +10,7 @@ type Props<IsMulti extends boolean = false> = {
   height: number | string
   options: selectOptionType[]
   isMulti?: IsMulti
-  selectValue: (value: IsMulti extends true ? MultiValue<selectOptionType> : SingleValue<selectOptionType>) => void
+  selectValue: (value: IsMulti extends true ? MultiValue<selectOptionType> : SingleValue<selectOptionType>, instanceId?: string) => void
   defaultValue?: IsMulti extends true ? MultiValue<selectOptionType> : SingleValue<selectOptionType>
 }
 
@@ -26,7 +26,7 @@ export const MySelect = <IsMulti extends boolean = false>(props: Props<IsMulti>)
       placeholder=""
       focusBorderColor={color}
       defaultValue={defaultValue}
-      onChange={selectValue}
+      onChange={(value) => selectValue(value, instanceId)}
       chakraStyles={{
         valueContainer: (provided) => ({
           ...provided,
