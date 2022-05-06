@@ -2,8 +2,11 @@ import { useEffect } from 'react'
 
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import { VStack, StackDivider, IconButton, useColorMode, useColorModeValue } from '@chakra-ui/react'
+import { useRecoilState } from 'recoil'
 
-import { ProjectSelect, DayPicker, IsStoredSwitch, IsOrbitSwitch, TelemetrySelect, TestCaseSelect } from '@parts'
+import { isOrbitState, isStoredState } from '@atoms/PlotSettingAtom'
+import { ProjectSelect, TelemetrySelect, TestCaseSelect } from '@components'
+import { DayPicker, MySwitch } from '@parts'
 
 type Props = {
   minW: number | string
@@ -13,6 +16,15 @@ export const PlotSetting = (props: Props) => {
   const { minW } = props
   const { colorMode, toggleColorMode } = useColorMode()
   const sidebarBg = useColorModeValue('gray.50', 'gray.700')
+  const [isOrbit, setIsOrbit] = useRecoilState(isOrbitState)
+  const [isStored, setIsStored] = useRecoilState(isStoredState)
+
+  const toggleIsOrbit = (value: boolean) => {
+    setIsOrbit(() => !value)
+  }
+  const toggleIsStored = (value: boolean) => {
+    setIsStored(() => !value)
+  }
 
   useEffect(() => {
     const settings = window.Main.getSettngs()
@@ -34,8 +46,8 @@ export const PlotSetting = (props: Props) => {
         onClick={toggleColorMode}
       />
       <ProjectSelect />
-      <IsOrbitSwitch />
-      <IsStoredSwitch />
+      <MySwitch label="isOrbit" value={isOrbit} toggleValue={toggleIsOrbit} />
+      <MySwitch label="isStored" value={isStored} toggleValue={toggleIsStored} />
       <DayPicker />
       <TestCaseSelect />
       <TelemetrySelect />

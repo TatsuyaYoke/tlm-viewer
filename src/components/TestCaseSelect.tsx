@@ -37,7 +37,7 @@ export const TestCaseSelect = () => {
 
   return (
     <VStack>
-      <MySwitch label="Choose test cases" htmlFor="choose-test-cases" value={isChoosed} toggleValue={toggleValue} />
+      <MySwitch label="Choose test cases" value={isChoosed} toggleValue={toggleValue} />
       <MySelect
         instanceId="testCase"
         color="teal.500"
