@@ -4,7 +4,7 @@ import { Box, Text } from '@chakra-ui/react'
 import { useSetRecoilState } from 'recoil'
 
 import { projectState } from '@atoms/PlotSettingAtom'
-import { MySelectSingle } from '@parts'
+import { MySelect} from '@parts'
 
 import type { selectOptionType } from '@types'
 import type { SingleValue } from 'chakra-react-select'
@@ -34,14 +34,14 @@ export const ProjectSelect = () => {
     <Box>
       <Text fontWeight={600}>Project</Text>
       {!isLoading && (
-        <MySelectSingle
+        <MySelect
           instanceId="projectSelect"
           color="teal.500"
           width="100%"
           height="40px"
           options={projectOptionList}
           selectValue={selectValue}
-          defauleValue={projectOptionList[0]}
+          defaultValue={projectOptionList[0]}
         />
       )}
     </Box>

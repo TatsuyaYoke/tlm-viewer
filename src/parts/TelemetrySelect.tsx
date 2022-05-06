@@ -35,9 +35,9 @@ export const TelemetrySelect = () => {
     setTlmList(newTlmList)
   }
 
-  const selectValue = (value: SingleValue<selectOptionType> | MultiValue<selectOptionType>, instanceId: number) => {
+  const selectValue = (value: SingleValue<selectOptionType> | MultiValue<selectOptionType>, instanceId: string) => {
     const newTlmList = tlmList.map((list) => ({ ...list }))
-    const foundIndex = newTlmList.findIndex((element) => element.id === instanceId)
+    const foundIndex = newTlmList.findIndex((element) => `tlm${element.id}` === instanceId)
     const item = newTlmList[foundIndex]
     if (item) {
       if (Array.isArray(value)) {
@@ -56,7 +56,7 @@ export const TelemetrySelect = () => {
         {tlmList.map((element, index) => (
           <Flex key={`tlm${element.id}`} w="100%" alignItems="center">
             <MySelectList
-              instanceId={element.id}
+              instanceId={`tlmList_${element.id}`}
               color="teal.500"
               width="100%"
               height="40px"

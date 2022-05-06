@@ -4,13 +4,13 @@ import type { selectOptionType } from '@types'
 import type { SingleValue, MultiValue } from 'chakra-react-select'
 
 type Props = {
-  instanceId: number
+  instanceId: string
   color: string
   width: number | string
   height: number | string
   options: selectOptionType[]
   isMulti: boolean
-  selectValue: (value: SingleValue<selectOptionType> | MultiValue<selectOptionType>, instanceId: number) => void
+  selectValue: (value: SingleValue<selectOptionType> | MultiValue<selectOptionType>, instanceId: string) => void
 }
 
 export const MySelectList = (props: Props) => {
