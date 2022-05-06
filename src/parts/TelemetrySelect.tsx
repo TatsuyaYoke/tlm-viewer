@@ -5,10 +5,10 @@ import { VStack, Text, Flex, IconButton } from '@chakra-ui/react'
 import { useRecoilState } from 'recoil'
 
 import { tlmListState } from '@atoms/PlotSettingAtom'
-import { MySelectList } from '@parts'
+import { MySelect } from '@parts'
 
 import type { selectOptionType } from '@types'
-import type { SingleValue, MultiValue } from 'chakra-react-select'
+import type { MultiValue } from 'chakra-react-select'
 
 export const TelemetrySelect = () => {
   const [tlmList, setTlmList] = useRecoilState(tlmListState)
@@ -35,7 +35,7 @@ export const TelemetrySelect = () => {
     setTlmList(newTlmList)
   }
 
-  const selectValue = (value: SingleValue<selectOptionType> | MultiValue<selectOptionType>, instanceId: string) => {
+  const selectValue = (value: MultiValue<selectOptionType>, instanceId?: string) => {
     const newTlmList = tlmList.map((list) => ({ ...list }))
     const foundIndex = newTlmList.findIndex((element) => `tlmListId${element.id}` === instanceId)
     const item = newTlmList[foundIndex]
@@ -55,7 +55,7 @@ export const TelemetrySelect = () => {
       <VStack w="100%">
         {tlmList.map((element, index) => (
           <Flex key={`tlm${element.id}`} w="100%" alignItems="center">
-            <MySelectList
+            <MySelect
               instanceId={`tlmListId${element.id}`}
               color="teal.500"
               width="100%"
