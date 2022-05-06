@@ -60,7 +60,11 @@ export const GraphPlot = () => {
       <Flex wrap="wrap">
         {graphData &&
           graphTime &&
-          Object.keys(graphData).map((key) => <Graph key={key} x={graphTime} y={graphData[key]} />)}
+          Object.keys(graphData).map((key) => {
+            const yData = graphData[key]
+            if (yData) return <Graph key={key} x={graphTime} y={yData} />
+            return null
+          })}
       </Flex>
     </Box>
   )
