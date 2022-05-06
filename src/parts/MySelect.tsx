@@ -3,7 +3,7 @@ import { Select } from 'chakra-react-select'
 import type { selectOptionType } from '@types'
 import type { SingleValue, MultiValue } from 'chakra-react-select'
 
-type Props<IsMulti extends boolean> = {
+type Props<IsMulti extends boolean = false> = {
   instanceId: string
   color: string
   width: number | string

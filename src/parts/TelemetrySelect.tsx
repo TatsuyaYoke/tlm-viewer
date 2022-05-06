@@ -4,14 +4,13 @@ import { SmallCloseIcon, AddIcon } from '@chakra-ui/icons'
 import { VStack, Text, Flex, IconButton } from '@chakra-ui/react'
 import { useRecoilState } from 'recoil'
 
-import { isMultiState, tlmListState } from '@atoms/PlotSettingAtom'
-import { MySelectList, MySwitch } from '@parts'
+import { tlmListState } from '@atoms/PlotSettingAtom'
+import { MySelectList } from '@parts'
 
 import type { selectOptionType } from '@types'
 import type { SingleValue, MultiValue } from 'chakra-react-select'
 
 export const TelemetrySelect = () => {
-  const [isMulti, setIsMulti] = useRecoilState(isMultiState)
   const [tlmList, setTlmList] = useRecoilState(tlmListState)
   const [countList, setCountList] = useState(1)
 
@@ -21,10 +20,6 @@ export const TelemetrySelect = () => {
     label: element,
     value: element,
   }))
-
-  const toggleValue = (value: boolean) => {
-    setIsMulti(() => !value)
-  }
 
   const addTlmList = () => {
     const newTlmList = [...tlmList]
@@ -41,13 +36,15 @@ export const TelemetrySelect = () => {
   }
 
   const selectValue = (value: SingleValue<selectOptionType> | MultiValue<selectOptionType>, instanceId: number) => {
-    const findIndex = tlmList.findIndex((element) => element.id === instanceId)
     const newTlmList = tlmList.map((list) => ({ ...list }))
-    if (Array.isArray(value)) {
-      newTlmList[findIndex].tlm = value
-    } else if (value !== null) {
-      newTlmList[findIndex].tlm = [value]
+    const foundIndex = newTlmList.findIndex((element) => element.id === instanceId)
+    const item = newTlmList[foundIndex]
+    if (item) {
+      if (Array.isArray(value)) {
+        item.tlm = value
+      }
     }
+
     setTlmList(() => newTlmList)
   }
   return (
@@ -55,7 +52,6 @@ export const TelemetrySelect = () => {
       <Flex w="100%">
         <Text fontWeight={600}>Choose telemeries</Text>
       </Flex>
-      <MySwitch label="isMulti?" htmlFor="is-multi" value={isMulti} toggleValue={toggleValue} />
       <VStack w="100%">
         {tlmList.map((element, index) => (
           <Flex key={`tlm${element.id}`} w="100%" alignItems="center">
@@ -65,7 +61,7 @@ export const TelemetrySelect = () => {
               width="100%"
               height="40px"
               options={tlmNamesOptions}
-              isMulti={isMulti}
+              isMulti={true}
               selectValue={selectValue}
             />
             <IconButton

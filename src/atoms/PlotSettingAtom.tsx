@@ -18,11 +18,6 @@ export const isChoosedState = atom<boolean>({
   default: false,
 })
 
-export const isMultiState = atom<boolean>({
-  key: 'isMultiState',
-  default: false,
-})
-
 export const testCaseListState = atom<MultiValue<selectOptionType>>({
   key: 'testCaseListState',
   default: [],

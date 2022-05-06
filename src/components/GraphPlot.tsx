@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Box, Button, Flex } from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
 
-import { isStoredState, isChoosedState, isMultiState, testCaseListState, tlmListState } from '@atoms/PlotSettingAtom'
+import { isStoredState, isChoosedState, testCaseListState, tlmListState } from '@atoms/PlotSettingAtom'
 import { Graph } from '@parts'
 
 import type { ObjectArrayType } from '@types'
@@ -11,7 +11,6 @@ import type { ObjectArrayType } from '@types'
 export const GraphPlot = () => {
   const isStored = useRecoilValue(isStoredState)
   const isChoosed = useRecoilValue(isChoosedState)
-  const isMulti = useRecoilValue(isMultiState)
   const testCaseList = useRecoilValue(testCaseListState)
   const tlmList = useRecoilValue(tlmListState)
 
@@ -31,7 +30,7 @@ export const GraphPlot = () => {
   }
 
   const set = () => {
-    console.log(testCaseList)
+    console.log(tlmList)
   }
 
   return (
