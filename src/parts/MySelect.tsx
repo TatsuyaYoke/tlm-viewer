@@ -1,17 +1,17 @@
 // import type { VFC } from 'react'
-import type { SingleValue, MultiValue } from 'chakra-react-select'
+import type { SingleValue, MultiValue, PropsValue } from 'chakra-react-select'
 import { Select } from 'chakra-react-select'
 import type { selectOptionType } from '@types'
 
-type Props<IsMulti extends boolean> = {
+type Props<IsMulti extends boolean = false> = {
   instanceId: string
   color: string
   width: number | string
   height: number | string
   options: selectOptionType[]
-  isMulti?: IsMulti
+  isMulti?: IsMulti | undefined
   selectValue: (value: IsMulti extends true ? MultiValue<selectOptionType> : SingleValue<selectOptionType>) => void
-  defaultValue?: IsMulti extends true ? MultiValue<selectOptionType> : SingleValue<selectOptionType>
+  defaultValue?: undefined | (IsMulti extends true ? MultiValue<selectOptionType> : SingleValue<selectOptionType>)
 }
 
 export const MySelect = <IsMulti extends boolean = false>(props: Props<IsMulti>) => {
@@ -21,11 +21,11 @@ export const MySelect = <IsMulti extends boolean = false>(props: Props<IsMulti>)
     <Select
       instanceId={instanceId}
       size="sm"
-      isMulti={isMulti}
+      isMulti={isMulti ?? (false as IsMulti)}
       options={options}
       placeholder=""
       focusBorderColor={color}
-      defaultValue={defaultValue}
+      defaultValue={defaultValue as PropsValue<selectOptionType>}
       onChange={selectValue}
       chakraStyles={{
         valueContainer: (provided) => ({
