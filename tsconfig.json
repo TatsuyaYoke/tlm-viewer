@@ -2,12 +2,23 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@*": ["./src/*"],
-      "@types": ["./types"]
+      "@*": [
+        "./src/*"
+      ],
+      "@types": [
+        "./types"
+      ]
     },
     "target": "ESNext",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "types": ["vite/client", "node"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
+    "types": [
+      "vite/client",
+      "node"
+    ],
     // "allowJs": false,
     "skipLibCheck": false,
     "esModuleInterop": false,
@@ -22,7 +33,12 @@
     "jsx": "react-jsx",
     "exactOptionalPropertyTypes": false
   },
-  "exclude": ["node_modules"],
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js"],
+  "include": [
+    "src",
+    "types",
+  ],
+  "exclude": [
+    "src/out"
+  ],
   "extends": "@tsconfig/strictest/tsconfig.json"
 }
