@@ -8,7 +8,7 @@ type Props<IsMulti extends boolean = false> = {
   color: string
   width: number | string
   height: number | string
-  options: selectOptionType[]
+  options?: selectOptionType[]
   isMulti?: IsMulti
   selectValue: (
     value: IsMulti extends true ? MultiValue<selectOptionType> : SingleValue<selectOptionType>,

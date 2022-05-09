@@ -39,6 +39,10 @@ export const PlotSetting = (props: Props) => {
       if (!project) {
         const initialSetting = settings[0]
         if (initialSetting) setSetting(initialSetting)
+      } else {
+        const foundIndex = settings.findIndex((element) => element.pjName === project.value)
+        const foundSetting = settings[foundIndex]
+        if (foundSetting) setSetting(foundSetting)
       }
 
       setProjectOptionList(() => settings.map((element) => stringToSelectOption(element.pjName)))
@@ -69,7 +73,9 @@ export const PlotSetting = (props: Props) => {
       <MySwitch label="isOrbit" value={isOrbit} toggleValue={toggleIsOrbit} />
       <MySwitch label="isStored" value={isStored} toggleValue={toggleIsStored} />
       <DayPicker />
-      <TestCaseSelect />
+      <TestCaseSelect
+        options={setting?.testCase ? setting?.testCase?.map((element) => stringToSelectOption(element)) : undefined}
+      />
       <TelemetrySelect />
     </VStack>
   )

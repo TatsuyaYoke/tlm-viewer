@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react'
-
 import { VStack } from '@chakra-ui/react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
@@ -9,9 +7,13 @@ import { MySwitch, MySelect } from '@parts'
 import type { selectOptionType } from '@types'
 import type { MultiValue } from 'chakra-react-select'
 
-export const TestCaseSelect = () => {
+type Props = {
+  options?: selectOptionType[]
+}
+
+export const TestCaseSelect = (props: Props) => {
+  const { options } = props
   const [isChoosed, setIsChoosed] = useRecoilState(isChoosedState)
-  const [testCaseOptionList, setTestCaseOptionList] = useState<selectOptionType[]>([])
   const setTestCaseList = useSetRecoilState(testCaseListState)
 
   const toggleValue = (value: boolean) => {
@@ -22,19 +24,6 @@ export const TestCaseSelect = () => {
     setTestCaseList(() => value)
   }
 
-  useEffect(() => {
-    const project = 'DSX0201'
-    const testCaseListOnlyValue = window.Main.getTestCaseList(project)
-    if (testCaseListOnlyValue) {
-      setTestCaseOptionList(() =>
-        testCaseListOnlyValue.map((element) => ({
-          label: element,
-          value: element,
-        }))
-      )
-    }
-  }, [])
-
   return (
     <VStack>
       <MySwitch label="Choose test cases" value={isChoosed} toggleValue={toggleValue} />
@@ -43,7 +32,7 @@ export const TestCaseSelect = () => {
         color="teal.500"
         width="100%"
         height="40px"
-        options={testCaseOptionList}
+        options={options}
         isMulti={true}
         selectValue={selectValue}
       />
