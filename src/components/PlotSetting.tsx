@@ -1,12 +1,15 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import { VStack, StackDivider, IconButton, useColorMode, useColorModeValue } from '@chakra-ui/react'
 import { useRecoilState } from 'recoil'
 
-import { isOrbitState, isStoredState } from '@atoms/PlotSettingAtom'
+import { isOrbitState, isStoredState, projectState } from '@atoms/PlotSettingAtom'
 import { ProjectSelect, TelemetrySelect, TestCaseSelect } from '@components'
+import { stringToSelectOption } from '@functions'
 import { DayPicker, MySwitch } from '@parts'
+
+import type { pjSettingWithTlmIdType, selectOptionType } from '@types'
 
 type Props = {
   minW: number | string
@@ -18,6 +21,10 @@ export const PlotSetting = (props: Props) => {
   const sidebarBg = useColorModeValue('gray.50', 'gray.700')
   const [isOrbit, setIsOrbit] = useRecoilState(isOrbitState)
   const [isStored, setIsStored] = useRecoilState(isStoredState)
+  const [isLoading, setIsLoading] = useState(true)
+  const [project, setProject] = useRecoilState(projectState)
+  const [setting, setSetting] = useState<pjSettingWithTlmIdType | null>(null)
+  const [projectOptionList, setProjectOptionList] = useState<selectOptionType[]>([])
 
   const toggleIsOrbit = (value: boolean) => {
     setIsOrbit(() => !value)
@@ -27,9 +34,17 @@ export const PlotSetting = (props: Props) => {
   }
 
   useEffect(() => {
-    const settings = window.Main.getSettngs()
-    console.log(settings)
-  }, [])
+    const settings = window.Main.getSettings()
+    if (settings) {
+      if (!project) {
+        const initialSetting = settings[0]
+        if (initialSetting) setSetting(initialSetting)
+      }
+
+      setProjectOptionList(() => settings.map((element) => stringToSelectOption(element.pjName)))
+    }
+    setIsLoading(false)
+  }, [project])
 
   return (
     <VStack
@@ -45,7 +60,12 @@ export const PlotSetting = (props: Props) => {
         icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
         onClick={toggleColorMode}
       />
-      <ProjectSelect />
+      {!isLoading && (
+        <ProjectSelect
+          options={projectOptionList}
+          defaultValue={setting?.pjName ? stringToSelectOption(setting.pjName) : undefined}
+        />
+      )}
       <MySwitch label="isOrbit" value={isOrbit} toggleValue={toggleIsOrbit} />
       <MySwitch label="isStored" value={isStored} toggleValue={toggleIsStored} />
       <DayPicker />

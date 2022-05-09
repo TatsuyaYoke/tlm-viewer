@@ -88,9 +88,7 @@ export const getSettings = (topPath: string, pjSettingPath: string) => {
   let pjSettings: pjSettingsType | undefined
   const settingsBeforeParse = JSON.parse(fs.readFileSync(pjSettingPath, 'utf8'))
   const schemaResult = appSettingsSchema.safeParse(settingsBeforeParse)
-  if (schemaResult.success) {
-    pjSettings = schemaResult.data.project
-  }
+  if (schemaResult.success) pjSettings = schemaResult.data.project
 
   if (pjSettings) {
     const pjSettingWithTlmIdList = pjSettings.map((value) => {
@@ -101,6 +99,11 @@ export const getSettings = (topPath: string, pjSettingPath: string) => {
         const tlmIdSchemaResult = tlmIdSchema.safeParse(tlmIdsettingsBeforeParse)
         if (tlmIdSchemaResult.success) {
           response.tlmId = tlmIdSchemaResult.data
+        }
+        const testCaseDirs = glob.sync(join(topPath, value.groundTestPath, '*'))
+        const testCaseList = testCaseDirs.map((dir: string) => dir.substring(dir.lastIndexOf('/') + 1))
+        if (testCaseList) {
+          response.testCase = testCaseList
         }
       }
       return response

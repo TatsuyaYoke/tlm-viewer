@@ -67,7 +67,7 @@
             "position": "before"
           },
           {
-            "pattern": "@components,@parts,@atoms**",
+            "pattern": "@components,@parts,@atoms**,@functions,@hooks",
             "group": "internal",
             "position": "before"
           }

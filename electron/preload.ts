@@ -40,7 +40,7 @@ const api = {
     }
     return null
   },
-  getSettngs: () => {
+  getSettings: () => {
     const topPath = resolvePathGdrive(TOP_PATH)
     const pjSettingPath = resolvePathGdrive(join(TOP_PATH, PROJECT_SETTING_RELATIVE_PATH))
     if (topPath && pjSettingPath) {

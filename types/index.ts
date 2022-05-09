@@ -46,6 +46,7 @@ export const tlmIdSchema = z.record(z.number())
 export type tlmIdType = z.infer<typeof tlmIdSchema>
 export type pjSettingWithTlmIdType = pjSettingType & {
   tlmId?: tlmIdType
+  testCase?: string[]
 }
 
 export type apiSuccess<T> = { success: true; data: T }
