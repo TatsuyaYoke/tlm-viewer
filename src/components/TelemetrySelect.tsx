@@ -1,19 +1,12 @@
-import { useState } from 'react'
-
 import { SmallCloseIcon, AddIcon } from '@chakra-ui/icons'
 import { VStack, Text, Flex, IconButton } from '@chakra-ui/react'
-import { useRecoilState } from 'recoil'
 
-import { tlmListState } from '@atoms/PlotSettingAtom'
+import { useTlmListSetting } from '@hooks'
 import { MySelect } from '@parts'
 
 import type { selectOptionType } from '@types'
-import type { MultiValue } from 'chakra-react-select'
 
 export const TelemetrySelect = () => {
-  const [tlmList, setTlmList] = useRecoilState(tlmListState)
-  const [countList, setCountList] = useState(1)
-
   const tlmNames = ['DATE', 'VOLTAGE', 'CURRENT']
 
   const tlmNamesOptions: selectOptionType[] = tlmNames.map((element) => ({
@@ -21,32 +14,8 @@ export const TelemetrySelect = () => {
     value: element,
   }))
 
-  const addTlmList = () => {
-    const newTlmList = [...tlmList]
-    newTlmList.push({ id: countList + 1, tlm: [] })
-    setCountList(() => countList + 1)
-    setTlmList(newTlmList)
-  }
+  const { tlmList, addTlmList, deleteTlmList, selectValue } = useTlmListSetting()
 
-  const deleteTlmList = (index: number) => {
-    if (tlmList.length === 1) return
-    const newTlmList = [...tlmList]
-    newTlmList.splice(index, 1)
-    setTlmList(newTlmList)
-  }
-
-  const selectValue = (value: MultiValue<selectOptionType>, instanceId?: string) => {
-    const newTlmList = tlmList.map((list) => ({ ...list }))
-    const foundIndex = newTlmList.findIndex((element) => `tlmListId${element.id}` === instanceId)
-    const item = newTlmList[foundIndex]
-    if (item) {
-      if (Array.isArray(value)) {
-        item.tlm = value
-      }
-    }
-
-    setTlmList(() => newTlmList)
-  }
   return (
     <VStack>
       <Flex w="100%">

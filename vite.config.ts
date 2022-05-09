@@ -12,7 +12,7 @@ const resolveAlias = {
   '@parts': resolve(__dirname, 'src/parts'),
   '@atoms': resolve(__dirname, 'src/atoms'),
   '@functions': resolve(__dirname, 'src/functions'),
-  '@hooks': resolve(__dirname, 'src/hooksk'),
+  '@hooks': resolve(__dirname, 'src/hooks'),
 }
 
 export default ({ command }: ConfigEnv): UserConfig => {
