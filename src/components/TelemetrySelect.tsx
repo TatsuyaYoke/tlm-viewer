@@ -14,7 +14,7 @@ export const TelemetrySelect = () => {
     value: element,
   }))
 
-  const { tlmList, addTlmList, deleteTlmList, selectValue } = useTlmListSetting()
+  const { tlmList, addTlmList, deleteTlmList, selectValue } = useTlmListSetting<`tlmListId${number}`>()
 
   return (
     <VStack>

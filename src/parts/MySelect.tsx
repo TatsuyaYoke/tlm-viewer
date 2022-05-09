@@ -3,8 +3,8 @@ import { Select } from 'chakra-react-select'
 import type { selectOptionType } from '@types'
 import type { SingleValue, MultiValue } from 'chakra-react-select'
 
-type Props<IsMulti extends boolean = false> = {
-  instanceId: string
+type Props<IsMulti extends boolean, InstanceId extends string> = {
+  instanceId: InstanceId
   color: string
   width: number | string
   height: number | string
@@ -12,12 +12,12 @@ type Props<IsMulti extends boolean = false> = {
   isMulti?: IsMulti
   selectValue: (
     value: IsMulti extends true ? MultiValue<selectOptionType> : SingleValue<selectOptionType>,
-    instanceId?: string
+    instanceId?: InstanceId
   ) => void
   defaultValue?: IsMulti extends true ? MultiValue<selectOptionType> : SingleValue<selectOptionType>
 }
 
-export const MySelect = <IsMulti extends boolean = false>(props: Props<IsMulti>) => {
+export const MySelect = <IsMulti extends boolean = false, InstanceId extends string = string>(props: Props<IsMulti, InstanceId>) => {
   const { instanceId, color, width, height, options, isMulti, selectValue, defaultValue } = props
 
   return (
