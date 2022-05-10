@@ -12,11 +12,11 @@ import { DayPicker, MySwitch } from '@parts'
 import type { pjSettingWithTlmIdType, selectOptionType } from '@types'
 
 type Props = {
-  minW: number | string
+  width: number | string
 }
 
 export const PlotSetting = (props: Props) => {
-  const { minW } = props
+  const { width } = props
   const { colorMode, toggleColorMode } = useColorMode()
   const sidebarBg = useColorModeValue('gray.50', 'gray.700')
   const [isOrbit, setIsOrbit] = useRecoilState(isOrbitState)
@@ -56,7 +56,8 @@ export const PlotSetting = (props: Props) => {
       spacing={3}
       p={8}
       align="stretch"
-      minW={minW}
+      minW={width}
+      maxW={width}
       bg={sidebarBg}
     >
       <IconButton
@@ -76,7 +77,15 @@ export const PlotSetting = (props: Props) => {
       <TestCaseSelect
         options={setting?.testCase ? setting?.testCase?.map((element) => stringToSelectOption(element)) : undefined}
       />
-      <TelemetrySelect />
+      <TelemetrySelect
+        options={
+          setting?.tlmId
+            ? Object.keys(setting.tlmId)
+                .map((element) => stringToSelectOption(element))
+                .slice(0, 200)
+            : undefined
+        }
+      />
     </VStack>
   )
 }

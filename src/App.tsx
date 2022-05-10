@@ -8,7 +8,7 @@ export const App = () => {
     <>
       {window.Main && <AppBar height={headerHeight} />}
       <Container maxW="container.2xl" p={0} pt={headerHeight} display="flex" minH="100vh">
-        <PlotSetting minW="400px" />
+        <PlotSetting width="450px" />
         <GraphPlot />
       </Container>
     </>

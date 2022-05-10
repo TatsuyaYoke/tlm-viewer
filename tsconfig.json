@@ -22,7 +22,7 @@
     "jsx": "react-jsx",
     "exactOptionalPropertyTypes": false
   },
-  "exclude": ["node_modules"],
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js"],
+  "include": ["src", "types"],
+  "exclude": ["src/out"],
   "extends": "@tsconfig/strictest/tsconfig.json"
 }

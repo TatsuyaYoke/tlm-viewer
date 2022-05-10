@@ -6,13 +6,12 @@ import { MySelect } from '@parts'
 
 import type { selectOptionType } from '@types'
 
-export const TelemetrySelect = () => {
-  const tlmNames = ['DATE', 'VOLTAGE', 'CURRENT']
+type Props = {
+  options?: selectOptionType[]
+}
 
-  const tlmNamesOptions: selectOptionType[] = tlmNames.map((element) => ({
-    label: element,
-    value: element,
-  }))
+export const TelemetrySelect = (props: Props) => {
+  const { options } = props
 
   const { tlmList, addTlmList, deleteTlmList, selectValue } = useTlmListSetting()
 
@@ -29,7 +28,7 @@ export const TelemetrySelect = () => {
               color="teal.500"
               width="100%"
               height="40px"
-              options={tlmNamesOptions}
+              options={options}
               isMulti={true}
               selectValue={selectValue}
             />
