@@ -13,7 +13,7 @@ type Props = {
 export const TelemetrySelect = (props: Props) => {
   const { options } = props
 
-  const { tlmList, addTlmList, deleteTlmList, selectValue } = useTlmListSetting()
+  const { tlmList, addTlmList, deleteTlmList, selectValue } = useTlmListSetting<`tlmListId${number}`>()
 
   return (
     <VStack>
