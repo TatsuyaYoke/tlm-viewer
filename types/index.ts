@@ -3,8 +3,8 @@ import * as z from 'zod'
 import type { MultiValue } from 'chakra-react-select'
 
 export type Main = {
-  getData: (path: string, query: string) => Promise<apiReturnType<ObjectArrayTypeIncludingDate, string>>
-  getSettings: () => pjSettingWithTlmIdType[] | null
+  getData: (path: string, query: string) => Promise<apiReturnType<ObjectArrayTypeIncludingDate>>
+  getSettings: () => apiReturnType<pjSettingWithTlmIdType[]>
   Maximize: () => void
   Minimize: () => void
   Close: () => void
@@ -64,5 +64,5 @@ export type pjSettingWithTlmIdType = pjSettingType & {
 }
 
 export type apiSuccess<T> = { success: true; data: T }
-export type apiError<K> = { success: false; error: K }
-export type apiReturnType<T, K> = apiSuccess<T> | apiError<K>
+export type apiError = { success: false; error: string }
+export type apiReturnType<T> = apiSuccess<T> | apiError

@@ -34,7 +34,12 @@ export const PlotSetting = (props: Props) => {
   }
 
   useEffect(() => {
-    const settings = window.Main.getSettings()
+    const response = window.Main.getSettings()
+    if (!response.success) {
+      console.log(response.error)
+      return
+    }
+    const settings = response.data
     if (settings) {
       if (!project) {
         const initialSetting = settings[0]

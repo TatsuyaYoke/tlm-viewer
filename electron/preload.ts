@@ -22,16 +22,36 @@ export const api: Main = {
 
     return {
       success: false,
-      error: 'cannot find database',
+      error: 'Database not found',
     }
   },
   getSettings: () => {
     const topPath = resolvePathGdrive(TOP_PATH)
     const pjSettingPath = resolvePathGdrive(join(TOP_PATH, PROJECT_SETTING_RELATIVE_PATH))
-    if (topPath && pjSettingPath) {
-      return getSettings(topPath, pjSettingPath)
+
+    if (!topPath)
+      return {
+        success: false,
+        error: 'Cannot connect Gdrive',
+      }
+
+    if (!pjSettingPath)
+      return {
+        success: false,
+        error: `${PROJECT_SETTING_RELATIVE_PATH} not found`,
+      }
+
+    const response = getSettings(topPath, pjSettingPath)
+    if (!response)
+      return {
+        success: false,
+        error: `Cannot parse ${PROJECT_SETTING_RELATIVE_PATH} correctly`,
+      }
+    
+    return {
+      success: true,
+      data: response,
     }
-    return null
   },
   Minimize: () => {
     ipcRenderer.send('minimize')
