@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
-import { VStack, StackDivider, IconButton, useColorMode, useColorModeValue, Text, Button } from '@chakra-ui/react'
+import { VStack, StackDivider, IconButton, useColorMode, useColorModeValue, Button, Flex } from '@chakra-ui/react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 import { isOrbitState, isStoredState, projectState, settingState } from '@atoms/PlotSettingAtom'
-import { ProjectSelect, TelemetrySelect, TestCaseSelect } from '@components'
+import { ProjectSelect, TelemetrySelect, TestCaseSelect, Error } from '@components'
 import { stringToSelectOption } from '@functions'
 import { DayPicker, MySwitch } from '@parts'
 
@@ -22,6 +22,8 @@ export const PlotSetting = (props: Props) => {
   const [isOrbit, setIsOrbit] = useRecoilState(isOrbitState)
   const [isStored, setIsStored] = useRecoilState(isStoredState)
   const [isLoading, setIsLoading] = useState(true)
+  const [isError, setIsError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const [projectOptionList, setProjectOptionList] = useState<selectOptionType[]>([])
   const project = useRecoilValue(projectState)
   const [setting, setSetting] = useRecoilState(settingState)
@@ -36,7 +38,8 @@ export const PlotSetting = (props: Props) => {
   const initializeSetting = () => {
     const response = window.Main.getSettings()
     if (!response.success) {
-      console.log(response.error)
+      setErrorMessage(response.error)
+      setIsError(true)
       return
     }
     const settings = response.data
@@ -51,6 +54,7 @@ export const PlotSetting = (props: Props) => {
       }
 
       setProjectOptionList(() => settings.map((element) => stringToSelectOption(element.pjName)))
+      setIsError(false)
     }
     setIsLoading(false)
   }
@@ -79,7 +83,7 @@ export const PlotSetting = (props: Props) => {
         <Button width="100%" colorScheme="teal" onClick={initializeSetting}>
           Reconnect
         </Button>
-        <Text width="100%">No Error</Text>
+        <Error isError={isError} error={errorMessage} />
       </VStack>
       {!isLoading && (
         <ProjectSelect
@@ -87,8 +91,10 @@ export const PlotSetting = (props: Props) => {
           defaultValue={setting?.pjName ? stringToSelectOption(setting.pjName) : undefined}
         />
       )}
-      <MySwitch label="isOrbit" value={isOrbit} toggleValue={toggleIsOrbit} />
-      <MySwitch label="isStored" value={isStored} toggleValue={toggleIsStored} />
+      <Flex>
+        <MySwitch label="isOrbit" value={isOrbit} toggleValue={toggleIsOrbit} />
+        <MySwitch label="isStored" value={isStored} toggleValue={toggleIsStored} />
+      </Flex>
       <DayPicker />
       <TestCaseSelect
         options={setting?.testCase ? setting?.testCase?.map((element) => stringToSelectOption(element)) : undefined}
