@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
-import { VStack, StackDivider, IconButton, useColorMode, useColorModeValue } from '@chakra-ui/react'
+import { VStack, StackDivider, IconButton, useColorMode, useColorModeValue, Text, Button } from '@chakra-ui/react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 import { isOrbitState, isStoredState, projectState, settingState } from '@atoms/PlotSettingAtom'
@@ -33,7 +33,7 @@ export const PlotSetting = (props: Props) => {
     setIsStored(() => !value)
   }
 
-  useEffect(() => {
+  const initializeSetting = () => {
     const response = window.Main.getSettings()
     if (!response.success) {
       console.log(response.error)
@@ -53,6 +53,10 @@ export const PlotSetting = (props: Props) => {
       setProjectOptionList(() => settings.map((element) => stringToSelectOption(element.pjName)))
     }
     setIsLoading(false)
+  }
+
+  useEffect(() => {
+    initializeSetting()
   }, [project])
 
   return (
@@ -65,11 +69,18 @@ export const PlotSetting = (props: Props) => {
       maxW={width}
       bg={sidebarBg}
     >
-      <IconButton
-        aria-label="change color theme"
-        icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
-        onClick={toggleColorMode}
-      />
+      <VStack>
+        <IconButton
+          aria-label="change color theme"
+          icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+          onClick={toggleColorMode}
+          width="100%"
+        />
+        <Button width="100%" colorScheme="teal" onClick={initializeSetting}>
+          Reconnect
+        </Button>
+        <Text width="100%">No Error</Text>
+      </VStack>
       {!isLoading && (
         <ProjectSelect
           options={projectOptionList}
