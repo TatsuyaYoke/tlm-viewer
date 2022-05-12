@@ -4,7 +4,6 @@ import type { MultiValue } from 'chakra-react-select'
 
 export type Main = {
   getData: (path: string, query: string) => Promise<apiReturnType<ObjectArrayTypeIncludingDate, string>>
-  getTestCaseList: (project: string) => string[] | null
   getSettings: () => pjSettingWithTlmIdType[] | null
   Maximize: () => void
   Minimize: () => void

@@ -1,6 +1,6 @@
 import { atom } from 'recoil'
 
-import type { selectOptionType, tlmListType } from '@types'
+import type { pjSettingWithTlmIdType, selectOptionType, tlmListType } from '@types'
 import type { SingleValue, MultiValue } from 'chakra-react-select'
 
 export const isStoredState = atom<boolean>({
@@ -31,4 +31,9 @@ export const projectState = atom<SingleValue<selectOptionType>>({
 export const tlmListState = atom<tlmListType[]>({
   key: 'tlmListState',
   default: [{ id: 1, tlm: [] }],
+})
+
+export const settingState = atom<pjSettingWithTlmIdType | null>({
+  key: 'settingState',
+  default: null,
 })

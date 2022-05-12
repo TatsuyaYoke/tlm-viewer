@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import { VStack, StackDivider, IconButton, useColorMode, useColorModeValue } from '@chakra-ui/react'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 
-import { isOrbitState, isStoredState, projectState } from '@atoms/PlotSettingAtom'
+import { isOrbitState, isStoredState, projectState, settingState } from '@atoms/PlotSettingAtom'
 import { ProjectSelect, TelemetrySelect, TestCaseSelect } from '@components'
 import { stringToSelectOption } from '@functions'
 import { DayPicker, MySwitch } from '@parts'
 
-import type { pjSettingWithTlmIdType, selectOptionType } from '@types'
+import type { selectOptionType } from '@types'
 
 type Props = {
   width: number | string
@@ -22,9 +22,9 @@ export const PlotSetting = (props: Props) => {
   const [isOrbit, setIsOrbit] = useRecoilState(isOrbitState)
   const [isStored, setIsStored] = useRecoilState(isStoredState)
   const [isLoading, setIsLoading] = useState(true)
-  const [project, setProject] = useRecoilState(projectState)
-  const [setting, setSetting] = useState<pjSettingWithTlmIdType | null>(null)
   const [projectOptionList, setProjectOptionList] = useState<selectOptionType[]>([])
+  const project = useRecoilValue(projectState)
+  const [setting, setSetting] = useRecoilState(settingState)
 
   const toggleIsOrbit = (value: boolean) => {
     setIsOrbit(() => !value)
@@ -79,10 +79,7 @@ export const PlotSetting = (props: Props) => {
       />
       <TelemetrySelect
         options={
-          setting?.tlmId
-            ? Object.keys(setting.tlmId)
-                .map((element) => stringToSelectOption(element))
-            : undefined
+          setting?.tlmId ? Object.keys(setting.tlmId).map((element) => stringToSelectOption(element)) : undefined
         }
       />
     </VStack>

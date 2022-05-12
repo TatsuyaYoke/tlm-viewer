@@ -1,7 +1,7 @@
 import { ipcRenderer, contextBridge } from 'electron'
 import { join } from 'path'
 
-import { readDbSync, resolvePathGdrive, getTestCaseList, getSettings } from './functions'
+import { readDbSync, resolvePathGdrive, getSettings } from './functions'
 
 import type { Main } from '../types'
 
@@ -24,14 +24,6 @@ export const api: Main = {
       success: false,
       error: 'cannot find database',
     }
-  },
-  getTestCaseList: (project) => {
-    const topPath = resolvePathGdrive(TOP_PATH)
-    const pjSettingPath = resolvePathGdrive(join(TOP_PATH, PROJECT_SETTING_RELATIVE_PATH))
-    if (topPath && pjSettingPath) {
-      return getTestCaseList(topPath, pjSettingPath, project)
-    }
-    return null
   },
   getSettings: () => {
     const topPath = resolvePathGdrive(TOP_PATH)
