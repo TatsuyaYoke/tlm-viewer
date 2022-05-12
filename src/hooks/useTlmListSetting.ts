@@ -7,9 +7,12 @@ import { tlmListState } from '@atoms/PlotSettingAtom'
 import type { selectOptionType } from '@types'
 import type { MultiValue } from 'chakra-react-select'
 
-export const useTlmListSetting = () => {
+const MAX_OPTION_LENGTH = 2000
+
+export const useTlmListSetting = (options: selectOptionType[] | undefined) => {
   const [tlmList, setTlmList] = useRecoilState(tlmListState)
   const [countList, setCountList] = useState(1)
+  const [filteredOptions, setFilteredOptions] = useState<selectOptionType[] | undefined>([])
 
   const addTlmList = () => {
     const newTlmList = [...tlmList]
@@ -37,5 +40,13 @@ export const useTlmListSetting = () => {
 
     setTlmList(() => newTlmList)
   }
-  return { tlmList, addTlmList, deleteTlmList, selectValue }
+
+  const filterOption = (value: string) => {
+    const result = options?.filter((option) => option.value.indexOf(value.toLocaleUpperCase()) !== -1)
+    const resultLength = result?.length
+    if (resultLength && resultLength > MAX_OPTION_LENGTH) return
+    setFilteredOptions(() => result)
+  }
+
+  return { tlmList, filteredOptions, addTlmList, deleteTlmList, selectValue, filterOption }
 }

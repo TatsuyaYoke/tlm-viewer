@@ -13,7 +13,7 @@ type Props = {
 export const TelemetrySelect = (props: Props) => {
   const { options } = props
 
-  const { tlmList, addTlmList, deleteTlmList, selectValue } = useTlmListSetting()
+  const { tlmList, filteredOptions, addTlmList, deleteTlmList, selectValue, filterOption } = useTlmListSetting(options)
 
   return (
     <VStack>
@@ -28,9 +28,10 @@ export const TelemetrySelect = (props: Props) => {
               color="teal.500"
               width="100%"
               height="40px"
-              options={options}
+              options={filteredOptions}
               isMulti={true}
               selectValue={selectValue}
+              filterOption={filterOption}
             />
             <IconButton
               aria-label="delete telemetry list"

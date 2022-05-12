@@ -82,7 +82,6 @@ export const PlotSetting = (props: Props) => {
           setting?.tlmId
             ? Object.keys(setting.tlmId)
                 .map((element) => stringToSelectOption(element))
-                .slice(0, 200)
             : undefined
         }
       />
