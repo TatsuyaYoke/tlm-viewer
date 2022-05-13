@@ -52,11 +52,7 @@ export const GraphPlot = () => {
     const filteredTestCaseList = testCaseList.filter((element) => {
       if (setting?.testCase?.indexOf(element.value) === -1) {
         setIsWarning(true)
-        setWarningMessage((prev) => {
-          const newList = [...prev]
-          newList.push(`${element.value} deleted because not exist`)
-          return newList
-        })
+        setWarningMessage((prev) => [...prev, `Test case: ${element.value} deleted because not exist`])
         return false
       }
       return true

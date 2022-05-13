@@ -20,7 +20,7 @@ type Props = {
   noDisplayWhenSuccess?: boolean
 }
 export const Error = (props: Props) => {
-  const { isError, isWarning = false, errorMessage, warningMessages, noDisplayWhenSuccess = false } = props
+  const { isError = false, isWarning = false, errorMessage, warningMessages, noDisplayWhenSuccess = false } = props
 
   return isError || isWarning ? (
     <Accordion allowMultiple width="100%">
@@ -37,7 +37,7 @@ export const Error = (props: Props) => {
           ) : (
             <List spacing={3}>
               {warningMessages?.map((message) => (
-                <ListItem display="flex" alignItems="center">
+                <ListItem key={message} display="flex" alignItems="center">
                   <ListIcon as={WarningIcon} color="orange.300" />
                   {message}
                 </ListItem>
