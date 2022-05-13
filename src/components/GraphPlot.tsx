@@ -67,10 +67,10 @@ export const GraphPlot = () => {
       <Flex>
         <Error isWarning={isWarning} warningMessages={warningMessage} noDisplayWhenSuccess={true} />
         <Spacer />
-        <Button colorScheme="teal" onClick={plot} mx="10" minW="80px" maxW="80px">
+        <Button colorScheme="teal" onClick={plot} mx="10" flexShrink={0} width="80px">
           Plot
         </Button>
-        <Button colorScheme="teal" onClick={set} mr="10" minW="80px" maxW="80px">
+        <Button colorScheme="teal" onClick={set} mr="10" flexShrink={0} width="80px">
           Set
         </Button>
       </Flex>
