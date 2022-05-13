@@ -43,18 +43,19 @@ export const PlotSetting = (props: Props) => {
       return
     }
     const settings = response.data
-    if (settings) {
-      if (!project) {
-        const initialSetting = settings[0]
-        if (initialSetting) setSetting(initialSetting)
-      } else {
-        const foundIndex = settings.findIndex((element) => element.pjName === project.value)
-        const foundSetting = settings[foundIndex]
-        if (foundSetting) setSetting(foundSetting)
-      }
+    let settingIndex = 0
 
-      setProjectOptionList(() => settings.map((element) => stringToSelectOption(element.pjName)))
-      setIsError(false)
+    if (settings) {
+      if (project) settingIndex = settings.findIndex((element) => element.pjName === project.value)
+      const foundSetting = settings[settingIndex]
+      if (foundSetting?.tlmId) {
+        setSetting(foundSetting)
+        setProjectOptionList(() => settings.map((element) => stringToSelectOption(element.pjName)))
+        setIsError(false)
+      } else {
+        setErrorMessage(`tlm_id.json for ${project?.value} not found`)
+        setIsError(true)
+      }
     }
     setIsLoading(false)
   }
@@ -91,19 +92,23 @@ export const PlotSetting = (props: Props) => {
           defaultValue={setting?.pjName ? stringToSelectOption(setting.pjName) : undefined}
         />
       )}
-      <Flex>
-        <MySwitch label="isOrbit" value={isOrbit} toggleValue={toggleIsOrbit} />
-        <MySwitch label="isStored" value={isStored} toggleValue={toggleIsStored} />
-      </Flex>
-      <DayPicker />
-      <TestCaseSelect
-        options={setting?.testCase ? setting?.testCase?.map((element) => stringToSelectOption(element)) : undefined}
-      />
-      <TelemetrySelect
-        options={
-          setting?.tlmId ? Object.keys(setting.tlmId).map((element) => stringToSelectOption(element)) : undefined
-        }
-      />
+      {!isError && (
+        <Flex>
+          <MySwitch label="isOrbit" value={isOrbit} toggleValue={toggleIsOrbit} />
+          <MySwitch label="isStored" value={isStored} toggleValue={toggleIsStored} />
+        </Flex>
+      )}
+      {!isError && <DayPicker />}
+      {!isError && !isOrbit && (
+        <TestCaseSelect
+          options={setting?.testCase ? setting?.testCase?.map((e) => stringToSelectOption(e)) : undefined}
+        />
+      )}
+      {!isError && (
+        <TelemetrySelect
+          options={setting?.tlmId ? Object.keys(setting.tlmId).map((e) => stringToSelectOption(e)) : undefined}
+        />
+      )}
     </VStack>
   )
 }
