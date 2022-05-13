@@ -84,7 +84,7 @@ export const PlotSetting = (props: Props) => {
         <Button width="100%" colorScheme="teal" onClick={initializeSetting}>
           Reconnect
         </Button>
-        <Error isError={isError} error={errorMessage} />
+        <Error isError={isError} errorMessage={errorMessage} />
       </VStack>
       {!isLoading && (
         <ProjectSelect

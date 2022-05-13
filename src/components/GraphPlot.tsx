@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Box, Button, Flex } from '@chakra-ui/react'
+import { Box, Button, Flex, Spacer } from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
 
 import {
@@ -10,7 +10,9 @@ import {
   testCaseListState,
   tlmListState,
   projectState,
+  settingState,
 } from '@atoms/PlotSettingAtom'
+import { Error } from '@components'
 import { Graph } from '@parts'
 
 import type { ObjectArrayType } from '@types'
@@ -22,6 +24,12 @@ export const GraphPlot = () => {
   const testCaseList = useRecoilValue(testCaseListState)
   const project = useRecoilValue(projectState)
   const tlmList = useRecoilValue(tlmListState)
+  const setting = useRecoilValue(settingState)
+
+  const [isWarning, setIsWarning] = useState(false)
+  const [warningMessage, setWarningMessage] = useState<string[]>([])
+  const [isError, setIsError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
 
   const [graphTime, setGraphTime] = useState<string[] | null>(null)
   const [graphData, setGraphData] = useState<ObjectArrayType | null>(null)
@@ -39,21 +47,34 @@ export const GraphPlot = () => {
   }
 
   const set = () => {
-    console.log(project)
-    console.log(testCaseList)
-    console.log(tlmList)
-    console.log(isStored)
-    console.log(isOrbit)
-    console.log(isChoosed)
+    setIsWarning(false)
+    setWarningMessage(() => [])
+    const filteredTestCaseList = testCaseList.filter((element) => {
+      if (setting?.testCase?.indexOf(element.value) === -1) {
+        setIsWarning(true)
+        setWarningMessage((prev) => {
+          const newList = [...prev]
+          newList.push(`${element.value} deleted because not exist`)
+          return newList
+        })
+        return false
+      }
+      return true
+    })
+
+    console.log(filteredTestCaseList)
+    console.log(warningMessage)
   }
 
   return (
     <Box p={8} w="100%">
-      <Flex justify="right">
-        <Button colorScheme="teal" onClick={plot} mr="10">
+      <Flex>
+        <Error isWarning={isWarning} warningMessages={warningMessage} noDisplayWhenSuccess={true} />
+        <Spacer />
+        <Button colorScheme="teal" onClick={plot} mx="10" minW="80px" maxW="80px">
           Plot
         </Button>
-        <Button colorScheme="teal" onClick={set} mr="10">
+        <Button colorScheme="teal" onClick={set} mr="10" minW="80px" maxW="80px">
           Set
         </Button>
       </Flex>

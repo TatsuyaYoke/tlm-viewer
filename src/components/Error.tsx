@@ -1,30 +1,56 @@
-import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Alert, AlertIcon } from '@chakra-ui/react'
+import { WarningIcon } from '@chakra-ui/icons'
+import {
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionPanel,
+  Alert,
+  AlertIcon,
+  Text,
+  List,
+  ListItem,
+  ListIcon,
+} from '@chakra-ui/react'
 
 type Props = {
-  isError: boolean
-  error?: string
+  isError?: boolean
+  isWarning?: boolean
+  errorMessage?: string
+  warningMessages?: string[]
+  noDisplayWhenSuccess?: boolean
 }
 export const Error = (props: Props) => {
-  const { isError, error } = props
+  const { isError, isWarning = false, errorMessage, warningMessages, noDisplayWhenSuccess = false } = props
 
-  return isError ? (
+  return isError || isWarning ? (
     <Accordion allowMultiple width="100%">
       <AccordionItem>
         <AccordionButton p={0}>
-          <Alert status="error" variant="solid">
+          <Alert status={isError ? 'error' : 'warning'} variant="solid">
             <AlertIcon />
-            Error
+            {isError ? <Text>Error</Text> : <Text>Warning</Text>}
           </Alert>
         </AccordionButton>
         <AccordionPanel pb={4} textAlign="left">
-          {error}
+          {isError ? (
+            <Text>{errorMessage}</Text>
+          ) : (
+            <List spacing={3}>
+              {warningMessages?.map((message) => (
+                <ListItem display="flex" alignItems="center">
+                  <ListIcon as={WarningIcon} color="orange.300" />
+                  {message}
+                </ListItem>
+              ))}
+            </List>
+          )}
         </AccordionPanel>
       </AccordionItem>
     </Accordion>
   ) : (
-    <Alert status="success" variant="solid">
+    <Alert status="success" variant="solid" display={noDisplayWhenSuccess ? 'none' : undefined}>
       <AlertIcon />
-      Success!
+      Success
     </Alert>
   )
 }
