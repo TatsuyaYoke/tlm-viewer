@@ -10,10 +10,12 @@ type Props = {
   options?: selectOptionType[]
 }
 
+const TLM_SELECT_INSTANCE_ID_PREFIX = 'tlmListId'
+
 export const TelemetrySelect = (props: Props) => {
   const { options } = props
 
-  const { tlmList, filteredOptions, addTlmList, deleteTlmList, selectValue, filterOption } = useTlmListSetting(options)
+  const { tlmList, filteredOptions, addTlmList, deleteTlmList, selectValue, filterOption } = useTlmListSetting(options, TLM_SELECT_INSTANCE_ID_PREFIX)
 
   return (
     <VStack>
@@ -24,7 +26,7 @@ export const TelemetrySelect = (props: Props) => {
         {tlmList.map((element, index) => (
           <Flex key={`tlm${element.id}`} w="100%" alignItems="center">
             <MySelect
-              instanceId={`tlmListId${element.id}`}
+              instanceId={`${TLM_SELECT_INSTANCE_ID_PREFIX}${element.id}`}
               color="teal.500"
               width="100%"
               height="40px"

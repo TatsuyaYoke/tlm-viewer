@@ -9,7 +9,7 @@ import type { MultiValue } from 'chakra-react-select'
 
 const MAX_OPTION_LENGTH = 2000
 
-export const useTlmListSetting = (options: selectOptionType[] | undefined) => {
+export const useTlmListSetting = (options: selectOptionType[] | undefined, prefixId: string) => {
   const [tlmList, setTlmList] = useRecoilState(tlmListState)
   const [countList, setCountList] = useState(1)
   const [filteredOptions, setFilteredOptions] = useState<selectOptionType[] | undefined>([])
@@ -30,7 +30,7 @@ export const useTlmListSetting = (options: selectOptionType[] | undefined) => {
 
   const selectValue = (value: MultiValue<selectOptionType>, instanceId?: string) => {
     const newTlmList = tlmList.map((list) => ({ ...list }))
-    const foundIndex = newTlmList.findIndex((element) => `tlmListId${element.id}` === instanceId)
+    const foundIndex = newTlmList.findIndex((element) => `${prefixId}${element.id}` === instanceId)
     const item = newTlmList[foundIndex]
     if (item) {
       if (Array.isArray(value)) {
