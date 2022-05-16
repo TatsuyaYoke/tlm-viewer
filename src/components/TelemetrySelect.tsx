@@ -15,7 +15,10 @@ const TLM_SELECT_INSTANCE_ID_PREFIX = 'tlmListId'
 export const TelemetrySelect = (props: Props) => {
   const { options } = props
 
-  const { tlmList, filteredOptions, addTlmList, deleteTlmList, selectValue, filterOption } = useTlmListSetting(options, TLM_SELECT_INSTANCE_ID_PREFIX)
+  const { tlmList, filteredOptions, addTlmList, deleteTlmList, selectValue, filterOption } = useTlmListSetting(
+    options,
+    TLM_SELECT_INSTANCE_ID_PREFIX
+  )
 
   return (
     <VStack>

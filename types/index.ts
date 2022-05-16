@@ -66,3 +66,21 @@ export type pjSettingWithTlmIdType = pjSettingType & {
 export type apiSuccess<T> = { success: true; data: T }
 export type apiError = { success: false; error: string }
 export type apiReturnType<T> = apiSuccess<T> | apiError
+
+export type dateSettingType = {
+  startDate?: Date
+  endDate?: Date
+}
+export type requestTlmListType = {
+  tlmId: number
+  tlm: string[]
+}
+export type requestDataType = {
+  project: string
+  isOrbit: boolean
+  isStored: boolean
+  isChoosed: boolean
+  dateSetting: dateSettingType
+  tesCase: selectOptionType[]
+  tlm: requestTlmListType[]
+}

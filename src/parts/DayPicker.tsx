@@ -5,7 +5,12 @@ import { SingleDatepicker } from 'chakra-dayzed-datepicker'
 
 import type { PropsConfigs } from 'chakra-dayzed-datepicker/dist/utils/commonTypes'
 
-export const DayPicker = () => {
+type Props = {
+  selectDate: (startDate: Date, endDate: Date) => void
+}
+
+export const DayPicker = (props: Props) => {
+  const { selectDate } = props
   const [startDate, setStartDate] = useState(new Date())
   const [endDate, setEndDate] = useState(new Date())
   const hoverBg = useColorModeValue('teal.300', 'teal.400')
@@ -28,6 +33,7 @@ export const DayPicker = () => {
     if (startDate > endDate) {
       setEndDate(() => startDate)
     }
+    selectDate(startDate, endDate)
   }, [startDate, endDate])
 
   return (

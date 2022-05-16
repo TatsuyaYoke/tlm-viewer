@@ -47,7 +47,7 @@ export const api: Main = {
         success: false,
         error: `Cannot parse ${PROJECT_SETTING_RELATIVE_PATH} correctly`,
       }
-    
+
     return {
       success: true,
       data: response,

@@ -11,11 +11,12 @@ import {
   tlmListState,
   projectState,
   settingState,
+  dateSettingState,
 } from '@atoms/PlotSettingAtom'
 import { Error } from '@components'
 import { Graph } from '@parts'
 
-import type { ObjectArrayType } from '@types'
+import type { ObjectArrayType, requestDataType, requestTlmListType } from '@types'
 
 export const GraphPlot = () => {
   const isStored = useRecoilValue(isStoredState)
@@ -25,6 +26,7 @@ export const GraphPlot = () => {
   const project = useRecoilValue(projectState)
   const tlmList = useRecoilValue(tlmListState)
   const setting = useRecoilValue(settingState)
+  const dateSetting = useRecoilValue(dateSettingState)
 
   const [isWarning, setIsWarning] = useState(false)
   const [warningMessage, setWarningMessage] = useState<string[]>([])
@@ -46,9 +48,20 @@ export const GraphPlot = () => {
     }
   }
 
-  const set = () => {
+  const initializeWarningError = () => {
     setIsWarning(false)
+    setIsError(false)
     setWarningMessage(() => [])
+  }
+
+  const set = () => {
+    initializeWarningError()
+    const projectValue = project?.value
+    if (!projectValue) return
+    const tlmIdList = setting?.tlmId
+    if (!tlmIdList) return
+
+    // delete test cases if no test cases in selected project
     const filteredTestCaseList = testCaseList.filter((element) => {
       if (setting?.testCase?.indexOf(element.value) === -1) {
         setIsWarning(true)
@@ -58,14 +71,75 @@ export const GraphPlot = () => {
       return true
     })
 
-    console.log(filteredTestCaseList)
-    console.log(warningMessage)
+    if (isChoosed && filteredTestCaseList.length === 0) {
+      setErrorMessage('Test case not selected, although Choose test cases is on')
+      setIsError(true)
+      return
+    }
+
+    // delete telemetries if no telemetries in selected project
+    const projectTlmList = Object.keys(tlmIdList)
+    const filteredTlmList = tlmList.map((element) => {
+      const filteredList = element.tlm.filter((tlm) => {
+        if (projectTlmList.indexOf(tlm.value) === -1) {
+          setIsWarning(true)
+          setWarningMessage((prev) => [...prev, `TLM list: ${tlm.value} of ${element.id} deleted because not exist`])
+          return false
+        }
+        return true
+      })
+      return {
+        id: element.id,
+        tlm: filteredList,
+      }
+    })
+
+    const reqeustTlmList: requestTlmListType[] = []
+    filteredTlmList.forEach((filteredElement) => {
+      filteredElement.tlm.forEach((tlm) => {
+        const tlmId = tlmIdList[tlm.value]
+        const selecteTlmIdList = reqeustTlmList.map((requestElement) => requestElement.tlmId)
+        if (tlmId && selecteTlmIdList.indexOf(tlmId) === -1) {
+          reqeustTlmList.push({
+            tlmId: tlmId,
+            tlm: [tlm.value],
+          })
+        } else {
+          const foundIndex = reqeustTlmList.findIndex((requestElement) => requestElement.tlmId === tlmId)
+          const foundTlmElement = reqeustTlmList[foundIndex]
+          if (foundTlmElement && foundTlmElement.tlm.indexOf(tlm.value) === -1) foundTlmElement.tlm.push(tlm.value)
+        }
+      })
+    })
+
+    if (reqeustTlmList.length === 0) {
+      setErrorMessage('Telemetry not selected')
+      setIsError(true)
+      return
+    }
+
+    const request: requestDataType = {
+      project: projectValue,
+      isOrbit: isOrbit,
+      isStored: isStored,
+      isChoosed: isChoosed,
+      dateSetting: dateSetting,
+      tesCase: filteredTestCaseList,
+      tlm: reqeustTlmList,
+    }
+    console.log(request)
   }
 
   return (
     <Box p={8} w="100%">
       <Flex>
-        <Error isWarning={isWarning} warningMessages={warningMessage} noDisplayWhenSuccess={true} />
+        <Error
+          isError={isError}
+          errorMessage={errorMessage}
+          isWarning={isWarning}
+          warningMessages={warningMessage}
+          noDisplayWhenSuccess={true}
+        />
         <Spacer />
         <Button colorScheme="teal" onClick={plot} mx="10" flexShrink={0} width="80px">
           Plot

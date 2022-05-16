@@ -1,6 +1,6 @@
 import { atom } from 'recoil'
 
-import type { pjSettingWithTlmIdType, selectOptionType, tlmListType } from '@types'
+import type { dateSettingType, pjSettingWithTlmIdType, selectOptionType, tlmListType } from '@types'
 import type { SingleValue, MultiValue } from 'chakra-react-select'
 
 export const isStoredState = atom<boolean>({
@@ -16,6 +16,14 @@ export const isOrbitState = atom<boolean>({
 export const isChoosedState = atom<boolean>({
   key: 'isChoosedState',
   default: false,
+})
+
+export const dateSettingState = atom<dateSettingType>({
+  key: 'dateSettingState',
+  default: {
+    startDate: undefined,
+    endDate: undefined,
+  },
 })
 
 export const testCaseListState = atom<MultiValue<selectOptionType>>({
