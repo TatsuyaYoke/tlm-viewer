@@ -71,9 +71,9 @@ export type dateSettingType = {
   startDate?: Date
   endDate?: Date
 }
-export type requestTlmListType = {
+export type requestTlmType = {
   tlmId: number
-  tlm: string[]
+  tlmList: string[]
 }
 export type requestDataType = {
   project: string
@@ -82,5 +82,5 @@ export type requestDataType = {
   isChoosed: boolean
   dateSetting: dateSettingType
   tesCase: selectOptionType[]
-  tlm: requestTlmListType[]
+  tlm: requestTlmType[]
 }

@@ -16,7 +16,7 @@ import {
 import { Error } from '@components'
 import { Graph } from '@parts'
 
-import type { ObjectArrayType, requestDataType, requestTlmListType } from '@types'
+import type { ObjectArrayType, requestDataType, requestTlmType } from '@types'
 
 export const GraphPlot = () => {
   const isStored = useRecoilValue(isStoredState)
@@ -94,7 +94,7 @@ export const GraphPlot = () => {
       }
     })
 
-    const reqeustTlmList: requestTlmListType[] = []
+    const reqeustTlmList: requestTlmType[] = []
     filteredTlmList.forEach((filteredElement) => {
       filteredElement.tlm.forEach((tlm) => {
         const tlmId = tlmIdList[tlm.value]
@@ -102,12 +102,12 @@ export const GraphPlot = () => {
         if (tlmId && selecteTlmIdList.indexOf(tlmId) === -1) {
           reqeustTlmList.push({
             tlmId: tlmId,
-            tlm: [tlm.value],
+            tlmList: [tlm.value],
           })
         } else {
           const foundIndex = reqeustTlmList.findIndex((requestElement) => requestElement.tlmId === tlmId)
           const foundTlmElement = reqeustTlmList[foundIndex]
-          if (foundTlmElement && foundTlmElement.tlm.indexOf(tlm.value) === -1) foundTlmElement.tlm.push(tlm.value)
+          if (foundTlmElement && foundTlmElement.tlmList.indexOf(tlm.value) === -1) foundTlmElement.tlmList.push(tlm.value)
         }
       })
     })
