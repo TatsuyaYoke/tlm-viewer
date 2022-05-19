@@ -2,6 +2,12 @@ import { BrowserWindow, app, ipcMain } from 'electron'
 import isDev from 'electron-is-dev'
 import { join } from 'path'
 
+import reload from 'electron-reload'
+
+reload(__dirname, {
+  electron: join(__dirname, '..', '..', 'node_modules', '.bin', 'electron'),
+})
+
 const createWindow = () => {
   // Create the browser window.
   const window = new BrowserWindow({
