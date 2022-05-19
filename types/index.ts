@@ -41,11 +41,22 @@ export type ObjectArrayType = z.infer<typeof objectArrayTypeSchema>
 export type ObjectArrayTypeIncludingDate = z.infer<typeof objectArrayTypeIncludeDateSchema>
 export type DateArrayType = z.infer<typeof dateArraySchema>
 
-export const pjSettingSchema = z.object({
-  pjName: z.string().regex(/^DSX[0-9]{4}/),
-  groundTestPath: z.string(),
-  orbitDatasetPath: z.string().regex(/^syns-sol-grdsys-external-prod.strix_/),
-})
+export const pjNameSchema = z.string().regex(/^DSX[0-9]{4}/)
+export const groundTestPathSchema = z.string()
+export const orbitDatasetPathSchema = z.string().regex(/^syns-sol-grdsys-external-prod.strix_/)
+
+export const pjSettingSchema = z.union([
+  z.object({
+    pjName: pjNameSchema,
+    groundTestPath: groundTestPathSchema.optional(),
+    orbitDatasetPath: orbitDatasetPathSchema,
+  }),
+  z.object({
+    pjName: pjNameSchema,
+    groundTestPath: groundTestPathSchema,
+    orbitDatasetPath: orbitDatasetPathSchema.optional(),
+  }),
+])
 export const pjSettingsSchema = z.array(pjSettingSchema)
 export const appSettingsSchema = z.object({
   project: pjSettingsSchema,

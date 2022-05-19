@@ -61,6 +61,17 @@ export const GraphPlot = () => {
     const tlmIdList = setting?.tlmId
     if (!tlmIdList) return
 
+    if (isOrbit && !setting.orbitDatasetPath) {
+      setIsError(true)
+      setErrorMessage(`Orbit telemetry for ${projectValue} not found`)
+      return
+    }
+    if (!isOrbit && !setting.testCase) {
+      setIsError(true)
+      setErrorMessage(`Ground test telemetry for ${projectValue} not found`)
+      return
+    }
+
     // delete test cases if no test cases in selected project
     const filteredTestCaseList = testCaseList.filter((element) => {
       if (setting?.testCase?.indexOf(element.value) === -1) {
@@ -107,7 +118,8 @@ export const GraphPlot = () => {
         } else {
           const foundIndex = reqeustTlmList.findIndex((requestElement) => requestElement.tlmId === tlmId)
           const foundTlmElement = reqeustTlmList[foundIndex]
-          if (foundTlmElement && foundTlmElement.tlmList.indexOf(tlm.value) === -1) foundTlmElement.tlmList.push(tlm.value)
+          if (foundTlmElement && foundTlmElement.tlmList.indexOf(tlm.value) === -1)
+            foundTlmElement.tlmList.push(tlm.value)
         }
       })
     })

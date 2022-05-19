@@ -92,10 +92,12 @@ export const getSettings = (topPath: string, pjSettingPath: string) => {
         if (tlmIdSchemaResult.success) {
           response.tlmId = tlmIdSchemaResult.data
         }
-        const testCaseDirs = glob.sync(join(topPath, value.groundTestPath, '*'))
-        const testCaseList = testCaseDirs.map((dir: string) => dir.substring(dir.lastIndexOf('/') + 1))
-        if (testCaseList) {
-          response.testCase = testCaseList
+        if (value.groundTestPath) {
+          const testCaseDirs = glob.sync(join(topPath, value.groundTestPath, '*'))
+          const testCaseList = testCaseDirs.map((dir: string) => dir.substring(dir.lastIndexOf('/') + 1))
+          if (testCaseList.length !== 0) {
+            response.testCase = testCaseList
+          }
         }
       }
       return response

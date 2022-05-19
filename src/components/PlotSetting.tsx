@@ -35,6 +35,8 @@ export const PlotSetting = (props: Props) => {
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+  const [isWarning, setIsWarning] = useState(false)
+  const [warningMessage, setWarningMessage] = useState<string[]>([])
   const [projectOptionList, setProjectOptionList] = useState<selectOptionType[]>([])
   const project = useRecoilValue(projectState)
   const [setting, setSetting] = useRecoilState(settingState)
@@ -83,6 +85,22 @@ export const PlotSetting = (props: Props) => {
     initializeSetting()
   }, [project])
 
+  useEffect(() => {
+    if (!project?.value) return
+    if (isOrbit && !setting?.orbitDatasetPath) {
+      setIsWarning(true)
+      setWarningMessage(() => [`orbitDatasetPath for ${project.value} not found`])
+      return
+    }
+    if (!isOrbit && !setting?.testCase) {
+      setIsWarning(true)
+      setWarningMessage(() => [`groundTestPath or telemetry for ${project.value} not found`])
+      return
+    }
+    setIsWarning(false)
+    setIsError(false)
+  }, [isOrbit, setting])
+
   return (
     <VStack
       divider={<StackDivider borderColor="gray.200" />}
@@ -103,7 +121,7 @@ export const PlotSetting = (props: Props) => {
         <Button width="100%" colorScheme="teal" onClick={initializeSetting}>
           Reconnect
         </Button>
-        <Error isError={isError} errorMessage={errorMessage} />
+        <Error isError={isError} errorMessage={errorMessage} isWarning={isWarning} warningMessages={warningMessage} />
       </VStack>
       {!isLoading && (
         <ProjectSelect
