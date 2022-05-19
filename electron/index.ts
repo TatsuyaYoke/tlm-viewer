@@ -2,11 +2,17 @@ import { BrowserWindow, app, ipcMain } from 'electron'
 import isDev from 'electron-is-dev'
 import { join } from 'path'
 
+import reload from 'electron-reload'
+
+if (isDev) {
+  reload(__dirname, {
+    electron: join(__dirname, '../../node_modules/electron/dist/electron.exe'),
+  })
+}
+
 const createWindow = () => {
   // Create the browser window.
   const window = new BrowserWindow({
-    // width,
-    // height,
     //  change to false to use AppBar
     frame: false,
     show: false,
