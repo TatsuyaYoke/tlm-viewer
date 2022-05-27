@@ -6,7 +6,7 @@ import { useRecoilValue } from 'recoil'
 import {
   isOrbitState,
   isStoredState,
-  isChoosedState,
+  isChosenState,
   testCaseListState,
   tlmListState,
   projectState,
@@ -20,7 +20,7 @@ import type { ObjectArrayType, requestDataType, requestTlmType } from '@types'
 
 export const GraphPlot = () => {
   const isStored = useRecoilValue(isStoredState)
-  const isChoosed = useRecoilValue(isChoosedState)
+  const isChosen = useRecoilValue(isChosenState)
   const isOrbit = useRecoilValue(isOrbitState)
   const testCaseList = useRecoilValue(testCaseListState)
   const project = useRecoilValue(projectState)
@@ -82,7 +82,7 @@ export const GraphPlot = () => {
       return true
     })
 
-    if (isChoosed && filteredTestCaseList.length === 0) {
+    if (isChosen && filteredTestCaseList.length === 0) {
       setErrorMessage('Test case not selected, although Choose test cases is on')
       setIsError(true)
       return
@@ -105,26 +105,26 @@ export const GraphPlot = () => {
       }
     })
 
-    const reqeustTlmList: requestTlmType[] = []
+    const requestTlmList: requestTlmType[] = []
     filteredTlmList.forEach((filteredElement) => {
       filteredElement.tlm.forEach((tlm) => {
         const tlmId = tlmIdList[tlm.value]
-        const selecteTlmIdList = reqeustTlmList.map((requestElement) => requestElement.tlmId)
-        if (tlmId && selecteTlmIdList.indexOf(tlmId) === -1) {
-          reqeustTlmList.push({
+        const selectedTlmIdList = requestTlmList.map((requestElement) => requestElement.tlmId)
+        if (tlmId && selectedTlmIdList.indexOf(tlmId) === -1) {
+          requestTlmList.push({
             tlmId: tlmId,
             tlmList: [tlm.value],
           })
         } else {
-          const foundIndex = reqeustTlmList.findIndex((requestElement) => requestElement.tlmId === tlmId)
-          const foundTlmElement = reqeustTlmList[foundIndex]
+          const foundIndex = requestTlmList.findIndex((requestElement) => requestElement.tlmId === tlmId)
+          const foundTlmElement = requestTlmList[foundIndex]
           if (foundTlmElement && foundTlmElement.tlmList.indexOf(tlm.value) === -1)
             foundTlmElement.tlmList.push(tlm.value)
         }
       })
     })
 
-    if (reqeustTlmList.length === 0) {
+    if (requestTlmList.length === 0) {
       setErrorMessage('Telemetry not selected')
       setIsError(true)
       return
@@ -134,10 +134,10 @@ export const GraphPlot = () => {
       project: projectValue,
       isOrbit: isOrbit,
       isStored: isStored,
-      isChoosed: isChoosed,
+      isChosen: isChosen,
       dateSetting: dateSetting,
       tesCase: filteredTestCaseList,
-      tlm: reqeustTlmList,
+      tlm: requestTlmList,
     }
     console.log(request)
   }

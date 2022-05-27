@@ -79,8 +79,8 @@ export type apiError = { success: false; error: string }
 export type apiReturnType<T> = apiSuccess<T> | apiError
 
 export type dateSettingType = {
-  startDate?: Date
-  endDate?: Date
+  startDate: Date
+  endDate: Date
 }
 export type requestTlmType = {
   tlmId: number
@@ -90,7 +90,7 @@ export type requestDataType = {
   project: string
   isOrbit: boolean
   isStored: boolean
-  isChoosed: boolean
+  isChosen: boolean
   dateSetting: dateSettingType
   tesCase: selectOptionType[]
   tlm: requestTlmType[]

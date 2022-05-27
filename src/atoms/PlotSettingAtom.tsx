@@ -13,16 +13,16 @@ export const isOrbitState = atom<boolean>({
   default: false,
 })
 
-export const isChoosedState = atom<boolean>({
-  key: 'isChoosedState',
+export const isChosenState = atom<boolean>({
+  key: 'isChosenState',
   default: false,
 })
 
 export const dateSettingState = atom<dateSettingType>({
   key: 'dateSettingState',
   default: {
-    startDate: undefined,
-    endDate: undefined,
+    startDate: new Date(),
+    endDate: new Date(),
   },
 })
 

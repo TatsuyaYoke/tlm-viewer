@@ -11,7 +11,7 @@ import {
   projectState,
   settingState,
   dateSettingState,
-  isChoosedState,
+  isChosenState,
 } from '@atoms/PlotSettingAtom'
 import { ProjectSelect, TelemetrySelect, TestCaseSelect, Error } from '@components'
 import { stringToSelectOption } from '@functions'
@@ -30,7 +30,7 @@ export const PlotSetting = (props: Props) => {
   const sidebarBg = useColorModeValue('gray.50', 'gray.700')
   const [isOrbit, setIsOrbit] = useRecoilState(isOrbitState)
   const [isStored, setIsStored] = useRecoilState(isStoredState)
-  const setIsChoosed = useSetRecoilState(isChoosedState)
+  const setIsChosen = useSetRecoilState(isChosenState)
   const setDate = useSetRecoilState(dateSettingState)
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState(false)
@@ -42,7 +42,7 @@ export const PlotSetting = (props: Props) => {
   const [setting, setSetting] = useRecoilState(settingState)
 
   const toggleIsOrbit = (value: boolean) => {
-    if (!value) setIsChoosed(false)
+    if (!value) setIsChosen(false)
     setIsOrbit(() => !value)
   }
   const toggleIsStored = (value: boolean) => {

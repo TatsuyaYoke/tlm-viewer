@@ -23,7 +23,7 @@ export const TelemetrySelect = (props: Props) => {
   return (
     <VStack>
       <Flex w="100%">
-        <Text fontWeight={600}>Choose telemeries</Text>
+        <Text fontWeight={600}>Choose telemetries</Text>
       </Flex>
       <VStack w="100%">
         {tlmList.map((element, index) => (

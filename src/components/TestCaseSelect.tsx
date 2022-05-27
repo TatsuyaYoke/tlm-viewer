@@ -1,7 +1,7 @@
 import { VStack } from '@chakra-ui/react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
-import { isChoosedState, testCaseListState } from '@atoms/PlotSettingAtom'
+import { isChosenState, testCaseListState } from '@atoms/PlotSettingAtom'
 import { MySwitch, MySelect } from '@parts'
 
 import type { selectOptionType } from '@types'
@@ -13,11 +13,11 @@ type Props = {
 
 export const TestCaseSelect = (props: Props) => {
   const { options } = props
-  const [isChoosed, setIsChoosed] = useRecoilState(isChoosedState)
+  const [isChosen, setIsChosen] = useRecoilState(isChosenState)
   const setTestCaseList = useSetRecoilState(testCaseListState)
 
   const toggleValue = (value: boolean) => {
-    setIsChoosed(() => !value)
+    setIsChosen(() => !value)
   }
 
   const selectValue = (value: MultiValue<selectOptionType>) => {
@@ -26,7 +26,7 @@ export const TestCaseSelect = (props: Props) => {
 
   return (
     <VStack>
-      <MySwitch label="Choose test cases" value={isChoosed} toggleValue={toggleValue} />
+      <MySwitch label="Choose test cases" value={isChosen} toggleValue={toggleValue} />
       <MySelect
         instanceId="testCase"
         color="teal.500"
