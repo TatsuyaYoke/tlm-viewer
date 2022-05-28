@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Box, Button, Flex, Spacer } from '@chakra-ui/react'
+import { Box, Button, Flex, Spacer, Spinner } from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
 
 import {
@@ -32,20 +32,30 @@ export const GraphPlot = () => {
   const [warningMessage, setWarningMessage] = useState<string[]>([])
   const [isError, setIsError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const [graphTime, setGraphTime] = useState<string[] | null>(null)
   const [graphData, setGraphData] = useState<ObjectArrayType | null>(null)
 
   const plot = async () => {
-    const path = 'G:/Shared drives/0705_Sat_Dev_Tlm/system_test.db'
-    const query =
-      "select distinct DATE, PCDU_BAT_VOLTAGE, PCDU_BAT_CURRENT from DSX0201_tlm_id_1 where DATE between '2022-04-18' and '2022-04-19'"
-    const response = await window.Main.getData(path, query)
-    if (response.success) {
-      const { DATE: dateData, ...dataWithoutDate } = response.data
-      setGraphTime(dateData)
-      setGraphData(dataWithoutDate)
-    }
+    setIsLoading(true)
+    // const path = 'G:/Shared drives/0705_Sat_Dev_Tlm/system_test.db'
+    // const query =
+    //   "select distinct DATE, PCDU_BAT_VOLTAGE, PCDU_BAT_CURRENT from DSX0201_tlm_id_1 where DATE between '2022-04-18' and '2022-04-19'"
+    // const response = await window.Main.getData(path, query)
+    // if (response.success) {
+    //   const { DATE: dateData, ...dataWithoutDate } = response.data
+    //   setGraphTime(dateData)
+    //   setGraphData(dataWithoutDate)
+    // }
+    setGraphTime(['2022-04-18 00:00:00', '2022-04-18 00:00:01', '2022-04-18 00:00:02'])
+    setGraphData({
+      PCDU_BAT_CURRENT: [0, 1, 2],
+      PCDU_BAT_VOLTAGE: [2, 1, 0],
+    })
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 1000)
   }
 
   const initializeWarningError = () => {
@@ -161,13 +171,15 @@ export const GraphPlot = () => {
         </Button>
       </Flex>
       <Flex wrap="wrap">
-        {graphData &&
-          graphTime &&
+        {!isLoading && graphData && graphTime ? (
           Object.keys(graphData).map((key) => {
             const yData = graphData[key]
             if (yData) return <Graph key={key} x={graphTime} y={yData} />
             return null
-          })}
+          })
+        ) : (
+          <Spinner thickness="5px" speed="0.5s" emptyColor="gray.200" color="blue.500" size="xl" />
+        )}
       </Flex>
     </Box>
   )
