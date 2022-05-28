@@ -3,5 +3,12 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
-    }
+    },
+    "cSpell.words": [
+        "synspective",
+        "syns",
+        "chakra",
+        "grdsys",
+        "strix",
+    ]
 }
