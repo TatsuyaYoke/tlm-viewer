@@ -15,8 +15,9 @@ import {
 } from '@atoms/PlotSettingAtom'
 import { Error } from '@components'
 import { Graph } from '@parts'
+import { isNotNull } from '@types'
 
-import type { ObjectArrayType, requestDataType, requestTlmType } from '@types'
+import type { requestDataType, requestTlmType, graphDataArrayType } from '@types'
 
 export const GraphPlot = () => {
   const isStored = useRecoilValue(isStoredState)
@@ -33,29 +34,83 @@ export const GraphPlot = () => {
   const [isError, setIsError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-
-  const [graphTime, setGraphTime] = useState<string[] | null>(null)
-  const [graphData, setGraphData] = useState<ObjectArrayType | null>(null)
+  const [graphData, setGraphData] = useState<graphDataArrayType>([])
 
   const plot = async () => {
     setIsLoading(true)
-    // const path = 'G:/Shared drives/0705_Sat_Dev_Tlm/system_test.db'
-    // const query =
-    //   "select distinct DATE, PCDU_BAT_VOLTAGE, PCDU_BAT_CURRENT from DSX0201_tlm_id_1 where DATE between '2022-04-18' and '2022-04-19'"
     // const response = await window.Main.getData(path, query)
-    // if (response.success) {
-    //   const { DATE: dateData, ...dataWithoutDate } = response.data
-    //   setGraphTime(dateData)
-    //   setGraphData(dataWithoutDate)
-    // }
-    setGraphTime(['2022-04-18 00:00:00', '2022-04-18 00:00:01', '2022-04-18 00:00:02'])
-    setGraphData({
-      PCDU_BAT_CURRENT: [0, 1, 2],
-      PCDU_BAT_VOLTAGE: [2, 1, 0],
-    })
+    const response: {
+      tlm: {
+        [key: string]: {
+          time: (string | number | null)[]
+          data: (string | number | null)[]
+        }
+      }
+      warningMessages: string[]
+    } = {
+      tlm: {
+        PCDU_BAT_CURRENT: {
+          time: ['2022-04-18 00:00:00', '2022-04-18 00:00:01', '2022-04-18 00:00:02'],
+          data: [0, 1, 2],
+        },
+        PCDU_BAT_VOLTAGE: {
+          time: ['2022-04-18 00:00:00', '2022-04-18 00:00:01', '2022-04-18 00:00:02'],
+          data: [2, 1, 0],
+        },
+        OBC_AD590_01: {
+          time: ['2022-04-18 00:00:00', '2022-04-18 00:00:01', '2022-04-18 00:00:02'],
+          data: [1, 1, 1],
+        },
+        OBC_AD590_02: {
+          time: ['2022-04-18 00:00:00', '2022-04-18 00:00:01', '2022-04-18 00:00:02'],
+          data: [2, 2, 2],
+        },
+      },
+      warningMessages: [],
+    }
+    const filteredTlmList = [
+      {
+        plotId: 1,
+        tlm: [
+          { label: 'PCDU_BAT_CURRENT', value: 'PCDU_BAT_CURRENT' },
+          { label: 'PCDU_BAT_VOLTAGE', value: 'PCDU_BAT_VOLTAGE' },
+        ],
+      },
+      {
+        plotId: 2,
+        tlm: [
+          { label: 'OBC_AD590_01', value: 'OBC_AD590_01' },
+          { label: 'OBC_AD590_02', value: 'OBC_AD590_0' },
+        ],
+      },
+    ]
+
+    setGraphData(() =>
+      filteredTlmList.map((plotObject) => {
+        const tlmListEachPlotId = plotObject.tlm.map((e) => e.value)
+        return {
+          plotId: plotObject.plotId,
+          tlm: tlmListEachPlotId
+            .map((tlmName) => {
+              const tlmData = response.tlm[tlmName]
+              const xData = tlmData?.time
+              const yData = tlmData?.data
+              if (tlmData && xData && yData)
+                return {
+                  tlmName: tlmName,
+                  x: xData,
+                  y: yData,
+                }
+              return null
+            })
+            .filter(isNotNull),
+        }
+      })
+    )
+
     setTimeout(() => {
       setIsLoading(false)
-    }, 1000)
+    }, 500)
   }
 
   const initializeWarningError = () => {
@@ -110,7 +165,7 @@ export const GraphPlot = () => {
         return true
       })
       return {
-        id: element.id,
+        plotId: element.id,
         tlm: filteredList,
       }
     })
@@ -171,12 +226,8 @@ export const GraphPlot = () => {
         </Button>
       </Flex>
       <Flex wrap="wrap">
-        {!isLoading && graphData && graphTime ? (
-          Object.keys(graphData).map((key) => {
-            const yData = graphData[key]
-            if (yData) return <Graph key={key} x={graphTime} y={yData} />
-            return null
-          })
+        {!isLoading ? (
+          graphData.map((element) => <Graph key={element.plotId} graphData={element.tlm} />)
         ) : (
           <Spinner thickness="5px" speed="0.5s" emptyColor="gray.200" color="blue.500" size="xl" />
         )}

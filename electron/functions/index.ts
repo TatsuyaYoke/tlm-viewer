@@ -14,9 +14,6 @@ import type {
   pjSettingWithTlmIdType,
 } from '../../types'
 
-export const isNotNull = <T>(item: T): item is Exclude<T, null> => item !== null
-export const isNotUndefined = <T>(item: T): item is Exclude<T, undefined> => item !== undefined
-
 const includeDate = (value: ObjectArrayType | ObjectArrayTypeIncludingDate): value is ObjectArrayTypeIncludingDate => {
   if ((value as ObjectArrayTypeIncludingDate).DATE !== undefined) {
     const result = dateArraySchema.safeParse(value.DATE)

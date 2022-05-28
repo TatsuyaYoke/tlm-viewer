@@ -1,33 +1,30 @@
 import { useColorModeValue } from '@chakra-ui/react'
 import Plot from 'react-plotly.js'
 
-import type { DataType } from '@types'
+import type { graphDataType } from '@types'
 
 type Props = {
-  x: DataType[]
-  y: DataType[]
+  graphData: graphDataType[]
   // color: string
 }
 
 export const Graph = (props: Props) => {
-  const { x, y } = props
+  const { graphData } = props
   const graphBgColor = useColorModeValue('#FFFFFF', '#1A202C')
   const graphFontColor = useColorModeValue('#000000', '#FFFFFF')
   const graphGridColor = useColorModeValue('#A0AEC0', '#636363')
   const graphLineColor = useColorModeValue('#A0AEC0', '#636363')
   return (
     <Plot
-      data={[
-        {
-          x: x,
-          y: y,
-          type: 'scattergl',
-          mode: 'lines+markers',
-          // marker: { color: color },
-        },
-      ]}
+      data={graphData.map((element) => ({
+        x: element.x,
+        y: element.y,
+        type: 'scattergl',
+        mode: 'lines+markers',
+        name: element.tlmName,
+      }))}
       layout={{
-        width: 600,
+        width: 700,
         height: 500,
         margin: {
           l: 50,
@@ -36,8 +33,8 @@ export const Graph = (props: Props) => {
           b: 80,
         },
         xaxis: {
-          // tickformat: '%m-%d, %H:%M',
-          tickangle: -45,
+          tickformat: '%m-%d, %H:%M:%S',
+          tickangle: -40,
           // dtick: 3 * 60 * 60 * 1000, // milliseconds
           gridcolor: graphGridColor,
           linecolor: graphLineColor,
@@ -65,6 +62,7 @@ export const Graph = (props: Props) => {
         },
         plot_bgcolor: graphBgColor,
         paper_bgcolor: graphBgColor,
+        showlegend: true,
       }}
       config={{
         responsive: false,

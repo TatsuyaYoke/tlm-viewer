@@ -5,6 +5,8 @@
         "source.fixAll.eslint": true
     },
     "cSpell.words": [
+        "vite",
+        "vitejs",
         "synspective",
         "syns",
         "chakra",
@@ -12,5 +14,22 @@
         "strix",
         "pcdu",
         "obc",
+        "plotly",
+        "scattergl",
+        "xaxis",
+        "yaxis",
+        "tickformat",
+        "tickangle",
+        "dtick",
+        "gridcolor",
+        "linecolor",
+        "zerolinecolor",
+        "showgrid",
+        "zeroline",
+        "showline",
+        "autorange",
+        "autotick",
+        "bgcolor",
+        "showlegend",
     ]
 }
