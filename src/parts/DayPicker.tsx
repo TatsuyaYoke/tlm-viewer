@@ -16,7 +16,7 @@ export const DayPicker = (props: Props) => {
   const hoverBg = useColorModeValue('teal.300', 'teal.400')
   const selectedBg = useColorModeValue('teal.100', 'teal.700')
 
-  const dayPickerCoinfg: PropsConfigs = {
+  const dayPickerConfig: PropsConfigs = {
     dateNavBtnProps: {
       variant: 'outline',
     },
@@ -40,11 +40,11 @@ export const DayPicker = (props: Props) => {
     <VStack spacing={3}>
       <Box w="100%">
         <Text fontWeight={600}>Start Date</Text>
-        <SingleDatepicker date={startDate} onDateChange={setStartDate} propsConfigs={dayPickerCoinfg} />
+        <SingleDatepicker date={startDate} onDateChange={setStartDate} propsConfigs={dayPickerConfig} />
       </Box>
       <Box w="100%">
         <Text fontWeight={600}>End Date</Text>
-        <SingleDatepicker date={endDate} onDateChange={setEndDate} propsConfigs={dayPickerCoinfg} />
+        <SingleDatepicker date={endDate} onDateChange={setEndDate} propsConfigs={dayPickerConfig} />
       </Box>
     </VStack>
   )

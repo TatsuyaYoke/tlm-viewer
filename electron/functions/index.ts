@@ -71,7 +71,7 @@ export const resolvePath = (path: string, resolveName1: string, resolveName2: st
   return null
 }
 
-export const resolvePathGdrive = (path: string): string | null => resolvePath(path, '共有ドライブ', 'Shared drives')
+export const resolvePathGDrive = (path: string): string | null => resolvePath(path, '共有ドライブ', 'Shared drives')
 
 export const getSettings = (topPath: string, pjSettingPath: string) => {
   let pjSettings: pjSettingsType | undefined
@@ -81,11 +81,11 @@ export const getSettings = (topPath: string, pjSettingPath: string) => {
 
   if (pjSettings) {
     const pjSettingWithTlmIdList = pjSettings.map((value) => {
-      const tlmIdfilePath = resolvePathGdrive(join(topPath, 'settings', value.pjName, 'tlm_id.json'))
+      const tlmIdFilePath = resolvePathGDrive(join(topPath, 'settings', value.pjName, 'tlm_id.json'))
       const response: pjSettingWithTlmIdType = value
-      if (tlmIdfilePath) {
-        const tlmIdsettingsBeforeParse = JSON.parse(fs.readFileSync(tlmIdfilePath, 'utf-8'))
-        const tlmIdSchemaResult = tlmIdSchema.safeParse(tlmIdsettingsBeforeParse)
+      if (tlmIdFilePath) {
+        const tlmIdSettingsBeforeParse = JSON.parse(fs.readFileSync(tlmIdFilePath, 'utf-8'))
+        const tlmIdSchemaResult = tlmIdSchema.safeParse(tlmIdSettingsBeforeParse)
         if (tlmIdSchemaResult.success) {
           response.tlmId = tlmIdSchemaResult.data
         }

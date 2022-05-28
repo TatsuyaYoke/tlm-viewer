@@ -31,5 +31,12 @@
         "autotick",
         "bgcolor",
         "showlegend",
+        "draggable",
+        "undraggable",
+        "datepicker",
+        "dayzed",
+        "fullscreenable",
+        "asar",
+        "parens",
     ]
 }

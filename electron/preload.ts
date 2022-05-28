@@ -1,7 +1,7 @@
 import { ipcRenderer, contextBridge } from 'electron'
 import { join } from 'path'
 
-import { readDbSync, resolvePathGdrive, getSettings } from './functions'
+import { readDbSync, resolvePathGDrive, getSettings } from './functions'
 
 import type { Main } from '../types'
 
@@ -11,7 +11,7 @@ const PROJECT_SETTING_RELATIVE_PATH = 'settings/pj-settings.json'
 
 export const api: Main = {
   getData: async (path, query) => {
-    const resolvedPath = resolvePathGdrive(path)
+    const resolvedPath = resolvePathGDrive(path)
     if (resolvedPath) {
       const data = await readDbSync(resolvedPath, query)
       return {
@@ -26,13 +26,13 @@ export const api: Main = {
     }
   },
   getSettings: () => {
-    const topPath = resolvePathGdrive(TOP_PATH)
-    const pjSettingPath = resolvePathGdrive(join(TOP_PATH, PROJECT_SETTING_RELATIVE_PATH))
+    const topPath = resolvePathGDrive(TOP_PATH)
+    const pjSettingPath = resolvePathGDrive(join(TOP_PATH, PROJECT_SETTING_RELATIVE_PATH))
 
     if (!topPath)
       return {
         success: false,
-        error: 'Cannot connect Gdrive',
+        error: 'Cannot connect GDrive',
       }
 
     if (!pjSettingPath)
