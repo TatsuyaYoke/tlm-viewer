@@ -207,6 +207,11 @@ export const GraphPlot = () => {
     console.log(request)
   }
 
+  const outputCsv = async () => {
+    const path = await window.Main.openFileDialog()
+    console.log(path)
+  }
+
   return (
     <Box p={8} w="100%">
       <Flex>
@@ -223,6 +228,9 @@ export const GraphPlot = () => {
         </Button>
         <Button colorScheme="teal" onClick={set} mr="10" flexShrink={0} width="80px">
           Set
+        </Button>
+        <Button colorScheme="teal" onClick={outputCsv} mr="10" flexShrink={0} width="80px">
+          CSV
         </Button>
       </Flex>
       <Flex wrap="wrap">

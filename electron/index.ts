@@ -1,8 +1,20 @@
-import { BrowserWindow, app, ipcMain } from 'electron'
+import { BrowserWindow, app, ipcMain, dialog } from 'electron'
 import isDev from 'electron-is-dev'
 import { join } from 'path'
 
 import reload from 'electron-reload'
+
+import type { MyIpcChannelDataType, MyIpcChannelSendOnType, MyIpcChannelType } from '../types'
+import type { IpcMainInvokeEvent, IpcMainEvent } from 'electron'
+
+const myIpcMain = {
+  handle: <T extends MyIpcChannelType>(
+    channel: T,
+    listener: (event: IpcMainInvokeEvent, args: unknown) => MyIpcChannelDataType[T]
+  ) => ipcMain.handle(channel, listener),
+  on: <T extends MyIpcChannelSendOnType>(channel: T, listener: (event: IpcMainEvent, args: unknown) => void) =>
+    ipcMain.on(channel, listener),
+}
 
 if (isDev) {
   reload(__dirname, {
@@ -38,19 +50,30 @@ const createWindow = () => {
   // window.webContents.openDevTools();
 
   // For AppBar
-  ipcMain.on('minimize', () => {
+  myIpcMain.on('Minimize', () => {
     // eslint-disable-next-line no-unused-expressions
     window.isMinimized() ? window.restore() : window.minimize()
     // or alternatively: win.isVisible() ? win.hide() : win.show()
   })
-  ipcMain.on('maximize', () => {
+  myIpcMain.on('Maximize', () => {
     // eslint-disable-next-line no-unused-expressions
     window.isMaximized() ? window.restore() : window.maximize()
   })
 
-  ipcMain.on('close', () => {
+  myIpcMain.on('Close', () => {
     window.close()
   })
+
+  myIpcMain.handle('openDialog', () =>
+    dialog
+      .showOpenDialog(window, {
+        properties: ['openFile'],
+      })
+      .then((result) => {
+        if (result.canceled) return ''
+        return result.filePaths[0]
+      })
+  )
 }
 
 // This method will be called when Electron has finished

@@ -5,12 +5,20 @@ import type { MultiValue } from 'chakra-react-select'
 export const isNotNull = <T>(item: T): item is Exclude<T, null> => item !== null
 export const isNotUndefined = <T>(item: T): item is Exclude<T, undefined> => item !== undefined
 
+export type MyIpcChannelDataType = {
+  openDialog: Promise<string | undefined>
+}
+
+export type MyIpcChannelType = keyof MyIpcChannelDataType
+export type MyIpcChannelSendOnType = 'Maximize' | 'Minimize' | 'Close'
+
 export type Main = {
   getData: (path: string, query: string) => Promise<apiReturnType<ObjectArrayTypeIncludingDate>>
   getSettings: () => apiReturnType<pjSettingWithTlmIdType[]>
   Maximize: () => void
   Minimize: () => void
   Close: () => void
+  openFileDialog: () => MyIpcChannelDataType['openDialog']
 }
 
 declare global {
