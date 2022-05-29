@@ -5,7 +5,7 @@ import { join } from 'path'
 
 import reload from 'electron-reload'
 
-import type { MyIpcChannelDataType, MyIpcChannelType, PropsType } from '../types'
+import type { MyIpcChannelDataType, MyIpcChannelType } from '../types'
 import type { IpcMainInvokeEvent } from 'electron'
 
 const myIpcMain = {
@@ -13,8 +13,8 @@ const myIpcMain = {
     channel: T,
     listener: (
       event: IpcMainInvokeEvent,
-      args: PropsType<MyIpcChannelDataType[T]>
-    ) => Promise<ReturnType<MyIpcChannelDataType[T]>>
+      args: Parameters<MyIpcChannelDataType[T]>[0]
+    ) => ReturnType<MyIpcChannelDataType[T]>
   ) => ipcMain.handle(channel, listener),
 }
 

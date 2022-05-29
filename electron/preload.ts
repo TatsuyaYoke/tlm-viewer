@@ -3,7 +3,7 @@ import { join } from 'path'
 
 import { readDbSync, resolvePathGDrive, getSettings } from './functions'
 
-import type { Main, MyIpcChannelDataType, MyIpcChannelType, PropsType } from '../types'
+import type { Main, MyIpcChannelDataType, MyIpcChannelType } from '../types'
 
 const TOP_PATH = 'G:/Shared drives/0705_Sat_Dev_Tlm'
 // const DB_NAME = 'system_test.db'
@@ -12,8 +12,10 @@ const PROJECT_SETTING_RELATIVE_PATH = 'settings/pj-settings.json'
 const myIpcRenderer = {
   invoke: async <T extends MyIpcChannelType>(
     channel: T,
-    args?: PropsType<MyIpcChannelDataType[T]>
-  ): Promise<ReturnType<MyIpcChannelDataType[T]>> => ipcRenderer.invoke(channel, args),
+    args?: Parameters<MyIpcChannelDataType[T]>[0]
+  ): /* おそらくバグかと思うのですが、Awaited を経由しないとエラーが消えませんでした.. */ Promise<
+    Awaited<ReturnType<MyIpcChannelDataType[T]>>
+  > => ipcRenderer.invoke(channel, args),
 }
 
 export const api: Main = {
@@ -60,15 +62,9 @@ export const api: Main = {
       data: response,
     }
   },
-  Minimize: () => {
-    myIpcRenderer.invoke('Minimize')
-  },
-  Maximize: () => {
-    myIpcRenderer.invoke('Maximize')
-  },
-  Close: () => {
-    myIpcRenderer.invoke('Close')
-  },
+  Minimize: () => myIpcRenderer.invoke('Minimize'),
+  Maximize: () => myIpcRenderer.invoke('Maximize'),
+  Close: () => myIpcRenderer.invoke('Close'),
   openFileDialog: () => myIpcRenderer.invoke('openFileDialog'),
   saveFile: (data) => myIpcRenderer.invoke('saveFile', data),
 }
