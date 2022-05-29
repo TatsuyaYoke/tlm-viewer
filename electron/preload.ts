@@ -3,15 +3,17 @@ import { join } from 'path'
 
 import { readDbSync, resolvePathGDrive, getSettings } from './functions'
 
-import type { Main, MyIpcChannelDataType,  MyIpcChannelType } from '../types'
+import type { Main, MyIpcChannelDataType, MyIpcChannelType, PropsType } from '../types'
 
 const TOP_PATH = 'G:/Shared drives/0705_Sat_Dev_Tlm'
 // const DB_NAME = 'system_test.db'
 const PROJECT_SETTING_RELATIVE_PATH = 'settings/pj-settings.json'
 
 const myIpcRenderer = {
-  invoke: <T extends MyIpcChannelType>(channel: T, args?: unknown): MyIpcChannelDataType[T] =>
-    ipcRenderer.invoke(channel, args),
+  invoke: async <T extends MyIpcChannelType>(
+    channel: T,
+    args?: PropsType<MyIpcChannelDataType[T]>
+  ): Promise<ReturnType<MyIpcChannelDataType[T]>> => ipcRenderer.invoke(channel, args),
 }
 
 export const api: Main = {
@@ -67,7 +69,8 @@ export const api: Main = {
   Close: () => {
     myIpcRenderer.invoke('Close')
   },
-  openFileDialog: () => myIpcRenderer.invoke('openDialog'),
+  openFileDialog: () => myIpcRenderer.invoke('openFileDialog'),
+  saveFile: (data) => myIpcRenderer.invoke('saveFile', data),
 }
 
 contextBridge.exposeInMainWorld('Main', api)

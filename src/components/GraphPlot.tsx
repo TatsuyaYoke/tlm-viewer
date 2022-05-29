@@ -208,7 +208,7 @@ export const GraphPlot = () => {
   }
 
   const outputCsv = async () => {
-    const path = await window.Main.openFileDialog()
+    const path = await window.Main.saveFile('aaa')
     console.log(path)
   }
 

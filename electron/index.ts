@@ -1,16 +1,20 @@
 import { BrowserWindow, app, ipcMain, dialog } from 'electron'
 import isDev from 'electron-is-dev'
+import * as fs from 'fs'
 import { join } from 'path'
 
 import reload from 'electron-reload'
 
-import type { MyIpcChannelDataType, MyIpcChannelType } from '../types'
+import type { MyIpcChannelDataType, MyIpcChannelType, PropsType } from '../types'
 import type { IpcMainInvokeEvent } from 'electron'
 
 const myIpcMain = {
   handle: <T extends MyIpcChannelType>(
     channel: T,
-    listener: (event: IpcMainInvokeEvent, args: unknown) => MyIpcChannelDataType[T]
+    listener: (
+      event: IpcMainInvokeEvent,
+      args: PropsType<MyIpcChannelDataType[T]>
+    ) => Promise<ReturnType<MyIpcChannelDataType[T]>>
   ) => ipcMain.handle(channel, listener),
 }
 
@@ -48,21 +52,21 @@ const createWindow = () => {
   // window.webContents.openDevTools();
 
   // For AppBar
-  myIpcMain.handle('Minimize', () => {
+  myIpcMain.handle('Minimize', async () => {
     // eslint-disable-next-line no-unused-expressions
     window.isMinimized() ? window.restore() : window.minimize()
     // or alternatively: win.isVisible() ? win.hide() : win.show()
   })
-  myIpcMain.handle('Maximize', () => {
+  myIpcMain.handle('Maximize', async () => {
     // eslint-disable-next-line no-unused-expressions
     window.isMaximized() ? window.restore() : window.maximize()
   })
 
-  myIpcMain.handle('Close', () => {
+  myIpcMain.handle('Close', async () => {
     window.close()
   })
 
-  myIpcMain.handle('openDialog', () =>
+  myIpcMain.handle('openFileDialog', () =>
     dialog
       .showOpenDialog(window, {
         properties: ['openFile'],
@@ -72,6 +76,23 @@ const createWindow = () => {
         return result.filePaths[0]
       })
   )
+  myIpcMain.handle('saveFile', async (_event, data) => {
+    const path = dialog.showSaveDialogSync(window, {
+      buttonLabel: 'Save',
+      filters: [{ name: 'CSV', extensions: ['csv'] }],
+      properties: ['createDirectory'],
+    })
+
+    if (path === undefined) {
+      return { success: false, error: 'Cancel' } as const
+    }
+    try {
+      fs.writeFileSync(path, data)
+      return { success: true, path: path } as const
+    } catch {
+      return { success: false, error: 'Cannot save' } as const
+    }
+  })
 }
 
 // This method will be called when Electron has finished
