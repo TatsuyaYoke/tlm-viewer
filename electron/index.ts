@@ -4,16 +4,14 @@ import { join } from 'path'
 
 import reload from 'electron-reload'
 
-import type { MyIpcChannelDataType, MyIpcChannelSendOnType, MyIpcChannelType } from '../types'
-import type { IpcMainInvokeEvent, IpcMainEvent } from 'electron'
+import type { MyIpcChannelDataType, MyIpcChannelType } from '../types'
+import type { IpcMainInvokeEvent } from 'electron'
 
 const myIpcMain = {
   handle: <T extends MyIpcChannelType>(
     channel: T,
     listener: (event: IpcMainInvokeEvent, args: unknown) => MyIpcChannelDataType[T]
   ) => ipcMain.handle(channel, listener),
-  on: <T extends MyIpcChannelSendOnType>(channel: T, listener: (event: IpcMainEvent, args: unknown) => void) =>
-    ipcMain.on(channel, listener),
 }
 
 if (isDev) {
@@ -50,17 +48,17 @@ const createWindow = () => {
   // window.webContents.openDevTools();
 
   // For AppBar
-  myIpcMain.on('Minimize', () => {
+  myIpcMain.handle('Minimize', () => {
     // eslint-disable-next-line no-unused-expressions
     window.isMinimized() ? window.restore() : window.minimize()
     // or alternatively: win.isVisible() ? win.hide() : win.show()
   })
-  myIpcMain.on('Maximize', () => {
+  myIpcMain.handle('Maximize', () => {
     // eslint-disable-next-line no-unused-expressions
     window.isMaximized() ? window.restore() : window.maximize()
   })
 
-  myIpcMain.on('Close', () => {
+  myIpcMain.handle('Close', () => {
     window.close()
   })
 
