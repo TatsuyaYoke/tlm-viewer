@@ -233,9 +233,9 @@ export const GraphPlot = () => {
           CSV
         </Button>
       </Flex>
-      <Flex wrap="wrap">
+      <Flex wrap="wrap" mt='20px'>
         {!isLoading ? (
-          graphData.map((element) => <Graph key={element.plotId} graphData={element.tlm} />)
+          graphData.map((element, index) => <Graph key={element.plotId} graphData={element} graphNumber={index+1} />)
         ) : (
           <Spinner thickness="5px" speed="0.5s" emptyColor="gray.200" color="blue.500" size="xl" />
         )}
