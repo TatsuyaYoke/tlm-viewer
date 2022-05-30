@@ -1,6 +1,7 @@
-import { useState } from 'react'
-
 import { Flex, Spacer, Text, Box, useColorModeValue } from '@chakra-ui/react'
+import { useRecoilState } from 'recoil'
+
+import { isMaximizeState } from '@atoms/PlotSettingAtom'
 
 type Props = {
   height: number | string
@@ -8,14 +9,14 @@ type Props = {
 
 export const AppBar = (props: Props) => {
   const { height } = props
-  const [isMaximize, setMaximize] = useState(true)
+  const [isMaximize, setIsMaximize] = useRecoilState(isMaximizeState)
   const bgColor = useColorModeValue('gray.200', 'gray.600')
 
   const handleToggle = () => {
     if (isMaximize) {
-      setMaximize(false)
+      setIsMaximize(false)
     } else {
-      setMaximize(true)
+      setIsMaximize(true)
     }
     window.Main.Maximize()
   }

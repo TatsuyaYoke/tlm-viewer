@@ -5,7 +5,7 @@ import { join } from 'path'
 
 import reload from 'electron-reload'
 
-import type { MyIpcChannelDataType, MyIpcChannelType, PropsType } from '../types'
+import type { MyIpcChannelDataType, MyIpcChannelType } from '../types'
 import type { IpcMainInvokeEvent } from 'electron'
 
 const myIpcMain = {
@@ -13,8 +13,8 @@ const myIpcMain = {
     channel: T,
     listener: (
       event: IpcMainInvokeEvent,
-      args: PropsType<MyIpcChannelDataType[T]>
-    ) => Promise<ReturnType<MyIpcChannelDataType[T]>>
+      args: Parameters<MyIpcChannelDataType[T]>[0]
+    ) => Promise<Awaited<ReturnType<MyIpcChannelDataType[T]>>>
   ) => ipcMain.handle(channel, listener),
 }
 
@@ -89,10 +89,12 @@ const createWindow = () => {
     try {
       fs.writeFileSync(path, data)
       return { success: true, path: path } as const
-    } catch {
-      return { success: false, error: 'Cannot save' } as const
+    } catch (error) {
+      if (error instanceof Error) return { success: false, error: error.message } as const
+      return { success: false, error: 'Unknown Error' } as const
     }
   })
+  myIpcMain.handle('isMaximize', async () => window.isMaximized())
 }
 
 // This method will be called when Electron has finished
@@ -126,4 +128,9 @@ app.on('window-all-closed', () => {
 //     return data
 //   }
 //   return null
+// })
+
+// ipcMain.on('message', (event: IpcMainEvent, data: any) => {
+//   console.log(data)
+//   setTimeout(() => event.sender.send('message', 'hi from electron'), 500)
 // })

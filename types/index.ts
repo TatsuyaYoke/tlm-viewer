@@ -4,26 +4,22 @@ import type { MultiValue } from 'chakra-react-select'
 
 export const isNotNull = <T>(item: T): item is Exclude<T, null> => item !== null
 export const isNotUndefined = <T>(item: T): item is Exclude<T, undefined> => item !== undefined
-export type PropsType<T> = T extends (args: infer R) => unknown ? R : never
-export type PropsPromiseReturn<T> = T extends (...args: infer U) => infer R ? (...args: U) => Promise<R> : unknown
 
 export type MyIpcChannelDataType = {
   Maximize: () => void
   Minimize: () => void
   Close: () => void
-  openFileDialog: () => string | undefined
-  saveFile: (data: string) => { success: true; path: string } | { success: false; error: string }
+  openFileDialog: () => Promise<string | undefined>
+  saveFile: (data: string) => Promise<{ success: true; path: string } | { success: false; error: string }>
+  isMaximize: () => Promise<boolean>
+  // sendMessage: (message: string) => void
+  // on: (channel: string, callback: (data: any) => void) => void
 }
 export type MyIpcChannelType = keyof MyIpcChannelDataType
 
-export type Main = {
+export type Main = MyIpcChannelDataType & {
   getData: (path: string, query: string) => Promise<apiReturnType<ObjectArrayTypeIncludingDate>>
   getSettings: () => apiReturnType<pjSettingWithTlmIdType[]>
-  Maximize: MyIpcChannelDataType['Maximize']
-  Minimize: MyIpcChannelDataType['Minimize']
-  Close: MyIpcChannelDataType['Close']
-  openFileDialog: PropsPromiseReturn<MyIpcChannelDataType['openFileDialog']>
-  saveFile: PropsPromiseReturn<MyIpcChannelDataType['saveFile']>
 }
 
 declare global {
