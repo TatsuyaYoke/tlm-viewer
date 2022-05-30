@@ -5,7 +5,7 @@ import { useSetRecoilState } from 'recoil'
 
 import { isMaximizeState } from '@atoms/PlotSettingAtom'
 import { AppBar, GraphPlot, PlotSetting } from '@components'
-import { useResizeObserver } from '@hooks/useResizeObserver'
+import { useResizeObserver } from '@hooks'
 
 export const App = () => {
   const headerHeight = '30px'
