@@ -10,7 +10,9 @@ export type MyIpcChannelDataType = {
   Minimize: () => void
   Close: () => void
   openFileDialog: () => Promise<string | undefined>
-  saveFile: (data: string) => Promise<{ success: true; path: string } | { success: false; error: string }>
+  saveFile: (
+    data: TlmDataObjectType['tlm']
+  ) => Promise<{ success: true; path: string } | { success: false; error: string }>
   isMaximize: () => Promise<boolean>
   // sendMessage: (message: string) => void
   // on: (channel: string, callback: (data: any) => void) => void
@@ -108,13 +110,30 @@ export type requestDataType = {
   tlm: requestTlmType[]
 }
 
-export type graphDataType = {
+export type TlmDataType = string | number | null
+
+export type TlmDataObjectType = {
+  tlm: {
+    [key: string]: {
+      time: TlmDataType[]
+      data: TlmDataType[]
+    }
+  }
+  warningMessages: string[]
+}
+
+export type GraphDataType = {
   tlmName: string
-  x: (string | number | null)[]
-  y: (string | number | null)[]
+  x: TlmDataType[]
+  y: TlmDataType[]
 }
-export type graphDataEachPlotIdType = {
+export type GraphDataEachPlotIdType = {
   plotId: number
-  tlm: graphDataType[]
+  tlm: GraphDataType[]
 }
-export type graphDataArrayType = graphDataEachPlotIdType[]
+export type GraphDataArrayType = GraphDataEachPlotIdType[]
+
+export type CsvDataType = {
+  Time: TlmDataType
+  [key: string]: TlmDataType
+}

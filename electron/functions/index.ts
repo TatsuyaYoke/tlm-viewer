@@ -4,7 +4,14 @@ import { join } from 'path'
 import glob from 'glob'
 import sqlite3 from 'sqlite3'
 
-import { arrayObjectSchema, dateArraySchema, appSettingsSchema, tlmIdSchema } from '../../types'
+import {
+  isNotNull,
+  arrayObjectSchema,
+  dateArraySchema,
+  appSettingsSchema,
+  tlmIdSchema,
+  isNotUndefined,
+} from '../../types'
 
 import type {
   ObjectArrayType,
@@ -12,6 +19,8 @@ import type {
   ArrayObjectType,
   pjSettingsType,
   pjSettingWithTlmIdType,
+  TlmDataObjectType,
+  CsvDataType,
 } from '../../types'
 
 const includeDate = (value: ObjectArrayType | ObjectArrayTypeIncludingDate): value is ObjectArrayTypeIncludingDate => {
@@ -102,4 +111,30 @@ export const getSettings = (topPath: string, pjSettingPath: string) => {
     return pjSettingWithTlmIdList
   }
   return null
+}
+
+export const convertToCsvData = (data: TlmDataObjectType['tlm']): CsvDataType[] => {
+  const tlmNameList = Object.keys(data)
+  const timeList = tlmNameList
+    .map((tlmName) => data[tlmName]?.time)
+    .flat()
+    .filter(isNotNull)
+    .filter(isNotUndefined)
+  const timeUniqueList = Array.from(new Set(timeList)).sort()
+
+  return timeUniqueList.map((baseTime) => {
+    const returnData: CsvDataType = { Time: baseTime }
+    tlmNameList.forEach((tlmName) => {
+      const tlm = data[tlmName]
+      if (tlm) {
+        const foundIndex = tlm.time.findIndex((time) => time === baseTime)
+        if (foundIndex !== -1) {
+          returnData[tlmName] = tlm.data[foundIndex] ?? null
+        } else {
+          returnData[tlmName] = null
+        }
+      }
+    })
+    return returnData
+  })
 }

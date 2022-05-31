@@ -17,7 +17,7 @@ import { Error } from '@components'
 import { Graph } from '@parts'
 import { isNotNull } from '@types'
 
-import type { requestDataType, requestTlmType, graphDataArrayType } from '@types'
+import type { requestDataType, requestTlmType, GraphDataArrayType, TlmDataObjectType } from '@types'
 
 export const GraphPlot = () => {
   const isStored = useRecoilValue(isStoredState)
@@ -34,20 +34,13 @@ export const GraphPlot = () => {
   const [isError, setIsError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [graphData, setGraphData] = useState<graphDataArrayType>([])
+  const [responseTlmData, setResponseTLmData] = useState<TlmDataObjectType | null>(null)
+  const [graphData, setGraphData] = useState<GraphDataArrayType>([])
 
   const plot = async () => {
     setIsLoading(true)
     // const response = await window.Main.getData(path, query)
-    const response: {
-      tlm: {
-        [key: string]: {
-          time: (string | number | null)[]
-          data: (string | number | null)[]
-        }
-      }
-      warningMessages: string[]
-    } = {
+    const response: TlmDataObjectType = {
       tlm: {
         PCDU_BAT_CURRENT: {
           time: ['2022-04-18 00:00:00', '2022-04-18 00:00:01', '2022-04-18 00:00:02'],
@@ -55,7 +48,7 @@ export const GraphPlot = () => {
         },
         PCDU_BAT_VOLTAGE: {
           time: ['2022-04-18 00:00:00', '2022-04-18 00:00:01', '2022-04-18 00:00:02'],
-          data: [2, 1, 0],
+          data: [2, 1, null],
         },
         OBC_AD590_01: {
           time: ['2022-04-18 00:00:00', '2022-04-18 00:00:01', '2022-04-18 00:00:02'],
@@ -63,11 +56,12 @@ export const GraphPlot = () => {
         },
         OBC_AD590_02: {
           time: ['2022-04-18 00:00:00', '2022-04-18 00:00:01', '2022-04-18 00:00:02'],
-          data: [2, 2, 2],
+          data: [null, 2, 2],
         },
       },
       warningMessages: [],
     }
+    setResponseTLmData(response)
     const filteredTlmList = [
       {
         plotId: 1,
@@ -208,8 +202,10 @@ export const GraphPlot = () => {
   }
 
   const outputCsv = async () => {
-    const path = await window.Main.saveFile('aaa')
-    console.log(path)
+    if (responseTlmData) {
+      const path = await window.Main.saveFile(responseTlmData.tlm)
+      console.log(path)
+    }
   }
 
   return (
@@ -229,13 +225,15 @@ export const GraphPlot = () => {
         <Button colorScheme="teal" onClick={set} mr="10" flexShrink={0} width="80px">
           Set
         </Button>
-        <Button colorScheme="teal" onClick={outputCsv} mr="10" flexShrink={0} width="80px">
-          CSV
-        </Button>
+        {responseTlmData && (
+          <Button colorScheme="teal" onClick={outputCsv} mr="10" flexShrink={0} width="80px">
+            CSV
+          </Button>
+        )}
       </Flex>
-      <Flex wrap="wrap" mt='20px'>
+      <Flex wrap="wrap" mt="20px">
         {!isLoading ? (
-          graphData.map((element, index) => <Graph key={element.plotId} graphData={element} graphNumber={index+1} />)
+          graphData.map((element, index) => <Graph key={element.plotId} graphData={element} graphNumber={index + 1} />)
         ) : (
           <Spinner thickness="5px" speed="0.5s" emptyColor="gray.200" color="blue.500" size="xl" />
         )}

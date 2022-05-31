@@ -1,10 +1,10 @@
 import { Box, Flex, useColorModeValue, Text, Button } from '@chakra-ui/react'
 import Plot from 'react-plotly.js'
 
-import type { graphDataEachPlotIdType } from '@types'
+import type { GraphDataEachPlotIdType } from '@types'
 
 type Props = {
-  graphData: graphDataEachPlotIdType
+  graphData: GraphDataEachPlotIdType
   graphNumber: number
 }
 
