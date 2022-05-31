@@ -38,5 +38,6 @@
         "fullscreenable",
         "asar",
         "parens",
+        "xanchor",
     ]
 }
