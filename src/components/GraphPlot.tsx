@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Box, Button, Flex, Spacer, Spinner } from '@chakra-ui/react'
+import { Box, Button, Flex, Spacer, Spinner, useToast } from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
 
 import {
@@ -36,6 +36,8 @@ export const GraphPlot = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [responseTlmData, setResponseTLmData] = useState<TlmDataObjectType | null>(null)
   const [graphData, setGraphData] = useState<GraphDataArrayType>([])
+
+  const toast = useToast()
 
   const plot = async () => {
     setIsLoading(true)
@@ -203,8 +205,18 @@ export const GraphPlot = () => {
 
   const outputCsv = async () => {
     if (responseTlmData) {
-      const path = await window.Main.saveFile(responseTlmData.tlm)
-      console.log(path)
+      const response = await window.Main.saveFile(responseTlmData.tlm)
+      toast({
+        title: response.success ? `success: ${response.path}` : `error: ${response.error}`,
+        status: response.success ? 'success' : 'error',
+        isClosable: true,
+      })
+    } else {
+      toast({
+        title: 'error: tlm data not found',
+        status: 'error',
+        isClosable: true,
+      })
     }
   }
 
