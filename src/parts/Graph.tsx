@@ -18,7 +18,6 @@ import {
   FormLabel,
   NumberInput,
   NumberInputField,
-  Input,
 } from '@chakra-ui/react'
 import Plot from 'react-plotly.js'
 
@@ -112,15 +111,15 @@ export const Graph = (props: Props) => {
   }, [])
 
   return (
-    !isLoading && (
-      <>
-        <Box mb="20px">
-          <Flex alignItems="center" mb="5px">
-            <Text mx="20px">Graph No.{graphNumber}</Text>
-            <Button colorScheme="teal" h="1.8em" fontSize="1em" onClick={onOpen}>
-              Set
-            </Button>
-          </Flex>
+    <>
+      <Box mb="20px">
+        <Flex alignItems="center" mb="5px">
+          <Text mx="20px">Graph No.{graphNumber}</Text>
+          <Button colorScheme="teal" h="1.8em" fontSize="1em" onClick={onOpen}>
+            Set
+          </Button>
+        </Flex>
+        {!isLoading && (
           <Plot
             data={graphData.tlm.map((element) => ({
               x: element.x,
@@ -182,36 +181,36 @@ export const Graph = (props: Props) => {
               responsive: false,
             }}
           />
-        </Box>
-        <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Axis setting</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody pb={6}>
-              <Text fontWeight="bold">Y-axis</Text>
-              <FormControl>
-                <Flex alignItems="center">
-                  <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
-                    Max
-                  </FormLabel>
-                  <NumberInput onChange={(_, value) => setYaxisMax(value)}>
-                    <NumberInputField />
-                  </NumberInput>
-                  {/* <Input type="time" step={1} defaultValue="00:00:00" /> */}
-                </Flex>
-              </FormControl>
-            </ModalBody>
+        )}
+      </Box>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Axis setting</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <Text fontWeight="bold">Y-axis</Text>
+            <FormControl>
+              <Flex alignItems="center">
+                <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
+                  Max
+                </FormLabel>
+                <NumberInput onChange={(_, value) => setYaxisMax(value)}>
+                  <NumberInputField />
+                </NumberInput>
+                {/* <Input type="time" step={1} defaultValue="00:00:00" /> */}
+              </Flex>
+            </FormControl>
+          </ModalBody>
 
-            <ModalFooter>
-              <Button colorScheme="teal" mr={3} onClick={clickAxisSetting}>
-                Activate
-              </Button>
-              <Button onClick={onClose}>Cancel</Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </>
-    )
+          <ModalFooter>
+            <Button colorScheme="teal" mr={3} onClick={clickAxisSetting}>
+              Activate
+            </Button>
+            <Button onClick={onClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   )
 }
