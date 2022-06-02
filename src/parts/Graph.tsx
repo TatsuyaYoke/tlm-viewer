@@ -21,13 +21,15 @@ import {
 } from '@chakra-ui/react'
 import Plot from 'react-plotly.js'
 
-import { isNotNull, isNotNumber, isNotString } from '@types'
+import { isNotNull, isNotString } from '@types'
 
 import type { GraphDataEachPlotIdType } from '@types'
 
 type Props = {
-  graphData: GraphDataEachPlotIdType
   graphNumber: number
+  graphData: GraphDataEachPlotIdType
+  xMax: string | undefined
+  xMin: string | undefined
 }
 
 type AxisType = {
@@ -44,7 +46,7 @@ type AxisType = {
 }
 
 export const Graph = (props: Props) => {
-  const { graphData, graphNumber } = props
+  const { graphNumber, graphData, xMax, xMin } = props
   const graphBgColor = useColorModeValue('#FFFFFF', '#1A202C')
   const graphFontColor = useColorModeValue('#000000', '#FFFFFF')
   const graphGridColor = useColorModeValue('#A0AEC0', '#636363')
@@ -76,19 +78,6 @@ export const Graph = (props: Props) => {
   }
 
   useEffect(() => {
-    const xDataAll = Array.from(
-      new Set(
-        graphData.tlm
-          .map((e) => e.x)
-          .flat()
-          .filter(isNotNumber)
-          .filter(isNotNull)
-      )
-    ).sort()
-
-    const xMin = xDataAll[0]
-    const xMax = xDataAll[xDataAll.length - 1]
-
     const yDataAll = graphData.tlm
       .map((e) => e.y)
       .flat()
@@ -140,7 +129,8 @@ export const Graph = (props: Props) => {
               xaxis: {
                 dtick: undefined,
                 // range: [undefined, undefined],
-                range: ['2022-04-18 00:00:00', '2022-04-18 00:00:02'],
+                range: [axis.x.min, axis.x.max],
+                // range: ['2022-04-18 00:00:00', '2022-04-18 00:00:02'],
                 tickformat: '%m-%d, %H:%M:%S',
                 tickangle: -40,
                 // dtick: 3 * 60 * 60 * 1000, // milliseconds

@@ -15,7 +15,7 @@ import {
 } from '@atoms/PlotSettingAtom'
 import { Error } from '@components'
 import { Graph } from '@parts'
-import { isNotNull } from '@types'
+import { isNotNull, isNotNumber, isNotUndefined } from '@types'
 
 import type { requestDataType, requestTlmType, GraphDataArrayType, TlmDataObjectType } from '@types'
 
@@ -36,6 +36,8 @@ export const GraphPlot = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [responseTlmData, setResponseTLmData] = useState<TlmDataObjectType | null>(null)
   const [graphData, setGraphData] = useState<GraphDataArrayType>([])
+  const [xMax, setXMax] = useState<string | undefined>(undefined)
+  const [xMin, setXMin] = useState<string | undefined>(undefined)
 
   const toast = useToast()
 
@@ -53,7 +55,7 @@ export const GraphPlot = () => {
           data: [2, 1, null],
         },
         OBC_AD590_01: {
-          time: ['2022-04-18 00:00:00', '2022-04-18 00:00:01', '2022-04-18 00:00:02'],
+          time: ['2022-04-18 00:00:00', '2022-04-18 00:00:01', '2022-04-18 00:00:04'],
           data: [1, 1, 1],
         },
         OBC_AD590_02: {
@@ -63,6 +65,23 @@ export const GraphPlot = () => {
       },
       warningMessages: [],
     }
+
+    const timeList = Object.keys(response.tlm)
+      .map((tlmName) => {
+        const tlmObject = response.tlm
+        if (tlmObject) {
+          return tlmObject[tlmName] ? tlmObject[tlmName]?.time : null
+        }
+        return null
+      })
+      .flat()
+      .filter(isNotNull)
+      .filter(isNotUndefined)
+      .filter(isNotNumber)
+      .sort()
+    setXMin(timeList[0])
+    setXMax(timeList[timeList.length - 1])
+
     setResponseTLmData(response)
     const filteredTlmList = [
       {
@@ -245,7 +264,9 @@ export const GraphPlot = () => {
       </Flex>
       <Flex wrap="wrap" mt="20px">
         {!isLoading ? (
-          graphData.map((element, index) => <Graph key={element.plotId} graphData={element} graphNumber={index + 1} />)
+          graphData.map((element, index) => (
+            <Graph key={element.plotId} graphData={element} graphNumber={index + 1} xMax={xMax} xMin={xMin} />
+          ))
         ) : (
           <Spinner thickness="5px" speed="0.5s" emptyColor="gray.200" color="blue.500" size="xl" />
         )}
