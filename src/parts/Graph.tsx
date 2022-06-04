@@ -22,11 +22,10 @@ import {
   NumberInputField,
 } from '@chakra-ui/react'
 import Plot from 'react-plotly.js'
-import * as z from 'zod'
 
-import { isNotNull, isNotString } from '@types'
+import { dateGraphSchema, isNotNull, isNotString } from '@types'
 
-import type { GraphDataEachPlotIdType } from '@types'
+import type { GraphDataEachPlotIdType, AxisType } from '@types'
 
 type Props = {
   graphNumber: number
@@ -37,21 +36,21 @@ type Props = {
   activate: boolean
 }
 
-type AxisType = {
-  x: {
-    max: string | undefined
-    min: string | undefined
-    div: number | undefined
-  }
-  y: {
-    max: number | undefined
-    min: number | undefined
-    div: number | undefined
-  }
-}
+// type AxisType = {
+//   x: {
+//     max: string | undefined
+//     min: string | undefined
+//     div: number | undefined
+//   }
+//   y: {
+//     max: number | undefined
+//     min: number | undefined
+//     div: number | undefined
+//   }
+// }
 
-const regexDateTime = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/
-const dateSchema = z.string().regex(regexDateTime)
+// const regexDateTime = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/
+// const dateSchema = z.string().regex(regexDateTime)
 
 export const Graph = (props: Props) => {
   const { graphNumber, graphData, xMax, xMin, xDiv, activate } = props
@@ -93,8 +92,8 @@ export const Graph = (props: Props) => {
       return
     }
 
-    const xaxisMaxResult = dateSchema.safeParse(xaxisMax)
-    const xaxisMinResult = dateSchema.safeParse(xaxisMin)
+    const xaxisMaxResult = dateGraphSchema.safeParse(xaxisMax)
+    const xaxisMinResult = dateGraphSchema.safeParse(xaxisMin)
     if (!(xaxisMaxResult.success && xaxisMinResult.success)) {
       toast({
         title: 'X-axis Format (yyyy-MM-dd HH:mm:ss) error',
@@ -148,7 +147,7 @@ export const Graph = (props: Props) => {
       const newAxis = { ...prev }
       newAxis.x.max = xMax
       newAxis.x.min = xMin
-      newAxis.x.div= xDiv
+      newAxis.x.div = xDiv
       return newAxis
     })
     setXaxisMax(() => axis.x.max)

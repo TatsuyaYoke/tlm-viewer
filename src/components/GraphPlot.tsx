@@ -23,7 +23,6 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
-import * as z from 'zod'
 
 import {
   isOrbitState,
@@ -37,25 +36,9 @@ import {
 } from '@atoms/PlotSettingAtom'
 import { Error } from '@components'
 import { Graph } from '@parts'
-import { isNotNull, isNotNumber, isNotUndefined } from '@types'
+import { dateGraphSchema, isNotNull, isNotNumber, isNotUndefined } from '@types'
 
-import type { requestDataType, requestTlmType, GraphDataArrayType, TlmDataObjectType } from '@types'
-
-type AxisType = {
-  x: {
-    max: string | undefined
-    min: string | undefined
-    div: number | undefined
-  }
-  y?: {
-    max: number | undefined
-    min: number | undefined
-    div: number | undefined
-  }
-}
-
-const regexDateTime = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/
-const dateSchema = z.string().regex(regexDateTime)
+import type { requestDataType, requestTlmType, GraphDataArrayType, TlmDataObjectType, AxisType } from '@types'
 
 export const GraphPlot = () => {
   const isStored = useRecoilValue(isStoredState)
@@ -278,8 +261,8 @@ export const GraphPlot = () => {
   }
 
   const activateAxis = () => {
-    const xaxisMaxResult = dateSchema.safeParse(xaxisMax)
-    const xaxisMinResult = dateSchema.safeParse(xaxisMin)
+    const xaxisMaxResult = dateGraphSchema.safeParse(xaxisMax)
+    const xaxisMinResult = dateGraphSchema.safeParse(xaxisMin)
     if (!(xaxisMaxResult.success && xaxisMinResult.success)) {
       toast({
         title: 'X-axis Format (yyyy-MM-dd HH:mm:ss) error',

@@ -139,3 +139,20 @@ export type CsvDataType = {
   Time: TlmDataType
   [key: string]: TlmDataType
 }
+
+
+export type AxisType = {
+  x: {
+    max: string | undefined
+    min: string | undefined
+    div: number | undefined
+  }
+  y?: {
+    max: number | undefined
+    min: number | undefined
+    div: number | undefined
+  }
+}
+
+export const regexGraphDateTime = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/
+export const dateGraphSchema = z.string().regex(regexGraphDateTime)
