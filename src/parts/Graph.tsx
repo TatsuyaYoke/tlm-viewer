@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import {
   Box,
   Flex,
+  Input,
+  useToast,
   useColorModeValue,
   Text,
   Button,
@@ -20,6 +22,7 @@ import {
   NumberInputField,
 } from '@chakra-ui/react'
 import Plot from 'react-plotly.js'
+import * as z from 'zod'
 
 import { isNotNull, isNotString } from '@types'
 
@@ -45,6 +48,9 @@ type AxisType = {
   }
 }
 
+const regexDateTime = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/
+const dateSchema = z.string().regex(regexDateTime)
+
 export const Graph = (props: Props) => {
   const { graphNumber, graphData, xMax, xMin } = props
   const graphBgColor = useColorModeValue('#FFFFFF', '#1A202C')
@@ -66,12 +72,44 @@ export const Graph = (props: Props) => {
   })
 
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [xaxisMax, setXaxisMax] = useState<string | undefined>(undefined)
+  const [xaxisMin, setXaxisMin] = useState<string | undefined>(undefined)
+  const [xaxisDiv, setXaxisDiv] = useState<number | undefined>(undefined)
   const [yaxisMax, setYaxisMax] = useState<number | undefined>(undefined)
+  const [yaxisMin, setYaxisMin] = useState<number | undefined>(undefined)
+  const [yaxisDiv, setYaxisDiv] = useState<number | undefined>(undefined)
 
-  const clickAxisSetting = () => {
+  const toast = useToast()
+
+  const activateAxis = () => {
+    if (!(xaxisMax && xaxisMin && yaxisMax && yaxisMin)) {
+      toast({
+        title: 'Max and Min required',
+        status: 'error',
+        isClosable: true,
+      })
+      return
+    }
+
+    const xaxisMaxResult = dateSchema.safeParse(xaxisMax)
+    const xaxisMinResult = dateSchema.safeParse(xaxisMin)
+    if (!(xaxisMaxResult.success && xaxisMinResult.success)) {
+      toast({
+        title: 'X-axis Format (yyyy-MM-dd H:mm:ss) error',
+        status: 'error',
+        isClosable: true,
+      })
+      return
+    }
+
     setAxis((prev) => {
       const newAxis = { ...prev }
+      newAxis.x.max = xaxisMax
+      newAxis.x.min = xaxisMin
+      newAxis.x.div = xaxisDiv
       newAxis.y.max = yaxisMax
+      newAxis.y.min = yaxisMin
+      newAxis.y.div = yaxisDiv
       return newAxis
     })
     onClose()
@@ -96,6 +134,10 @@ export const Graph = (props: Props) => {
       newAxis.y.min = yMin - yOutside
       return newAxis
     })
+    setXaxisMax(() => axis.x.max)
+    setXaxisMin(() => axis.x.min)
+    setYaxisMax(() => axis.y.max)
+    setYaxisMin(() => axis.y.min)
     setIsLoading(false)
   }, [])
 
@@ -127,13 +169,10 @@ export const Graph = (props: Props) => {
                 b: 80,
               },
               xaxis: {
-                dtick: undefined,
-                // range: [undefined, undefined],
+                dtick: axis.x.div ? axis.x.div * 1000 : undefined, // msec
                 range: [axis.x.min, axis.x.max],
-                // range: ['2022-04-18 00:00:00', '2022-04-18 00:00:02'],
                 tickformat: '%m-%d, %H:%M:%S',
                 tickangle: -40,
-                // dtick: 3 * 60 * 60 * 1000, // milliseconds
                 gridcolor: graphGridColor,
                 linecolor: graphLineColor,
                 zerolinecolor: graphLineColor,
@@ -141,14 +180,10 @@ export const Graph = (props: Props) => {
                 showgrid: true,
                 zeroline: true,
                 showline: true,
-                // autorange: true,
-                // autotick: true,
               },
               yaxis: {
-                dtick: undefined,
-                // range: [undefined, undefined],
+                dtick: axis.y.div,
                 range: [axis.y.min, axis.y.max],
-                // range: [2, 2.1],
                 gridcolor: graphGridColor,
                 linecolor: graphLineColor,
                 zerolinecolor: graphLineColor,
@@ -156,8 +191,6 @@ export const Graph = (props: Props) => {
                 showgrid: true,
                 zeroline: true,
                 showline: true,
-                // autorange: true,
-                // autotick: true,
               },
               font: {
                 color: graphFontColor,
@@ -176,25 +209,82 @@ export const Graph = (props: Props) => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Axis setting</ModalHeader>
+          <ModalHeader>Set axis</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <Text fontWeight="bold">Y-axis</Text>
-            <FormControl>
+            <Text fontWeight="bold">X-axis</Text>
+            <FormControl my="10px">
               <Flex alignItems="center">
                 <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
                   Max
                 </FormLabel>
-                <NumberInput onChange={(_, value) => setYaxisMax(value)}>
+                <Input
+                  w="250px"
+                  placeholder="yyyy-MM-dd H:mm:ss"
+                  defaultValue={axis.x.max}
+                  onChange={(event) => setXaxisMax(event.target.value)}
+                />
+              </Flex>
+            </FormControl>
+            <FormControl my="10px">
+              <Flex alignItems="center">
+                <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
+                  Min
+                </FormLabel>
+                <Input
+                  w="250px"
+                  placeholder="yyyy-MM-dd H:mm:ss"
+                  defaultValue={axis.x.min}
+                  onChange={(event) => setXaxisMin(event.target.value)}
+                />
+              </Flex>
+            </FormControl>
+            <FormControl my="10px">
+              <Flex alignItems="center">
+                <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
+                  Div
+                </FormLabel>
+                <NumberInput w="250px" defaultValue={axis.x.div} onChange={(_, value) => setXaxisDiv(value)}>
                   <NumberInputField />
                 </NumberInput>
-                {/* <Input type="time" step={1} defaultValue="00:00:00" /> */}
+                <Text ml="10px">sec</Text>
+              </Flex>
+            </FormControl>
+            <Text fontWeight="bold">Y-axis</Text>
+            <FormControl my="10px">
+              <Flex alignItems="center">
+                <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
+                  Max
+                </FormLabel>
+                <NumberInput w="250px" defaultValue={axis.y.max} onChange={(_, value) => setYaxisMax(value)}>
+                  <NumberInputField />
+                </NumberInput>
+              </Flex>
+            </FormControl>
+            <FormControl my="10px">
+              <Flex alignItems="center">
+                <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
+                  Min
+                </FormLabel>
+                <NumberInput w="250px" defaultValue={axis.y.min} onChange={(_, value) => setYaxisMin(value)}>
+                  <NumberInputField />
+                </NumberInput>
+              </Flex>
+            </FormControl>
+            <FormControl my="10px">
+              <Flex alignItems="center">
+                <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
+                  Div
+                </FormLabel>
+                <NumberInput w="250px" defaultValue={axis.y.div} onChange={(_, value) => setYaxisDiv(value)}>
+                  <NumberInputField />
+                </NumberInput>
               </Flex>
             </FormControl>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="teal" mr={3} onClick={clickAxisSetting}>
+            <Button colorScheme="teal" mr={3} onClick={activateAxis}>
               Activate
             </Button>
             <Button onClick={onClose}>Cancel</Button>
