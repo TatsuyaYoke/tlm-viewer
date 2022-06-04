@@ -1,7 +1,29 @@
 import { useState } from 'react'
 
-import { Box, Button, Flex, Spacer, Spinner, useToast } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  NumberInput,
+  NumberInputField,
+  Spacer,
+  Spinner,
+  Text,
+  useDisclosure,
+  useToast,
+} from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
+import * as z from 'zod'
 
 import {
   isOrbitState,
@@ -18,6 +40,22 @@ import { Graph } from '@parts'
 import { isNotNull, isNotNumber, isNotUndefined } from '@types'
 
 import type { requestDataType, requestTlmType, GraphDataArrayType, TlmDataObjectType } from '@types'
+
+type AxisType = {
+  x: {
+    max: string | undefined
+    min: string | undefined
+    div: number | undefined
+  }
+  y?: {
+    max: number | undefined
+    min: number | undefined
+    div: number | undefined
+  }
+}
+
+const regexDateTime = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/
+const dateSchema = z.string().regex(regexDateTime)
 
 export const GraphPlot = () => {
   const isStored = useRecoilValue(isStoredState)
@@ -36,10 +74,20 @@ export const GraphPlot = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [responseTlmData, setResponseTLmData] = useState<TlmDataObjectType | null>(null)
   const [graphData, setGraphData] = useState<GraphDataArrayType>([])
-  const [xMax, setXMax] = useState<string | undefined>(undefined)
-  const [xMin, setXMin] = useState<string | undefined>(undefined)
 
   const toast = useToast()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [xaxisMax, setXaxisMax] = useState<string | undefined>(undefined)
+  const [xaxisMin, setXaxisMin] = useState<string | undefined>(undefined)
+  const [xaxisDiv, setXaxisDiv] = useState<number | undefined>(undefined)
+  const [xaxisActivate, setXaxisActivate] = useState<boolean>(false)
+  const [axis, setAxis] = useState<AxisType>({
+    x: {
+      max: undefined,
+      min: undefined,
+      div: undefined,
+    },
+  })
 
   const plot = async () => {
     setIsLoading(true)
@@ -79,8 +127,15 @@ export const GraphPlot = () => {
       .filter(isNotUndefined)
       .filter(isNotNumber)
       .sort()
-    setXMin(timeList[0])
-    setXMax(timeList[timeList.length - 1])
+
+    setAxis((prev) => {
+      const newAxis = { ...prev }
+      newAxis.x.max = timeList[timeList.length - 1]
+      newAxis.x.min = timeList[0]
+      return newAxis
+    })
+    setXaxisMin(() => axis.x.min)
+    setXaxisMax(() => axis.x.max)
 
     setResponseTLmData(response)
     const filteredTlmList = [
@@ -222,6 +277,29 @@ export const GraphPlot = () => {
     console.log(request)
   }
 
+  const activateAxis = () => {
+    const xaxisMaxResult = dateSchema.safeParse(xaxisMax)
+    const xaxisMinResult = dateSchema.safeParse(xaxisMin)
+    if (!(xaxisMaxResult.success && xaxisMinResult.success)) {
+      toast({
+        title: 'X-axis Format (yyyy-MM-dd HH:mm:ss) error',
+        status: 'error',
+        isClosable: true,
+      })
+      return
+    }
+
+    setAxis((prev) => {
+      const newAxis = { ...prev }
+      newAxis.x.max = xaxisMax
+      newAxis.x.min = xaxisMin
+      newAxis.x.div = xaxisDiv
+      return newAxis
+    })
+    setXaxisActivate((prev) => !prev)
+    onClose()
+  }
+
   const outputCsv = async () => {
     if (responseTlmData) {
       const response = await window.Main.saveFile(responseTlmData.tlm)
@@ -240,37 +318,106 @@ export const GraphPlot = () => {
   }
 
   return (
-    <Box p={8} w="100%">
-      <Flex>
-        <Error
-          isError={isError}
-          errorMessage={errorMessage}
-          isWarning={isWarning}
-          warningMessages={warningMessage}
-          noDisplayWhenSuccess={true}
-        />
-        <Spacer />
-        <Button colorScheme="teal" onClick={plot} mx="10" flexShrink={0} width="80px">
-          Plot
-        </Button>
-        <Button colorScheme="teal" onClick={set} mr="10" flexShrink={0} width="80px">
-          Set
-        </Button>
-        {responseTlmData && (
-          <Button colorScheme="teal" onClick={outputCsv} mr="10" flexShrink={0} width="80px">
-            CSV
+    <>
+      <Box p={8} w="100%">
+        <Flex>
+          <Error
+            isError={isError}
+            errorMessage={errorMessage}
+            isWarning={isWarning}
+            warningMessages={warningMessage}
+            noDisplayWhenSuccess={true}
+          />
+          <Spacer />
+          <Button colorScheme="teal" onClick={plot} mx="10" flexShrink={0} width="80px">
+            Plot
           </Button>
-        )}
-      </Flex>
-      <Flex wrap="wrap" mt="20px">
-        {!isLoading ? (
-          graphData.map((element, index) => (
-            <Graph key={element.plotId} graphData={element} graphNumber={index + 1} xMax={xMax} xMin={xMin} />
-          ))
-        ) : (
-          <Spinner thickness="5px" speed="0.5s" emptyColor="gray.200" color="blue.500" size="xl" />
-        )}
-      </Flex>
-    </Box>
+          <Button colorScheme="teal" onClick={set} mr="10" flexShrink={0} width="80px">
+            Set
+          </Button>
+          {responseTlmData && (
+            <Button colorScheme="teal" onClick={outputCsv} mr="10" flexShrink={0} width="80px">
+              CSV
+            </Button>
+          )}
+          {responseTlmData && (
+            <Button colorScheme="teal" onClick={onOpen} mr="10" flexShrink={0} width="80px">
+              Axis
+            </Button>
+          )}
+        </Flex>
+        <Flex wrap="wrap" mt="20px">
+          {!isLoading ? (
+            graphData.map((element, index) => (
+              <Graph
+                key={element.plotId}
+                graphData={element}
+                graphNumber={index + 1}
+                xMax={axis.x.max}
+                xMin={axis.x.min}
+                xDiv={axis.x.div}
+                activate={xaxisActivate}
+              />
+            ))
+          ) : (
+            <Spinner thickness="5px" speed="0.5s" emptyColor="gray.200" color="blue.500" size="xl" />
+          )}
+        </Flex>
+      </Box>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Set axis</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <Text fontWeight="bold">X-axis</Text>
+            <FormControl my="10px">
+              <Flex alignItems="center">
+                <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
+                  Max
+                </FormLabel>
+                <Input
+                  w="250px"
+                  placeholder="yyyy-MM-dd HH:mm:ss"
+                  defaultValue={axis.x.max}
+                  onChange={(event) => setXaxisMax(event.target.value)}
+                />
+              </Flex>
+            </FormControl>
+            <FormControl my="10px">
+              <Flex alignItems="center">
+                <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
+                  Min
+                </FormLabel>
+                <Input
+                  w="250px"
+                  placeholder="yyyy-MM-dd HH:mm:ss"
+                  defaultValue={axis.x.min}
+                  onChange={(event) => setXaxisMin(event.target.value)}
+                />
+              </Flex>
+            </FormControl>
+            <FormControl my="10px">
+              <Flex alignItems="center">
+                <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
+                  Div
+                </FormLabel>
+                <NumberInput w="250px" defaultValue={axis.x.div} onChange={(_, value) => setXaxisDiv(value)}>
+                  <NumberInputField />
+                </NumberInput>
+                <Text ml="10px">sec</Text>
+              </Flex>
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="teal" mr={3} onClick={activateAxis}>
+              Activate
+            </Button>
+            <Button onClick={onClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   )
 }

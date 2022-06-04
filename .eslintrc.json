@@ -56,6 +56,7 @@
     "import/extensions": "off",
     "arrow-body-style": ["error", "as-needed"],
     "object-shorthand": "off",
+    "prefer-destructuring": "off",
     "import/order": [
       "warn",
       {

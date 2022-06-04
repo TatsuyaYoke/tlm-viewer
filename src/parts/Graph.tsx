@@ -33,6 +33,8 @@ type Props = {
   graphData: GraphDataEachPlotIdType
   xMax: string | undefined
   xMin: string | undefined
+  xDiv: number | undefined
+  activate: boolean
 }
 
 type AxisType = {
@@ -52,7 +54,7 @@ const regexDateTime = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][
 const dateSchema = z.string().regex(regexDateTime)
 
 export const Graph = (props: Props) => {
-  const { graphNumber, graphData, xMax, xMin } = props
+  const { graphNumber, graphData, xMax, xMin, xDiv, activate } = props
   const graphBgColor = useColorModeValue('#FFFFFF', '#1A202C')
   const graphFontColor = useColorModeValue('#000000', '#FFFFFF')
   const graphGridColor = useColorModeValue('#A0AEC0', '#636363')
@@ -82,7 +84,7 @@ export const Graph = (props: Props) => {
   const toast = useToast()
 
   const activateAxis = () => {
-    if (!(xaxisMax && xaxisMin && yaxisMax && yaxisMin)) {
+    if (Number.isNaN(yaxisMax ?? NaN) || Number.isNaN(yaxisMin ?? NaN)) {
       toast({
         title: 'Max and Min required',
         status: 'error',
@@ -95,7 +97,7 @@ export const Graph = (props: Props) => {
     const xaxisMinResult = dateSchema.safeParse(xaxisMin)
     if (!(xaxisMaxResult.success && xaxisMinResult.success)) {
       toast({
-        title: 'X-axis Format (yyyy-MM-dd H:mm:ss) error',
+        title: 'X-axis Format (yyyy-MM-dd HH:mm:ss) error',
         status: 'error',
         isClosable: true,
       })
@@ -140,6 +142,19 @@ export const Graph = (props: Props) => {
     setYaxisMin(() => axis.y.min)
     setIsLoading(false)
   }, [])
+
+  useEffect(() => {
+    setAxis((prev) => {
+      const newAxis = { ...prev }
+      newAxis.x.max = xMax
+      newAxis.x.min = xMin
+      newAxis.x.div= xDiv
+      return newAxis
+    })
+    setXaxisMax(() => axis.x.max)
+    setXaxisMin(() => axis.x.min)
+    setXaxisDiv(() => axis.x.div)
+  }, [activate])
 
   return (
     <>
@@ -220,7 +235,7 @@ export const Graph = (props: Props) => {
                 </FormLabel>
                 <Input
                   w="250px"
-                  placeholder="yyyy-MM-dd H:mm:ss"
+                  placeholder="yyyy-MM-dd HH:mm:ss"
                   defaultValue={axis.x.max}
                   onChange={(event) => setXaxisMax(event.target.value)}
                 />
@@ -233,7 +248,7 @@ export const Graph = (props: Props) => {
                 </FormLabel>
                 <Input
                   w="250px"
-                  placeholder="yyyy-MM-dd H:mm:ss"
+                  placeholder="yyyy-MM-dd HH:mm:ss"
                   defaultValue={axis.x.min}
                   onChange={(event) => setXaxisMin(event.target.value)}
                 />
