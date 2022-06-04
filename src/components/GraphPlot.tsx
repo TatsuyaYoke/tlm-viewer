@@ -70,6 +70,11 @@ export const GraphPlot = () => {
       min: undefined,
       div: undefined,
     },
+    y: {
+      max: undefined,
+      min: undefined,
+      div: undefined,
+    },
   })
 
   const plot = async () => {
