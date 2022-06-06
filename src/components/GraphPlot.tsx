@@ -120,10 +120,10 @@ export const GraphPlot = () => {
       const newAxis = { ...prev }
       newAxis.x.max = timeList[timeList.length - 1]
       newAxis.x.min = timeList[0]
+      setXaxisMin(newAxis.x.min)
+      setXaxisMax(newAxis.x.max)
       return newAxis
     })
-    setXaxisMin(() => axis.x.min)
-    setXaxisMax(() => axis.x.max)
 
     setResponseTLmData(response)
     const filteredTlmList = [
