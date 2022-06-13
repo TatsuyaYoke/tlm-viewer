@@ -2,8 +2,7 @@ import * as z from 'zod'
 
 import type { MultiValue } from 'chakra-react-select'
 
-export const isNotNull = <T>(item: T): item is Exclude<T, null> => item !== null
-export const isNotUndefined = <T>(item: T): item is Exclude<T, undefined> => item !== undefined
+export const nonNullable = <T>(item: T): item is NonNullable<T> => item != null
 export const isNotString = <T>(item: T): item is Exclude<T, string> => typeof item !== 'string'
 export const isNotNumber = <T>(item: T): item is Exclude<T, number> => typeof item !== 'number'
 

@@ -4,14 +4,7 @@ import { join } from 'path'
 import glob from 'glob'
 import sqlite3 from 'sqlite3'
 
-import {
-  isNotNull,
-  arrayObjectSchema,
-  dateArraySchema,
-  appSettingsSchema,
-  tlmIdSchema,
-  isNotUndefined,
-} from '../../types'
+import { nonNullable, arrayObjectSchema, dateArraySchema, appSettingsSchema, tlmIdSchema } from '../../types'
 
 import type {
   ObjectArrayType,
@@ -118,8 +111,7 @@ export const convertToCsvData = (data: TlmDataObjectType['tlm']): CsvDataType[] 
   const timeList = tlmNameList
     .map((tlmName) => data[tlmName]?.time)
     .flat()
-    .filter(isNotNull)
-    .filter(isNotUndefined)
+    .filter(nonNullable)
   const timeUniqueList = Array.from(new Set(timeList)).sort()
 
   return timeUniqueList.map((baseTime) => {

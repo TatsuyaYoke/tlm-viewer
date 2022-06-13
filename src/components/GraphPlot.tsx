@@ -35,7 +35,7 @@ import {
 } from '@atoms/PlotSettingAtom'
 import { Error } from '@components'
 import { Graph } from '@parts'
-import { dateGraphSchema, isNotNull, isNotNumber, isNotUndefined } from '@types'
+import { dateGraphSchema, nonNullable, isNotNumber } from '@types'
 
 import type { RequestDataType, RequestTlmType, GraphDataArrayType, TlmDataObjectType, AxisType } from '@types'
 
@@ -109,8 +109,7 @@ export const GraphPlot = () => {
         return null
       })
       .flat()
-      .filter(isNotNull)
-      .filter(isNotUndefined)
+      .filter(nonNullable)
       .filter(isNotNumber)
       .sort()
 
@@ -159,7 +158,7 @@ export const GraphPlot = () => {
                 }
               return null
             })
-            .filter(isNotNull),
+            .filter(nonNullable),
         }
       })
     )

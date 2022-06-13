@@ -23,7 +23,7 @@ import {
 } from '@chakra-ui/react'
 import Plot from 'react-plotly.js'
 
-import { dateGraphSchema, isNotNull, isNotString } from '@types'
+import { dateGraphSchema, nonNullable, isNotString } from '@types'
 
 import type { GraphDataEachPlotIdType, AxisType } from '@types'
 
@@ -121,7 +121,7 @@ export const Graph = (props: Props) => {
       .map((e) => e.y)
       .flat()
       .filter(isNotString)
-      .filter(isNotNull)
+      .filter(nonNullable)
 
     const yMax = Math.max(...yDataAll)
     const yMin = Math.min(...yDataAll)
