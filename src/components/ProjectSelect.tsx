@@ -6,19 +6,19 @@ import { useSetRecoilState } from 'recoil'
 import { projectState } from '@atoms/PlotSettingAtom'
 import { MySelect } from '@parts'
 
-import type { selectOptionType } from '@types'
+import type { SelectOptionType } from '@types'
 import type { SingleValue } from 'chakra-react-select'
 
 type Props = {
-  options: selectOptionType[]
-  defaultValue?: SingleValue<selectOptionType>
+  options: SelectOptionType[]
+  defaultValue?: SingleValue<SelectOptionType>
 }
 
 export const ProjectSelect = (props: Props) => {
   const { options, defaultValue } = props
   const setProject = useSetRecoilState(projectState)
 
-  const selectValue = (value: SingleValue<selectOptionType>) => {
+  const selectValue = (value: SingleValue<SelectOptionType>) => {
     setProject(() => value)
   }
 

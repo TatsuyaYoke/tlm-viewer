@@ -17,7 +17,7 @@ import { ProjectSelect, TelemetrySelect, TestCaseSelect, Error } from '@componen
 import { stringToSelectOption } from '@functions'
 import { DayPicker, MySwitch } from '@parts'
 
-import type { selectOptionType } from '@types'
+import type { SelectOptionType } from '@types'
 
 type Props = {
   width?: ComponentProps<typeof VStack>['width']
@@ -37,7 +37,7 @@ export const PlotSetting = (props: Props) => {
   const [errorMessage, setErrorMessage] = useState('')
   const [isWarning, setIsWarning] = useState(false)
   const [warningMessage, setWarningMessage] = useState<string[]>([])
-  const [projectOptionList, setProjectOptionList] = useState<selectOptionType[]>([])
+  const [projectOptionList, setProjectOptionList] = useState<SelectOptionType[]>([])
   const project = useRecoilValue(projectState)
   const [setting, setSetting] = useRecoilState(settingState)
 

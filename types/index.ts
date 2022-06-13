@@ -32,14 +32,14 @@ declare global {
   }
 }
 
-export type selectOptionType = {
+export type SelectOptionType = {
   label: string
   value: string
 }
 
 export type tlmListType = {
   id: number
-  tlm: MultiValue<selectOptionType>
+  tlm: MultiValue<SelectOptionType>
 }
 
 export const dataTypeSchema = z.union([z.number().nullable(), z.string()])
@@ -59,7 +59,7 @@ export type DateArrayType = z.infer<typeof dateArraySchema>
 
 export const pjNameSchema = z.string().regex(/^DSX[0-9]{4}/)
 export const groundTestPathSchema = z.string()
-export const orbitDatasetPathSchema = z.string().regex(/^syns-sol-grdsys-external-prod.strix_/)
+export const orbitDatasetPathSchema = z.string().regex(/^strix_/)
 
 export const pjSettingSchema = z.union([
   z.object({
@@ -94,23 +94,22 @@ export type apiSuccess<T> = { success: true; data: T }
 export type apiError = { success: false; error: string }
 export type apiReturnType<T> = apiSuccess<T> | apiError
 
-export type dateSettingType = {
+export type DateSettingType = {
   startDate: Date
   endDate: Date
 }
-export type requestTlmType = {
+export type RequestTlmType = {
   tlmId: number
   tlmList: string[]
 }
-export type requestDataType = {
-  project: string
+export type RequestDataType = {
   isOrbit: boolean
   isStored: boolean
   isChosen: boolean
-  dateSetting: dateSettingType
-  tesCase: selectOptionType[]
-  tlm: requestTlmType[]
-}
+  dateSetting: DateSettingType
+  testCase: SelectOptionType[]
+  tlm: RequestTlmType[]
+} & pjSettingType
 
 export type TlmDataType = string | number | null
 

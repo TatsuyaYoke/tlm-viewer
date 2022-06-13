@@ -1,6 +1,6 @@
 import { atom } from 'recoil'
 
-import type { dateSettingType, pjSettingWithTlmIdType, selectOptionType, tlmListType } from '@types'
+import type { DateSettingType, pjSettingWithTlmIdType, SelectOptionType, tlmListType } from '@types'
 import type { SingleValue, MultiValue } from 'chakra-react-select'
 
 export const isMaximizeState = atom<boolean>({
@@ -23,7 +23,7 @@ export const isChosenState = atom<boolean>({
   default: false,
 })
 
-export const dateSettingState = atom<dateSettingType>({
+export const dateSettingState = atom<DateSettingType>({
   key: 'dateSettingState',
   default: {
     startDate: new Date(),
@@ -31,12 +31,12 @@ export const dateSettingState = atom<dateSettingType>({
   },
 })
 
-export const testCaseListState = atom<MultiValue<selectOptionType>>({
+export const testCaseListState = atom<MultiValue<SelectOptionType>>({
   key: 'testCaseListState',
   default: [],
 })
 
-export const projectState = atom<SingleValue<selectOptionType>>({
+export const projectState = atom<SingleValue<SelectOptionType>>({
   key: 'projectState',
   default: null,
 })

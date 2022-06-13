@@ -1,6 +1,6 @@
 import { Select } from 'chakra-react-select'
 
-import type { selectOptionType } from '@types'
+import type { SelectOptionType } from '@types'
 import type { SingleValue, MultiValue } from 'chakra-react-select'
 
 type Props<IsMulti extends boolean = false> = {
@@ -8,13 +8,13 @@ type Props<IsMulti extends boolean = false> = {
   color: string
   width: number | string
   height: number | string
-  options?: selectOptionType[]
+  options?: SelectOptionType[]
   isMulti?: IsMulti
   selectValue: (
-    value: IsMulti extends true ? MultiValue<selectOptionType> : SingleValue<selectOptionType>,
+    value: IsMulti extends true ? MultiValue<SelectOptionType> : SingleValue<SelectOptionType>,
     instanceId?: string
   ) => void
-  defaultValue?: IsMulti extends true ? MultiValue<selectOptionType> : SingleValue<selectOptionType>
+  defaultValue?: IsMulti extends true ? MultiValue<SelectOptionType> : SingleValue<SelectOptionType>
   filterOption?: (value: string) => void
 }
 

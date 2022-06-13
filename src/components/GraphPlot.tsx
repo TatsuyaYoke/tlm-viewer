@@ -30,7 +30,6 @@ import {
   isChosenState,
   testCaseListState,
   tlmListState,
-  projectState,
   settingState,
   dateSettingState,
 } from '@atoms/PlotSettingAtom'
@@ -38,14 +37,13 @@ import { Error } from '@components'
 import { Graph } from '@parts'
 import { dateGraphSchema, isNotNull, isNotNumber, isNotUndefined } from '@types'
 
-import type { requestDataType, requestTlmType, GraphDataArrayType, TlmDataObjectType, AxisType } from '@types'
+import type { RequestDataType, RequestTlmType, GraphDataArrayType, TlmDataObjectType, AxisType } from '@types'
 
 export const GraphPlot = () => {
   const isStored = useRecoilValue(isStoredState)
   const isChosen = useRecoilValue(isChosenState)
   const isOrbit = useRecoilValue(isOrbitState)
   const testCaseList = useRecoilValue(testCaseListState)
-  const project = useRecoilValue(projectState)
   const tlmList = useRecoilValue(tlmListState)
   const setting = useRecoilValue(settingState)
   const dateSetting = useRecoilValue(dateSettingState)
@@ -179,90 +177,92 @@ export const GraphPlot = () => {
 
   const set = () => {
     initializeWarningError()
-    const projectValue = project?.value
-    if (!projectValue) return
-    const tlmIdList = setting?.tlmId
-    if (!tlmIdList) return
+    if (setting) {
+      const { pjName, tlmId: tlmIdList, groundTestPath, orbitDatasetPath, testCase } = setting
+      if (!tlmIdList) return
 
-    if (isOrbit && !setting.orbitDatasetPath) {
-      setIsError(true)
-      setErrorMessage(`Orbit telemetry for ${projectValue} not found`)
-      return
-    }
-    if (!isOrbit && !setting.testCase) {
-      setIsError(true)
-      setErrorMessage(`Ground test telemetry for ${projectValue} not found`)
-      return
-    }
-
-    // delete test cases if no test cases in selected project
-    const filteredTestCaseList = testCaseList.filter((element) => {
-      if (setting?.testCase?.indexOf(element.value) === -1) {
-        setIsWarning(true)
-        setWarningMessage((prev) => [...prev, `Test case: ${element.value} deleted because not exist`])
-        return false
+      if (isOrbit && !orbitDatasetPath) {
+        setIsError(true)
+        setErrorMessage(`Orbit telemetry for ${pjName} not found`)
+        return
       }
-      return true
-    })
+      if (!isOrbit && !testCase) {
+        setIsError(true)
+        setErrorMessage(`Ground test telemetry for ${pjName} not found`)
+        return
+      }
 
-    if (isChosen && filteredTestCaseList.length === 0) {
-      setErrorMessage('Test case not selected, although Choose test cases is on')
-      setIsError(true)
-      return
-    }
-
-    // delete telemetries if no telemetries in selected project
-    const projectTlmList = Object.keys(tlmIdList)
-    const filteredTlmList = tlmList.map((element) => {
-      const filteredList = element.tlm.filter((tlm) => {
-        if (projectTlmList.indexOf(tlm.value) === -1) {
+      // delete test cases if no test cases in selected project
+      const filteredTestCaseList = testCaseList.filter((element) => {
+        if (testCase?.indexOf(element.value) === -1) {
           setIsWarning(true)
-          setWarningMessage((prev) => [...prev, `TLM list: ${tlm.value} of ${element.id} deleted because not exist`])
+          setWarningMessage((prev) => [...prev, `Test case: ${element.value} deleted because not exist`])
           return false
         }
         return true
       })
-      return {
-        plotId: element.id,
-        tlm: filteredList,
-      }
-    })
 
-    const requestTlmList: requestTlmType[] = []
-    filteredTlmList.forEach((filteredElement) => {
-      filteredElement.tlm.forEach((tlm) => {
-        const tlmId = tlmIdList[tlm.value]
-        const selectedTlmIdList = requestTlmList.map((requestElement) => requestElement.tlmId)
-        if (tlmId && selectedTlmIdList.indexOf(tlmId) === -1) {
-          requestTlmList.push({
-            tlmId: tlmId,
-            tlmList: [tlm.value],
-          })
-        } else {
-          const foundIndex = requestTlmList.findIndex((requestElement) => requestElement.tlmId === tlmId)
-          const foundTlmElement = requestTlmList[foundIndex]
-          if (foundTlmElement && foundTlmElement.tlmList.indexOf(tlm.value) === -1)
-            foundTlmElement.tlmList.push(tlm.value)
+      if (isChosen && filteredTestCaseList.length === 0) {
+        setErrorMessage('Test case not selected, although Choose test cases is on')
+        setIsError(true)
+        return
+      }
+
+      // delete telemetries if no telemetries in selected project
+      const projectTlmList = Object.keys(tlmIdList)
+      const filteredTlmList = tlmList.map((element) => {
+        const filteredList = element.tlm.filter((tlm) => {
+          if (projectTlmList.indexOf(tlm.value) === -1) {
+            setIsWarning(true)
+            setWarningMessage((prev) => [...prev, `TLM list: ${tlm.value} of ${element.id} deleted because not exist`])
+            return false
+          }
+          return true
+        })
+        return {
+          plotId: element.id,
+          tlm: filteredList,
         }
       })
-    })
 
-    if (requestTlmList.length === 0) {
-      setErrorMessage('Telemetry not selected')
-      setIsError(true)
-      return
-    }
+      const requestTlmList: RequestTlmType[] = []
+      filteredTlmList.forEach((filteredElement) => {
+        filteredElement.tlm.forEach((tlm) => {
+          const tlmId = tlmIdList[tlm.value]
+          const selectedTlmIdList = requestTlmList.map((requestElement) => requestElement.tlmId)
+          if (tlmId && selectedTlmIdList.indexOf(tlmId) === -1) {
+            requestTlmList.push({
+              tlmId: tlmId,
+              tlmList: [tlm.value],
+            })
+          } else {
+            const foundIndex = requestTlmList.findIndex((requestElement) => requestElement.tlmId === tlmId)
+            const foundTlmElement = requestTlmList[foundIndex]
+            if (foundTlmElement && foundTlmElement.tlmList.indexOf(tlm.value) === -1)
+              foundTlmElement.tlmList.push(tlm.value)
+          }
+        })
+      })
 
-    const request: requestDataType = {
-      project: projectValue,
-      isOrbit: isOrbit,
-      isStored: isStored,
-      isChosen: isChosen,
-      dateSetting: dateSetting,
-      tesCase: filteredTestCaseList,
-      tlm: requestTlmList,
+      if (requestTlmList.length === 0) {
+        setErrorMessage('Telemetry not selected')
+        setIsError(true)
+        return
+      }
+
+      const request: RequestDataType = {
+        pjName: pjName,
+        isOrbit: isOrbit,
+        isStored: isStored,
+        isChosen: isChosen,
+        groundTestPath: groundTestPath ?? '',
+        orbitDatasetPath: orbitDatasetPath ?? '',
+        dateSetting: dateSetting,
+        testCase: filteredTestCaseList,
+        tlm: requestTlmList,
+      }
+      console.log(request)
     }
-    console.log(request)
   }
 
   const activateAxis = () => {

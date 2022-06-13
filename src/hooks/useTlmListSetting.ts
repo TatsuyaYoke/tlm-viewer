@@ -4,15 +4,15 @@ import { useRecoilState } from 'recoil'
 
 import { tlmListState } from '@atoms/PlotSettingAtom'
 
-import type { selectOptionType } from '@types'
+import type { SelectOptionType } from '@types'
 import type { MultiValue } from 'chakra-react-select'
 
 const MAX_OPTION_LENGTH = 2000
 
-export const useTlmListSetting = (options: selectOptionType[] | undefined, prefixId: string) => {
+export const useTlmListSetting = (options: SelectOptionType[] | undefined, prefixId: string) => {
   const [tlmList, setTlmList] = useRecoilState(tlmListState)
   const [countList, setCountList] = useState(1)
-  const [filteredOptions, setFilteredOptions] = useState<selectOptionType[] | undefined>([])
+  const [filteredOptions, setFilteredOptions] = useState<SelectOptionType[] | undefined>([])
 
   const addTlmList = () => {
     const newTlmList = [...tlmList]
@@ -28,7 +28,7 @@ export const useTlmListSetting = (options: selectOptionType[] | undefined, prefi
     setTlmList(newTlmList)
   }
 
-  const selectValue = (value: MultiValue<selectOptionType>, instanceId?: string) => {
+  const selectValue = (value: MultiValue<SelectOptionType>, instanceId?: string) => {
     const newTlmList = tlmList.map((list) => ({ ...list }))
     const foundIndex = newTlmList.findIndex((element) => `${prefixId}${element.id}` === instanceId)
     const item = newTlmList[foundIndex]

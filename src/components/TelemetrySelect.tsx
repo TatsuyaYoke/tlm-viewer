@@ -4,10 +4,10 @@ import { VStack, Text, Flex, IconButton } from '@chakra-ui/react'
 import { useTlmListSetting } from '@hooks'
 import { MySelect } from '@parts'
 
-import type { selectOptionType } from '@types'
+import type { SelectOptionType } from '@types'
 
 type Props = {
-  options?: selectOptionType[]
+  options?: SelectOptionType[]
 }
 
 const TLM_SELECT_INSTANCE_ID_PREFIX = 'tlmListId'

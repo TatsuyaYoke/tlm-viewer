@@ -4,11 +4,11 @@ import { useRecoilState, useSetRecoilState } from 'recoil'
 import { isChosenState, testCaseListState } from '@atoms/PlotSettingAtom'
 import { MySwitch, MySelect } from '@parts'
 
-import type { selectOptionType } from '@types'
+import type { SelectOptionType } from '@types'
 import type { MultiValue } from 'chakra-react-select'
 
 type Props = {
-  options?: selectOptionType[]
+  options?: SelectOptionType[]
 }
 
 export const TestCaseSelect = (props: Props) => {
@@ -20,7 +20,7 @@ export const TestCaseSelect = (props: Props) => {
     setIsChosen(() => !value)
   }
 
-  const selectValue = (value: MultiValue<selectOptionType>) => {
+  const selectValue = (value: MultiValue<SelectOptionType>) => {
     setTestCaseList(() => value)
   }
 

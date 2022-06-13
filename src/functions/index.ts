@@ -1,6 +1,6 @@
-import type { selectOptionType } from '@types'
+import type { SelectOptionType } from '@types'
 
-export const stringToSelectOption = (element: string): selectOptionType => ({
+export const stringToSelectOption = (element: string): SelectOptionType => ({
   label: element,
   value: element,
 })
