@@ -1,7 +1,7 @@
 import { ipcRenderer, contextBridge } from 'electron'
 import { join } from 'path'
 
-import { readDbSync, resolvePathGDrive, getSettings } from './functions'
+import { resolvePathGDrive, getSettings } from './functions'
 
 import type { Main, MyIpcChannelDataType, MyIpcChannelType } from '../types'
 
@@ -17,21 +17,21 @@ const myIpcRenderer = {
 }
 
 export const api: Main = {
-  getData: async (path, query) => {
-    const resolvedPath = resolvePathGDrive(path)
-    if (resolvedPath) {
-      const data = await readDbSync(resolvedPath, query)
-      return {
-        success: true,
-        data: data,
-      }
-    }
+  // getData: async (path, query) => {
+  //   const resolvedPath = resolvePathGDrive(path)
+  //   if (resolvedPath) {
+  //     const data = await readDbSync(resolvedPath, query)
+  //     return {
+  //       success: true,
+  //       data: data,
+  //     }
+  //   }
 
-    return {
-      success: false,
-      error: 'Database not found',
-    }
-  },
+  //   return {
+  //     success: false,
+  //     error: 'Database not found',
+  //   }
+  // },
   getSettings: () => {
     const topPath = resolvePathGDrive(TOP_PATH)
     const pjSettingPath = resolvePathGDrive(join(TOP_PATH, PROJECT_SETTING_RELATIVE_PATH))

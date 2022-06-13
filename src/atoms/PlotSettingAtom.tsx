@@ -1,6 +1,6 @@
 import { atom } from 'recoil'
 
-import type { DateSettingType, pjSettingWithTlmIdType, SelectOptionType, tlmListType } from '@types'
+import type { DateSettingType, PjSettingWithTlmIdType, SelectOptionType, TlmListType } from '@types'
 import type { SingleValue, MultiValue } from 'chakra-react-select'
 
 export const isMaximizeState = atom<boolean>({
@@ -41,12 +41,12 @@ export const projectState = atom<SingleValue<SelectOptionType>>({
   default: null,
 })
 
-export const tlmListState = atom<tlmListType[]>({
+export const tlmListState = atom<TlmListType[]>({
   key: 'tlmListState',
   default: [{ id: 1, tlm: [] }],
 })
 
-export const settingState = atom<pjSettingWithTlmIdType | null>({
+export const settingState = atom<PjSettingWithTlmIdType | null>({
   key: 'settingState',
   default: null,
 })

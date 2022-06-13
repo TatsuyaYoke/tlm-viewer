@@ -12,7 +12,7 @@ export type MyIpcChannelDataType = {
   Close: () => void
   openFileDialog: () => Promise<string | undefined>
   saveFile: (
-    data: TlmDataObjectType['tlm']
+    data: ResponseDataType['tlm']
   ) => Promise<{ success: true; path: string } | { success: false; error: string }>
   isMaximize: () => Promise<boolean>
   // sendMessage: (message: string) => void
@@ -21,7 +21,7 @@ export type MyIpcChannelDataType = {
 export type MyIpcChannelType = keyof MyIpcChannelDataType
 
 export type Main = MyIpcChannelDataType & {
-  getData: (path: string, query: string) => Promise<apiReturnType<ObjectArrayTypeIncludingDate>>
+  // getData: (path: string, query: string) => Promise<apiReturnType<ObjectArrayTypeIncludingDate>>
   getSettings: () => apiReturnType<PjSettingWithTlmIdType[]>
 }
 
@@ -36,25 +36,25 @@ export type SelectOptionType = {
   value: string
 }
 
-export type tlmListType = {
+export type TlmListType = {
   id: number
   tlm: MultiValue<SelectOptionType>
 }
 
-export const dataTypeSchema = z.union([z.number().nullable(), z.string()])
-export const objectTypeSchema = z.record(dataTypeSchema)
-export const arrayObjectSchema = z.array(objectTypeSchema)
-export const objectArrayTypeSchema = z.record(z.array(dataTypeSchema))
-export const objectArrayTypeIncludeDateSchema = z.object({ DATE: z.array(z.string()) }).and(objectArrayTypeSchema)
-const regexDateTime = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]/
-export const dateArraySchema = z.array(z.string().regex(regexDateTime))
+// export const dataTypeSchema = z.union([z.number().nullable(), z.string()])
+// export const objectTypeSchema = z.record(dataTypeSchema)
+// export const arrayObjectSchema = z.array(objectTypeSchema)
+// export const objectArrayTypeSchema = z.record(z.array(dataTypeSchema))
+// export const objectArrayTypeIncludeDateSchema = z.object({ DATE: z.array(z.string()) }).and(objectArrayTypeSchema)
+// const regexDateTime = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]/
+// export const dateArraySchema = z.array(z.string().regex(regexDateTime))
 
-export type ArrayObjectType = z.infer<typeof arrayObjectSchema>
-export type ObjectType = z.infer<typeof objectTypeSchema>
-export type DataType = z.infer<typeof dataTypeSchema>
-export type ObjectArrayType = z.infer<typeof objectArrayTypeSchema>
-export type ObjectArrayTypeIncludingDate = z.infer<typeof objectArrayTypeIncludeDateSchema>
-export type DateArrayType = z.infer<typeof dateArraySchema>
+// export type ArrayObjectType = z.infer<typeof arrayObjectSchema>
+// export type ObjectType = z.infer<typeof objectTypeSchema>
+// export type DataType = z.infer<typeof dataTypeSchema>
+// export type ObjectArrayType = z.infer<typeof objectArrayTypeSchema>
+// export type ObjectArrayTypeIncludingDate = z.infer<typeof objectArrayTypeIncludeDateSchema>
+// export type DateArrayType = z.infer<typeof dateArraySchema>
 
 export const pjNameSchema = z.string().regex(/^DSX[0-9]{4}/)
 export const groundTestPathSchema = z.string()
@@ -110,8 +110,6 @@ export type RequestDataType = {
   tlm: RequestTlmType[]
 } & PjSettingType
 
-export type TlmDataType = string | number | null
-
 export type TlmDataObjectType = {
   tlm: {
     [key: string]: {
@@ -122,17 +120,91 @@ export type TlmDataObjectType = {
   warningMessages: string[]
 }
 
+const mode = ['orbit', 'ground'] as const
+export type Mode = typeof mode[number]
+
+export type QuerySuccess<T> = { success: true; data: T }
+export type QueryError = { success: false; error: string }
+export type QueryReturnType<T> = QuerySuccess<T> | QueryError
+
+const regexGroundTestDateTime =
+  /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]/
+// /^[0-9]{4}(-|\/)(0?[1-9]|1[0-2])(-|\/)(0?[1-9]|[12][0-9]|3[01]) ([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]/
+export const groundDateTimeTypeSchema = z.string().regex(regexGroundTestDateTime)
+
+export const groundDataTypeSchema = z.union([z.number().nullable(), groundDateTimeTypeSchema])
+export const groundObjectTypeSchema = z.record(groundDataTypeSchema)
+
+export const groundArrayObjectTypeSchema = z.array(groundObjectTypeSchema)
+export const groundObjectArrayTypeSchema = z.record(z.array(groundDataTypeSchema))
+export const groundObjectArrayIncludingDateTimeTypeSchema = z
+  .object({ DATE: z.array(z.string()) })
+  .and(groundObjectArrayTypeSchema)
+
+const regexOrbitDateTime =
+  /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9].[0-9]{3}Z/
+export const orbitDateTimeTypeSchema = z
+  .object({ value: z.string().regex(regexOrbitDateTime) })
+  .transform((e) => e.value)
+
+export const orbitDataTypeSchema = z.union([z.number().nullable(), orbitDateTimeTypeSchema])
+export const orbitObjectTypeSchema = z.record(orbitDataTypeSchema)
+
+export const orbitArrayObjectTypeSchema = z.array(orbitObjectTypeSchema)
+export const orbitObjectArrayTypeSchema = z.record(z.array(orbitDataTypeSchema))
+export const orbitObjectArrayIncludingDateTimeTypeSchema = z
+  .object({
+    OBCTimeUTC: z.array(orbitDateTimeTypeSchema),
+    CalibratedOBCTimeUTC: z.array(orbitDateTimeTypeSchema),
+  })
+  .and(orbitObjectArrayTypeSchema)
+
+export type DateTimeType = {
+  orbit: z.infer<typeof orbitDateTimeTypeSchema>
+  ground: z.infer<typeof groundDateTimeTypeSchema>
+}
+export type DataType = {
+  orbit: z.infer<typeof orbitDataTypeSchema>
+  ground: z.infer<typeof groundDataTypeSchema>
+}
+export type ArrayObjectType = {
+  orbit: z.infer<typeof orbitArrayObjectTypeSchema>
+  ground: z.infer<typeof groundArrayObjectTypeSchema>
+}
+export type ObjectArrayType = {
+  orbit: z.infer<typeof orbitObjectArrayTypeSchema>
+  ground: z.infer<typeof groundObjectArrayTypeSchema>
+}
+export type ObjectArrayIncludingDateTimeType = {
+  orbit: z.infer<typeof orbitObjectArrayIncludingDateTimeTypeSchema>
+  ground: z.infer<typeof groundObjectArrayIncludingDateTimeTypeSchema>
+}
+
+export type ResponseDataType = {
+  success: boolean
+  tlm: {
+    time: string[]
+    data: {
+      [key: string]: (number | null)[]
+    }
+  }
+  errorMessages: string[]
+}
+
 export type GraphDataType = {
   tlmName: string
-  x: TlmDataType[]
-  y: TlmDataType[]
+  x: string[]
+  y: (number | null)[]
 }
+
 export type GraphDataEachPlotIdType = {
   plotId: number
   tlm: GraphDataType[]
 }
+
 export type GraphDataArrayType = GraphDataEachPlotIdType[]
 
+export type TlmDataType = string | number | null
 export type CsvDataType = {
   Time: TlmDataType
   [key: string]: TlmDataType

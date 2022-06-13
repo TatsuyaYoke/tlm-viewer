@@ -2,62 +2,53 @@ import * as fs from 'fs'
 import { join } from 'path'
 
 import glob from 'glob'
-import sqlite3 from 'sqlite3'
 
-import { nonNullable, arrayObjectSchema, dateArraySchema, appSettingsSchema, tlmIdSchema } from '../../types'
+import { appSettingsSchema, tlmIdSchema } from '../../types'
 
-import type {
-  ObjectArrayType,
-  ObjectArrayTypeIncludingDate,
-  ArrayObjectType,
-  PjSettingsType,
-  PjSettingWithTlmIdType,
-  TlmDataObjectType,
-  CsvDataType,
-} from '../../types'
+import type { PjSettingsType, PjSettingWithTlmIdType, ResponseDataType, CsvDataType } from '../../types'
 
-const includeDate = (value: ObjectArrayType | ObjectArrayTypeIncludingDate): value is ObjectArrayTypeIncludingDate => {
-  if ((value as ObjectArrayTypeIncludingDate).DATE !== undefined) {
-    const result = dateArraySchema.safeParse(value.DATE)
-    return result.success
-  }
-  return false
-}
+// const includeDate = (value: ObjectArrayType | ObjectArrayTypeIncludingDate): value is ObjectArrayTypeIncludingDate => {
+//   if ((value as ObjectArrayTypeIncludingDate).DATE !== undefined) {
+//     const result = dateArraySchema.safeParse(value.DATE)
+//     return result.success
+//   }
+//   return false
+// }
 
-export const toObjectArray = (records: ArrayObjectType): ObjectArrayTypeIncludingDate | null => {
-  const objectArray: ObjectArrayType = {}
-  const keys = Object.keys(records[0] ?? {})
-  keys.forEach((key) => {
-    objectArray[key] = []
-  })
-  records.forEach((record) => {
-    keys.forEach((key) => {
-      objectArray[key]?.push(record[key] ?? null)
-    })
-  })
-  if (includeDate(objectArray)) {
-    return objectArray
-  }
-  return null
-}
+// export const toObjectArray = (records: ArrayObjectType): ObjectArrayTypeIncludingDate | null => {
+//   const objectArray: ObjectArrayType = {}
+//   const keys = Object.keys(records[0] ?? {})
+//   keys.forEach((key) => {
+//     objectArray[key] = []
+//   })
+//   records.forEach((record) => {
+//     keys.forEach((key) => {
+//       objectArray[key]?.push(record[key] ?? null)
+//     })
+//   })
+//   if (includeDate(objectArray)) {
+//     return objectArray
+//   }
+//   return null
+// }
 
-export const readDbSync = async (path: string, query: string): Promise<ObjectArrayTypeIncludingDate> =>
-  new Promise((resolve) => {
-    const db = new sqlite3.Database(path)
-    db.serialize(() => {
-      db.all(query, (_err, records) => {
-        const schemaResult = arrayObjectSchema.safeParse(records)
-        if (schemaResult.success) {
-          const data = toObjectArray(schemaResult.data)
-          if (data) {
-            resolve(data)
-          }
-        } else {
-          console.log(schemaResult.error.issues)
-        }
-      })
-    })
-  })
+// export const readDbSync = async (path: string, query: string): Promise<ObjectArrayTypeIncludingDate> =>
+//   new Promise((resolve) => {
+//     const db = new sqlite3.Database(path)
+//     db.serialize(() => {
+//       db.all(query, (_err, records) => {
+//         const schemaResult = arrayObjectSchema.safeParse(records)
+//         if (schemaResult.success) {
+//           const data = toObjectArray(schemaResult.data)
+//           if (data) {
+//             resolve(data)
+//           }
+//         } else {
+//           console.log(schemaResult.error.issues)
+//         }
+//       })
+//     })
+//   })
 
 export const resolvePath = (path: string, resolveName1: string, resolveName2: string): string | null => {
   if (fs.existsSync(path)) return path
@@ -106,26 +97,13 @@ export const getSettings = (topPath: string, pjSettingPath: string) => {
   return null
 }
 
-export const convertToCsvData = (data: TlmDataObjectType['tlm']): CsvDataType[] => {
-  const tlmNameList = Object.keys(data)
-  const timeList = tlmNameList
-    .map((tlmName) => data[tlmName]?.time)
-    .flat()
-    .filter(nonNullable)
-  const timeUniqueList = Array.from(new Set(timeList)).sort()
-
-  return timeUniqueList.map((baseTime) => {
-    const returnData: CsvDataType = { Time: baseTime }
+export const convertToCsvData = (responseData: ResponseDataType['tlm']): CsvDataType[] => {
+  const tlmNameList = Object.keys(responseData.data)
+  const timeList = responseData.time
+  return timeList.map((time, index) => {
+    const returnData: CsvDataType = { Time: time }
     tlmNameList.forEach((tlmName) => {
-      const tlm = data[tlmName]
-      if (tlm) {
-        const foundIndex = tlm.time.findIndex((time) => time === baseTime)
-        if (foundIndex !== -1) {
-          returnData[tlmName] = tlm.data[foundIndex] ?? null
-        } else {
-          returnData[tlmName] = null
-        }
-      }
+      returnData[tlmName] = responseData.data[tlmName]?.[index] ?? null
     })
     return returnData
   })

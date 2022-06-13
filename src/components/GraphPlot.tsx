@@ -35,9 +35,15 @@ import {
 } from '@atoms/PlotSettingAtom'
 import { Error } from '@components'
 import { Graph } from '@parts'
-import { dateGraphSchema, nonNullable, isNotNumber } from '@types'
+import { dateGraphSchema, nonNullable } from '@types'
 
-import type { RequestDataType, RequestTlmType, GraphDataArrayType, TlmDataObjectType, AxisType } from '@types'
+import type {
+  RequestDataType,
+  RequestTlmType,
+  GraphDataArrayType,
+  AxisType,
+  ResponseDataType,
+} from '@types'
 
 export const GraphPlot = () => {
   const isStored = useRecoilValue(isStoredState)
@@ -53,7 +59,7 @@ export const GraphPlot = () => {
   const [isError, setIsError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [responseTlmData, setResponseTLmData] = useState<TlmDataObjectType | null>(null)
+  const [responseTlmData, setResponseTlmData] = useState<ResponseDataType | null>(null)
   const [graphData, setGraphData] = useState<GraphDataArrayType>([])
 
   const toast = useToast()
@@ -78,41 +84,21 @@ export const GraphPlot = () => {
   const plot = async () => {
     setIsLoading(true)
     // const response = await window.Main.getData(path, query)
-    const response: TlmDataObjectType = {
+    const response: ResponseDataType = {
+      success: true,
       tlm: {
-        PCDU_BAT_CURRENT: {
-          time: ['2022-04-18 00:00:00', '2022-04-18 00:00:01', '2022-04-18 00:00:02'],
-          data: [0, 1, 2],
-        },
-        PCDU_BAT_VOLTAGE: {
-          time: ['2022-04-18 00:00:00', '2022-04-18 00:00:01', '2022-04-18 00:00:02'],
-          data: [2, 1, null],
-        },
-        OBC_AD590_01: {
-          time: ['2022-04-18 00:00:00', '2022-04-18 00:00:01', '2022-04-18 00:00:04'],
-          data: [1, 1, 1],
-        },
-        OBC_AD590_02: {
-          time: ['2022-04-18 00:00:00', '2022-04-18 00:00:01', '2022-04-18 00:00:02'],
-          data: [null, 2, 2],
+        time: ['2022-04-18 00:00:00', '2022-04-18 00:00:01', '2022-04-18 00:00:02'],
+        data: {
+          PCDU_BAT_CURRENT: [0, 1, 2],
+          PCDU_BAT_VOLTAGE: [2, 1, null],
+          OBC_AD590_01: [1, 1, 1],
+          OBC_AD590_02: [null, 2, 2],
         },
       },
-      warningMessages: [],
+      errorMessages: [],
     }
 
-    const timeList = Object.keys(response.tlm)
-      .map((tlmName) => {
-        const tlmObject = response.tlm
-        if (tlmObject) {
-          return tlmObject[tlmName] ? tlmObject[tlmName]?.time : null
-        }
-        return null
-      })
-      .flat()
-      .filter(nonNullable)
-      .filter(isNotNumber)
-      .sort()
-
+    const timeList = response.tlm.time
     setAxis((prev) => {
       const newAxis = { ...prev }
       newAxis.x.max = timeList[timeList.length - 1]
@@ -122,7 +108,7 @@ export const GraphPlot = () => {
       return newAxis
     })
 
-    setResponseTLmData(response)
+    setResponseTlmData(response)
     const filteredTlmList = [
       {
         plotId: 1,
@@ -147,10 +133,9 @@ export const GraphPlot = () => {
           plotId: plotObject.plotId,
           tlm: tlmListEachPlotId
             .map((tlmName) => {
-              const tlmData = response.tlm[tlmName]
-              const xData = tlmData?.time
-              const yData = tlmData?.data
-              if (tlmData && xData && yData)
+              const xData = timeList
+              const yData = response.tlm.data[tlmName]
+              if (xData && yData)
                 return {
                   tlmName: tlmName,
                   x: xData,
