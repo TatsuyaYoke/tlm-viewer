@@ -22,7 +22,7 @@ export type MyIpcChannelType = keyof MyIpcChannelDataType
 
 export type Main = MyIpcChannelDataType & {
   getData: (path: string, query: string) => Promise<apiReturnType<ObjectArrayTypeIncludingDate>>
-  getSettings: () => apiReturnType<pjSettingWithTlmIdType[]>
+  getSettings: () => apiReturnType<PjSettingWithTlmIdType[]>
 }
 
 declare global {
@@ -77,15 +77,15 @@ export const appSettingsSchema = z.object({
   project: pjSettingsSchema,
 })
 
-export type pjSettingType = z.infer<typeof pjSettingSchema>
-export type pjSettingsType = z.infer<typeof pjSettingsSchema>
-export type pjSettingsKeyType = keyof pjSettingType
-export type appSettingsType = z.infer<typeof appSettingsSchema>
+export type PjSettingType = z.infer<typeof pjSettingSchema>
+export type PjSettingsType = z.infer<typeof pjSettingsSchema>
+export type PjSettingsKeyType = keyof PjSettingType
+export type AppSettingsType = z.infer<typeof appSettingsSchema>
 
 export const tlmIdSchema = z.record(z.number())
-export type tlmIdType = z.infer<typeof tlmIdSchema>
-export type pjSettingWithTlmIdType = pjSettingType & {
-  tlmId?: tlmIdType
+export type TlmIdType = z.infer<typeof tlmIdSchema>
+export type PjSettingWithTlmIdType = PjSettingType & {
+  tlmId?: TlmIdType
   testCase?: string[]
 }
 
@@ -108,7 +108,7 @@ export type RequestDataType = {
   dateSetting: DateSettingType
   testCase: SelectOptionType[]
   tlm: RequestTlmType[]
-} & pjSettingType
+} & PjSettingType
 
 export type TlmDataType = string | number | null
 

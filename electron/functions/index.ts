@@ -10,8 +10,8 @@ import type {
   ObjectArrayType,
   ObjectArrayTypeIncludingDate,
   ArrayObjectType,
-  pjSettingsType,
-  pjSettingWithTlmIdType,
+  PjSettingsType,
+  PjSettingWithTlmIdType,
   TlmDataObjectType,
   CsvDataType,
 } from '../../types'
@@ -76,7 +76,7 @@ export const resolvePath = (path: string, resolveName1: string, resolveName2: st
 export const resolvePathGDrive = (path: string): string | null => resolvePath(path, '共有ドライブ', 'Shared drives')
 
 export const getSettings = (topPath: string, pjSettingPath: string) => {
-  let pjSettings: pjSettingsType | undefined
+  let pjSettings: PjSettingsType | undefined
   const settingsBeforeParse = JSON.parse(fs.readFileSync(pjSettingPath, 'utf8'))
   const schemaResult = appSettingsSchema.safeParse(settingsBeforeParse)
   if (schemaResult.success) pjSettings = schemaResult.data.project
@@ -84,7 +84,7 @@ export const getSettings = (topPath: string, pjSettingPath: string) => {
   if (pjSettings) {
     const pjSettingWithTlmIdList = pjSettings.map((value) => {
       const tlmIdFilePath = resolvePathGDrive(join(topPath, 'settings', value.pjName, 'tlm_id.json'))
-      const response: pjSettingWithTlmIdType = value
+      const response: PjSettingWithTlmIdType = value
       if (tlmIdFilePath) {
         const tlmIdSettingsBeforeParse = JSON.parse(fs.readFileSync(tlmIdFilePath, 'utf-8'))
         const tlmIdSchemaResult = tlmIdSchema.safeParse(tlmIdSettingsBeforeParse)
