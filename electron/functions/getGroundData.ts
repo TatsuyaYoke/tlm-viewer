@@ -25,7 +25,7 @@ const readGroundTablesSync = (
         if (error) {
           resolve({
             success: false,
-            error: error.message,
+            error: `table search: ${error.message}`,
           })
           return
         }
@@ -71,7 +71,7 @@ const readGroundDbColumnsSync = (
         if (error) {
           resolve({
             success: false,
-            error: error.message,
+            error: `column search: ${error.message}`,
           })
           return
         }
@@ -149,7 +149,7 @@ const readGroundDbSync = (queryObject: {
         if (error) {
           resolve({
             success: false,
-            error: error.message,
+            error: `getData: ${error.message}`,
           })
           return
         }
@@ -289,9 +289,9 @@ export const getGroundData = async (request: RequestDataType, dbTopPath: string 
           const { table, columns } = currentElement
           const tlmListQuery = columns.reduce((prev, current) => `${prev}\n(tab)${current},`, '')
           return `${prevQuery}
-        (tab)${table}_tlm.DATE AS ${table}_DATE,
-        ${tlmListQuery}
-       `
+          (tab)${table}_tlm.DATE AS ${table}_DATE,
+          ${tlmListQuery}
+          `
         }, 'SELECT\n')
       )
 

@@ -36,22 +36,6 @@ type Props = {
   activate: boolean
 }
 
-// type AxisType = {
-//   x: {
-//     max: string | undefined
-//     min: string | undefined
-//     div: number | undefined
-//   }
-//   y: {
-//     max: number | undefined
-//     min: number | undefined
-//     div: number | undefined
-//   }
-// }
-
-// const regexDateTime = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/
-// const dateSchema = z.string().regex(regexDateTime)
-
 export const Graph = (props: Props) => {
   const { graphNumber, graphData, xMax, xMin, xDiv, activate } = props
   const graphBgColor = useColorModeValue('#FFFFFF', '#1A202C')
@@ -123,8 +107,8 @@ export const Graph = (props: Props) => {
       .filter(isNotString)
       .filter(nonNullable)
 
-    const yMax = Math.max(...yDataAll)
-    const yMin = Math.min(...yDataAll)
+    const yMax = yDataAll.reduce((a, b) => (a > b ? a : b))
+    const yMin = yDataAll.reduce((a, b) => (a < b ? a : b))
     const yOutside = ((yMax - yMin) / 4) * 0.2
 
     setAxis((prev) => {

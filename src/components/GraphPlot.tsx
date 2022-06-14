@@ -37,7 +37,14 @@ import { Error } from '@components'
 import { Graph } from '@parts'
 import { dateGraphSchema, nonNullable } from '@types'
 
-import type { RequestDataType, RequestTlmType, GraphDataArrayType, AxisType, ResponseDataType } from '@types'
+import type {
+  RequestDataType,
+  RequestTlmType,
+  GraphDataArrayType,
+  AxisType,
+  ResponseDataType,
+  SelectOptionType,
+} from '@types'
 
 export const GraphPlot = () => {
   const isStored = useRecoilValue(isStoredState)
@@ -75,23 +82,10 @@ export const GraphPlot = () => {
     },
   })
 
-  const plot = async (response: ResponseDataType) => {
-    setIsLoading(true)
-    // const response = await window.Main.getData(path, query)
-    // const response: ResponseDataType = {
-    //   success: true,
-    //   tlm: {
-    //     time: ['2022-04-18 00:00:00', '2022-04-18 00:00:01', '2022-04-18 00:00:02'],
-    //     data: {
-    //       PCDU_BAT_CURRENT: [0, 1, 2],
-    //       PCDU_BAT_VOLTAGE: [2, 1, null],
-    //       OBC_AD590_01: [1, 1, 1],
-    //       OBC_AD590_02: [null, 2, 2],
-    //     },
-    //   },
-    //   errorMessages: [],
-    // }
-
+  const setPlot = async (
+    response: ResponseDataType,
+    filteredTlmList: { plotId: number; tlm: SelectOptionType[] }[]
+  ) => {
     const timeList = response.tlm.time
     const sortedTimeList = [...timeList].sort()
     setAxis((prev) => {
@@ -104,23 +98,6 @@ export const GraphPlot = () => {
     })
 
     setResponseTlmData(response)
-    const filteredTlmList = [
-      {
-        plotId: 1,
-        tlm: [
-          { label: 'PCDU_BAT_CURRENT', value: 'PCDU_BAT_CURRENT' },
-          { label: 'PCDU_BAT_VOLTAGE', value: 'PCDU_BAT_VOLTAGE' },
-        ],
-      },
-      {
-        plotId: 2,
-        tlm: [
-          { label: 'OBC_AD590_01', value: 'OBC_AD590_01' },
-          { label: 'OBC_AD590_02', value: 'OBC_AD590_02' },
-        ],
-      },
-    ]
-
     setGraphData(() =>
       filteredTlmList.map((plotObject) => {
         const tlmListEachPlotId = plotObject.tlm.map((e) => e.value)
@@ -142,10 +119,6 @@ export const GraphPlot = () => {
         }
       })
     )
-
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 500)
   }
 
   const initializeWarningError = () => {
@@ -154,7 +127,7 @@ export const GraphPlot = () => {
     setWarningMessage(() => [])
   }
 
-  const set = async () => {
+  const plot = async () => {
     initializeWarningError()
     if (setting) {
       const { pjName, tlmId: tlmIdList, groundTestPath, orbitDatasetPath, testCase } = setting
@@ -229,44 +202,22 @@ export const GraphPlot = () => {
         return
       }
 
-      // const request: RequestDataType = {
-      //   pjName: pjName,
-      //   isOrbit: isOrbit,
-      //   isStored: isStored,
-      //   isChosen: isChosen,
-      //   groundTestPath: groundTestPath ?? '',
-      //   orbitDatasetPath: orbitDatasetPath ?? '',
-      //   dateSetting: dateSetting,
-      //   testCase: filteredTestCaseList,
-      //   tlm: requestTlmList,
-      // }
-      const testIsOrbit = true
+      setIsLoading(true)
       const request: RequestDataType = {
-        pjName: 'DSX0201',
-        isOrbit: testIsOrbit,
-        orbitDatasetPath: 'strix_b_telemetry_v_6_17',
-        groundTestPath: 'DSX0201/500_SystemFM',
-        isStored: false,
-        isChosen: false,
-        dateSetting: {
-          // startDate: isOrbit ? new Date(2022, 3, 28) : new Date(2022, 4, 18),
-          // endDate: isOrbit ? new Date(2022, 3, 28) : new Date(2022, 4, 19),
-          startDate: testIsOrbit ? new Date(2022, 3, 28) : new Date(2021, 10, 11),
-          endDate: testIsOrbit ? new Date(2022, 3, 28) : new Date(2021, 10, 17),
-        },
-        testCase: [
-          { value: '510_FlatSat', label: '510_FlatSat' },
-          { value: '511_Hankan_Test', label: '511_Hankan_Test' },
-        ],
-        tlm: [
-          { tlmId: 1, tlmList: ['PCDU_BAT_CURRENT', 'PCDU_BAT_VOLTAGE', 'AB_DSS2_ONOFF'] },
-          { tlmId: 2, tlmList: ['OBC_AD590_01', 'OBC_AD590_02'] },
-        ],
+        pjName: pjName,
+        isOrbit: isOrbit,
+        isStored: isStored,
+        isChosen: isChosen,
+        groundTestPath: groundTestPath ?? '',
+        orbitDatasetPath: orbitDatasetPath ?? '',
+        dateSetting: dateSetting,
+        testCase: filteredTestCaseList,
+        tlm: requestTlmList,
       }
-      console.log(request)
+
       const response = await window.Main.getData(request)
-      console.log(response)
-      plot(response)
+      setPlot(response, filteredTlmList)
+      setIsLoading(false)
     }
   }
 
@@ -322,11 +273,8 @@ export const GraphPlot = () => {
             noDisplayWhenSuccess={true}
           />
           <Spacer />
-          {/* <Button colorScheme="teal" onClick={plot} mx="10" flexShrink={0} width="80px">
+          <Button colorScheme="teal" onClick={plot} mx="10" flexShrink={0} width="80px">
             Plot
-          </Button> */}
-          <Button colorScheme="teal" onClick={set} mr="10" flexShrink={0} width="80px">
-            Set
           </Button>
           {responseTlmData && (
             <Button colorScheme="teal" onClick={outputCsv} mr="10" flexShrink={0} width="80px">
