@@ -170,7 +170,7 @@ export const Graph = (props: Props) => {
               x: element.x,
               y: element.y,
               type: 'scattergl',
-              mode: 'lines+markers',
+              mode: 'markers',
               name: element.tlmName,
             }))}
             layout={{

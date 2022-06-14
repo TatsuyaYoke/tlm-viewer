@@ -21,8 +21,8 @@ export type MyIpcChannelDataType = {
 export type MyIpcChannelType = keyof MyIpcChannelDataType
 
 export type Main = MyIpcChannelDataType & {
-  // getData: (path: string, query: string) => Promise<apiReturnType<ObjectArrayTypeIncludingDate>>
-  getSettings: () => apiReturnType<PjSettingWithTlmIdType[]>
+  getData: (request: RequestDataType) => Promise<ResponseDataType>
+  getSettings: (topPath: string, pjSettingPath: string) => ApiReturnType<PjSettingWithTlmIdType[]>
 }
 
 declare global {
@@ -40,21 +40,6 @@ export type TlmListType = {
   id: number
   tlm: MultiValue<SelectOptionType>
 }
-
-// export const dataTypeSchema = z.union([z.number().nullable(), z.string()])
-// export const objectTypeSchema = z.record(dataTypeSchema)
-// export const arrayObjectSchema = z.array(objectTypeSchema)
-// export const objectArrayTypeSchema = z.record(z.array(dataTypeSchema))
-// export const objectArrayTypeIncludeDateSchema = z.object({ DATE: z.array(z.string()) }).and(objectArrayTypeSchema)
-// const regexDateTime = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]/
-// export const dateArraySchema = z.array(z.string().regex(regexDateTime))
-
-// export type ArrayObjectType = z.infer<typeof arrayObjectSchema>
-// export type ObjectType = z.infer<typeof objectTypeSchema>
-// export type DataType = z.infer<typeof dataTypeSchema>
-// export type ObjectArrayType = z.infer<typeof objectArrayTypeSchema>
-// export type ObjectArrayTypeIncludingDate = z.infer<typeof objectArrayTypeIncludeDateSchema>
-// export type DateArrayType = z.infer<typeof dateArraySchema>
 
 export const pjNameSchema = z.string().regex(/^DSX[0-9]{4}/)
 export const groundTestPathSchema = z.string()
@@ -89,10 +74,6 @@ export type PjSettingWithTlmIdType = PjSettingType & {
   testCase?: string[]
 }
 
-export type apiSuccess<T> = { success: true; data: T }
-export type apiError = { success: false; error: string }
-export type apiReturnType<T> = apiSuccess<T> | apiError
-
 export type DateSettingType = {
   startDate: Date
   endDate: Date
@@ -126,6 +107,7 @@ export type Mode = typeof mode[number]
 export type QuerySuccess<T> = { success: true; data: T }
 export type QueryError = { success: false; error: string }
 export type QueryReturnType<T> = QuerySuccess<T> | QueryError
+export type ApiReturnType<T> = QueryReturnType<T>
 
 const regexGroundTestDateTime =
   /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]/
@@ -145,7 +127,7 @@ const regexOrbitDateTime =
   /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9].[0-9]{3}Z/
 export const orbitDateTimeTypeSchema = z
   .object({ value: z.string().regex(regexOrbitDateTime) })
-  .transform((e) => e.value)
+  .transform((e) => e.value.replace('T', ' ').replace('.000Z', ''))
 
 export const orbitDataTypeSchema = z.union([z.number().nullable(), orbitDateTimeTypeSchema])
 export const orbitObjectTypeSchema = z.record(orbitDataTypeSchema)
