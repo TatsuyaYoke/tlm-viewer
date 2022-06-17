@@ -1,7 +1,7 @@
 import { BigQuery } from '@google-cloud/bigquery'
 
 import { isNotNumber, nonNullable, orbitArrayObjectTypeSchema } from '../../types'
-import { getStringFromUTCDateFixedTime, trimQuery, uniqueArray } from './getDbDataCommon'
+import { getStringFromDateFixedTime, trimQuery, uniqueArray } from './getDbDataCommon'
 
 import type {
   RequestDataType,
@@ -90,8 +90,8 @@ export const getOrbitData = async (
   bigquerySettingPath: string | null
 ): Promise<ResponseDataType> => {
   if (bigquerySettingPath) {
-    const startDateStr = getStringFromUTCDateFixedTime(request.dateSetting.startDate, '00:00:00')
-    const endDateStr = getStringFromUTCDateFixedTime(request.dateSetting.endDate, '23:59:59')
+    const startDateStr = getStringFromDateFixedTime(request.dateSetting.startDate, '00:00:00')
+    const endDateStr = getStringFromDateFixedTime(request.dateSetting.endDate, '23:59:59')
     const queryWith = trimQuery(
       request.tlm.reduce((prevQuery, currentElement) => {
         const datasetTableQuery = `\n(tab)(tab)\`${request.orbitDatasetPath}.tlm_id_${currentElement.tlmId}\``

@@ -56,7 +56,7 @@ export const GraphPlot = () => {
   const dateSetting = useRecoilValue(dateSettingState)
 
   const [isWarning, setIsWarning] = useState(false)
-  const [warningMessage, setWarningMessage] = useState<string[]>([])
+  const [warningMessages, setWarningMessages] = useState<string[]>([])
   const [isError, setIsError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -124,7 +124,7 @@ export const GraphPlot = () => {
   const initializeWarningError = () => {
     setIsWarning(false)
     setIsError(false)
-    setWarningMessage(() => [])
+    setWarningMessages(() => [])
   }
 
   const plot = async () => {
@@ -148,7 +148,7 @@ export const GraphPlot = () => {
       const filteredTestCaseList = testCaseList.filter((element) => {
         if (testCase?.indexOf(element.value) === -1) {
           setIsWarning(true)
-          setWarningMessage((prev) => [...prev, `Test case: ${element.value} deleted because not exist`])
+          setWarningMessages((prev) => [...prev, `Test case: ${element.value} deleted because not exist`])
           return false
         }
         return true
@@ -166,7 +166,7 @@ export const GraphPlot = () => {
         const filteredList = element.tlm.filter((tlm) => {
           if (projectTlmList.indexOf(tlm.value) === -1) {
             setIsWarning(true)
-            setWarningMessage((prev) => [...prev, `TLM list: ${tlm.value} of ${element.id} deleted because not exist`])
+            setWarningMessages((prev) => [...prev, `TLM list: ${tlm.value} of ${element.id} deleted because not exist`])
             return false
           }
           return true
@@ -216,7 +216,13 @@ export const GraphPlot = () => {
       }
 
       const response = await window.Main.getData(request)
-      setPlot(response, filteredTlmList)
+      if (response.success) {
+        setPlot(response, filteredTlmList)
+      } else {
+        setIsWarning(true)
+        setGraphData([])
+        setWarningMessages((prev) => [...prev, ...response.errorMessages])
+      }
       setIsLoading(false)
     }
   }
@@ -269,7 +275,7 @@ export const GraphPlot = () => {
             isError={isError}
             errorMessage={errorMessage}
             isWarning={isWarning}
-            warningMessages={warningMessage}
+            warningMessages={warningMessages}
             noDisplayWhenSuccess={true}
           />
           <Spacer />

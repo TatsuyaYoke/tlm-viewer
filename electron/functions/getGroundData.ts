@@ -5,7 +5,7 @@ import sqlite3 from 'sqlite3'
 import * as z from 'zod'
 
 import { groundArrayObjectTypeSchema, isNotNumber, nonNullable } from '../../types'
-import { getStringFromUTCDateFixedTime, trimQuery, uniqueArray } from './getDbDataCommon'
+import { getStringFromDateFixedTime, trimQuery, uniqueArray } from './getDbDataCommon'
 
 import type {
   ArrayObjectType,
@@ -198,7 +198,7 @@ export const getGroundData = async (request: RequestDataType, dbTopPath: string 
       const { startDate, endDate } = dateSetting
       const dbAllPathList = glob.sync(join(dbTopPath, `../${groundTestPath}/**/**/*.db`))
       for (let day = new Date(startDate.toDateString()); day <= endDate; day.setDate(day.getDate() + 1)) {
-        const dayString = getStringFromUTCDateFixedTime(day)
+        const dayString = getStringFromDateFixedTime(day)
         if (dbAllPathList.some((filePath) => filePath.indexOf(dayString) !== -1)) dayList.push(dayString)
       }
       dbPathList = dayList
