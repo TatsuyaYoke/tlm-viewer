@@ -38,6 +38,7 @@ type Props = {
 
 export const Graph = (props: Props) => {
   const { graphNumber, graphData, xMax, xMin, xDiv, activate } = props
+  console.log(`Graph No.${graphNumber} Rendering`)
   const graphBgColor = useColorModeValue('#FFFFFF', '#1A202C')
   const graphFontColor = useColorModeValue('#000000', '#FFFFFF')
   const graphGridColor = useColorModeValue('#A0AEC0', '#636363')

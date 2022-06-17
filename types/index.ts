@@ -22,7 +22,7 @@ export type MyIpcChannelType = keyof MyIpcChannelDataType
 
 export type Main = MyIpcChannelDataType & {
   getData: (request: RequestDataType) => Promise<ResponseDataType>
-  getSettings: (topPath: string, pjSettingPath: string) => ApiReturnType<PjSettingWithTlmIdType[]>
+  getSettings: () => ApiReturnType<PjSettingWithTlmIdType[]>
 }
 
 declare global {

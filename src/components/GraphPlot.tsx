@@ -47,6 +47,7 @@ import type {
 } from '@types'
 
 export const GraphPlot = () => {
+  console.log('GraphPlot Rendering...')
   const isStored = useRecoilValue(isStoredState)
   const isChosen = useRecoilValue(isChosenState)
   const isOrbit = useRecoilValue(isOrbitState)
