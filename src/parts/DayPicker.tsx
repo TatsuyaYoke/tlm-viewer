@@ -34,7 +34,14 @@ export const DayPicker = (props: Props) => {
       setEndDate(() => startDate)
     }
     selectDate(startDate, endDate)
-  }, [startDate, endDate])
+  }, [startDate])
+
+  useEffect(() => {
+    if (startDate > endDate) {
+      setStartDate(() => endDate)
+    }
+    selectDate(startDate, endDate)
+  }, [endDate])
 
   return (
     <VStack spacing={3}>
