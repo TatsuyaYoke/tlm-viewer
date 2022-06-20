@@ -28,8 +28,8 @@
     "pack": "npm run build && electron-builder --dir",
     "clean": "rimraf dist main src/out",
     "type-check": "tsc",
-    "lint": "prettier -c . && eslint . --ext js,jsx,ts,tsx",
-    "lint:fix": "prettier -w . && eslint . --ext js,jsx,ts,tsx --fix"
+    "lint": "prettier -c . && eslint . --ext js,jsx,ts,tsx && npm run type-check",
+    "lint:fix": "prettier -w . && eslint . --ext js,jsx,ts,tsx --fix && npm run type-check"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.7",
