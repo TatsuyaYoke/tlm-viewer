@@ -215,19 +215,6 @@ export const Graph = (props: Props) => {
             <FormControl my="10px">
               <Flex alignItems="center">
                 <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
-                  Max
-                </FormLabel>
-                <Input
-                  w="250px"
-                  placeholder="yyyy-MM-dd HH:mm:ss"
-                  defaultValue={axis.x.max}
-                  onChange={(event) => setXaxisMax(event.target.value)}
-                />
-              </Flex>
-            </FormControl>
-            <FormControl my="10px">
-              <Flex alignItems="center">
-                <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
                   Min
                 </FormLabel>
                 <Input
@@ -235,6 +222,19 @@ export const Graph = (props: Props) => {
                   placeholder="yyyy-MM-dd HH:mm:ss"
                   defaultValue={axis.x.min}
                   onChange={(event) => setXaxisMin(event.target.value)}
+                />
+              </Flex>
+            </FormControl>
+            <FormControl my="10px">
+              <Flex alignItems="center">
+                <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
+                  Max
+                </FormLabel>
+                <Input
+                  w="250px"
+                  placeholder="yyyy-MM-dd HH:mm:ss"
+                  defaultValue={axis.x.max}
+                  onChange={(event) => setXaxisMax(event.target.value)}
                 />
               </Flex>
             </FormControl>
@@ -253,9 +253,9 @@ export const Graph = (props: Props) => {
             <FormControl my="10px">
               <Flex alignItems="center">
                 <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
-                  Max
+                  Min
                 </FormLabel>
-                <NumberInput w="250px" defaultValue={axis.y.max} onChange={(_, value) => setYaxisMax(value)}>
+                <NumberInput w="250px" defaultValue={axis.y.min} onChange={(_, value) => setYaxisMin(value)}>
                   <NumberInputField />
                 </NumberInput>
               </Flex>
@@ -263,9 +263,9 @@ export const Graph = (props: Props) => {
             <FormControl my="10px">
               <Flex alignItems="center">
                 <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
-                  Min
+                  Max
                 </FormLabel>
-                <NumberInput w="250px" defaultValue={axis.y.min} onChange={(_, value) => setYaxisMin(value)}>
+                <NumberInput w="250px" defaultValue={axis.y.max} onChange={(_, value) => setYaxisMax(value)}>
                   <NumberInputField />
                 </NumberInput>
               </Flex>

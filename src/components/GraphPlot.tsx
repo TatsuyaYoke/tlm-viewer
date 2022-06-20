@@ -315,19 +315,6 @@ export const GraphPlot = () => {
             <FormControl my="10px">
               <Flex alignItems="center">
                 <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
-                  Max
-                </FormLabel>
-                <Input
-                  w="250px"
-                  placeholder="yyyy-MM-dd HH:mm:ss"
-                  defaultValue={axis.x.max}
-                  onChange={(event) => setXaxisMax(event.target.value)}
-                />
-              </Flex>
-            </FormControl>
-            <FormControl my="10px">
-              <Flex alignItems="center">
-                <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
                   Min
                 </FormLabel>
                 <Input
@@ -335,6 +322,19 @@ export const GraphPlot = () => {
                   placeholder="yyyy-MM-dd HH:mm:ss"
                   defaultValue={axis.x.min}
                   onChange={(event) => setXaxisMin(event.target.value)}
+                />
+              </Flex>
+            </FormControl>
+            <FormControl my="10px">
+              <Flex alignItems="center">
+                <FormLabel fontWeight="normal" m={0} mr="10px" w="40px">
+                  Max
+                </FormLabel>
+                <Input
+                  w="250px"
+                  placeholder="yyyy-MM-dd HH:mm:ss"
+                  defaultValue={axis.x.max}
+                  onChange={(event) => setXaxisMax(event.target.value)}
                 />
               </Flex>
             </FormControl>
