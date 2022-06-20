@@ -13,6 +13,7 @@ const resolveAlias = {
   '@atoms': resolve(__dirname, 'src/atoms'),
   '@functions': resolve(__dirname, 'src/functions'),
   '@hooks': resolve(__dirname, 'src/hooks'),
+  '@constants': resolve(__dirname, 'src/constants'),
   '@types': resolve(__dirname, 'types'),
 }
 

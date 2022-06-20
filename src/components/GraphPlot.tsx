@@ -27,6 +27,7 @@ import { useReadLocalStorage } from 'usehooks-ts'
 
 import { testCaseListState, settingState, dateSettingState } from '@atoms/PlotSettingAtom'
 import { Error } from '@components'
+import { checkDivSetting } from '@functions'
 import { Graph } from '@parts'
 import { dateGraphSchema, nonNullable } from '@types'
 
@@ -228,6 +229,18 @@ export const GraphPlot = () => {
     if (!(xaxisMaxResult.success && xaxisMinResult.success)) {
       toast({
         title: 'X-axis Format (yyyy-MM-dd HH:mm:ss) error',
+        status: 'error',
+        isClosable: true,
+      })
+      return
+    }
+
+    const xaxisMaxNumber = new Date(xaxisMaxResult.data)
+    const xaxisMinNumber = new Date(xaxisMinResult.data)
+    const checkXaxisDivResult = checkDivSetting(xaxisMaxNumber, xaxisMinNumber, xaxisDiv)
+    if (!checkXaxisDivResult.success) {
+      toast({
+        title: `X-axis ${checkXaxisDivResult.error}`,
         status: 'error',
         isClosable: true,
       })

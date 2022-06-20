@@ -23,6 +23,7 @@ import {
 } from '@chakra-ui/react'
 import Plot from 'react-plotly.js'
 
+import { checkDivSetting } from '@functions'
 import { dateGraphSchema, nonNullable, isNotString } from '@types'
 
 import type { GraphDataEachPlotIdType, AxisType } from '@types'
@@ -82,6 +83,28 @@ export const Graph = (props: Props) => {
     if (!(xaxisMaxResult.success && xaxisMinResult.success)) {
       toast({
         title: 'X-axis Format (yyyy-MM-dd HH:mm:ss) error',
+        status: 'error',
+        isClosable: true,
+      })
+      return
+    }
+
+    const checkYaxisDivResult = checkDivSetting(yaxisMax, yaxisMin, yaxisDiv)
+    if (!checkYaxisDivResult.success) {
+      toast({
+        title: `Y-axis ${checkYaxisDivResult.error}`,
+        status: 'error',
+        isClosable: true,
+      })
+      return
+    }
+
+    const xaxisMaxNumber = new Date(xaxisMaxResult.data)
+    const xaxisMinNumber = new Date(xaxisMinResult.data)
+    const checkXaxisDivResult = checkDivSetting(xaxisMaxNumber, xaxisMinNumber, xaxisDiv)
+    if (!checkXaxisDivResult.success) {
+      toast({
+        title: `X-axis ${checkXaxisDivResult.error}`,
         status: 'error',
         isClosable: true,
       })
