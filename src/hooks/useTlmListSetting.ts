@@ -1,16 +1,14 @@
 import { useState } from 'react'
 
-import { useRecoilState } from 'recoil'
+import { useLocalStorage } from 'usehooks-ts'
 
-import { tlmListState } from '@atoms/PlotSettingAtom'
-
-import type { SelectOptionType } from '@types'
+import type { SelectOptionType, TlmListType } from '@types'
 import type { MultiValue } from 'chakra-react-select'
 
 const MAX_OPTION_LENGTH = 2000
 
 export const useTlmListSetting = (options: SelectOptionType[] | undefined, prefixId: string) => {
-  const [tlmList, setTlmList] = useRecoilState(tlmListState)
+  const [tlmList, setTlmList] = useLocalStorage<TlmListType[]>('TlmList', [{ id: 1, tlm: [] }])
   const [countList, setCountList] = useState(1)
   const [filteredOptions, setFilteredOptions] = useState<SelectOptionType[] | undefined>([])
 

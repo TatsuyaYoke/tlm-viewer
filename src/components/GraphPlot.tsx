@@ -25,7 +25,7 @@ import {
 import { useRecoilValue } from 'recoil'
 import { useReadLocalStorage } from 'usehooks-ts'
 
-import { testCaseListState, tlmListState, settingState, dateSettingState } from '@atoms/PlotSettingAtom'
+import { testCaseListState, settingState, dateSettingState } from '@atoms/PlotSettingAtom'
 import { Error } from '@components'
 import { Graph } from '@parts'
 import { dateGraphSchema, nonNullable } from '@types'
@@ -37,15 +37,16 @@ import type {
   AxisType,
   ResponseDataType,
   SelectOptionType,
+  TlmListType,
 } from '@types'
 
 export const GraphPlot = () => {
   console.log('GraphPlot Rendering...')
-  const isStored: boolean = useReadLocalStorage('IsStored') ?? false
-  const isChosen: boolean = useReadLocalStorage('IsChosen') ?? false
-  const isOrbit: boolean = useReadLocalStorage('IsOrbit') ?? false
+  const isStored = useReadLocalStorage<boolean>('IsStored') ?? false
+  const isChosen = useReadLocalStorage<boolean>('IsChosen') ?? false
+  const isOrbit = useReadLocalStorage<boolean>('IsOrbit') ?? false
   const testCaseList = useRecoilValue(testCaseListState)
-  const tlmList = useRecoilValue(tlmListState)
+  const tlmList = useReadLocalStorage<TlmListType[]>('TlmList') ?? [{ id: 1, tlm: [] }]
   const setting = useRecoilValue(settingState)
   const dateSetting = useRecoilValue(dateSettingState)
 
@@ -160,7 +161,7 @@ export const GraphPlot = () => {
         const filteredList = element.tlm.filter((tlm) => {
           if (projectTlmList.indexOf(tlm.value) === -1) {
             setIsWarning(true)
-            setWarningMessages((prev) => [...prev, `TLM list: ${tlm.value} of ${element.id} deleted because not exist`])
+            setWarningMessages((prev) => [...prev, `TLM list: ${tlm.value} deleted because not exist`])
             return false
           }
           return true

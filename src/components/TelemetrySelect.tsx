@@ -37,6 +37,7 @@ export const TelemetrySelect = (props: Props) => {
               isMulti={true}
               selectValue={selectValue}
               filterOption={filterOption}
+              defaultValue={element.tlm}
             />
             <IconButton
               aria-label="delete telemetry list"
