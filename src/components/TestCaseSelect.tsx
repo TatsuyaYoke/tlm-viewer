@@ -1,7 +1,8 @@
 import { VStack } from '@chakra-ui/react'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
+import { useLocalStorage } from 'usehooks-ts'
 
-import { isChosenState, testCaseListState } from '@atoms/PlotSettingAtom'
+import { testCaseListState } from '@atoms/PlotSettingAtom'
 import { MySwitch, MySelect } from '@parts'
 
 import type { SelectOptionType } from '@types'
@@ -13,7 +14,7 @@ type Props = {
 
 export const TestCaseSelect = (props: Props) => {
   const { options } = props
-  const [isChosen, setIsChosen] = useRecoilState(isChosenState)
+  const [isChosen, setIsChosen] = useLocalStorage('IsChosen', false)
   const setTestCaseList = useSetRecoilState(testCaseListState)
 
   const toggleValue = (value: boolean) => {

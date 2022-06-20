@@ -23,16 +23,9 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
+import { useReadLocalStorage } from 'usehooks-ts'
 
-import {
-  isOrbitState,
-  isStoredState,
-  isChosenState,
-  testCaseListState,
-  tlmListState,
-  settingState,
-  dateSettingState,
-} from '@atoms/PlotSettingAtom'
+import { testCaseListState, tlmListState, settingState, dateSettingState } from '@atoms/PlotSettingAtom'
 import { Error } from '@components'
 import { Graph } from '@parts'
 import { dateGraphSchema, nonNullable } from '@types'
@@ -48,9 +41,9 @@ import type {
 
 export const GraphPlot = () => {
   console.log('GraphPlot Rendering...')
-  const isStored = useRecoilValue(isStoredState)
-  const isChosen = useRecoilValue(isChosenState)
-  const isOrbit = useRecoilValue(isOrbitState)
+  const isStored: boolean = useReadLocalStorage('IsStored') ?? false
+  const isChosen: boolean = useReadLocalStorage('IsChosen') ?? false
+  const isOrbit: boolean = useReadLocalStorage('IsOrbit') ?? false
   const testCaseList = useRecoilValue(testCaseListState)
   const tlmList = useRecoilValue(tlmListState)
   const setting = useRecoilValue(settingState)

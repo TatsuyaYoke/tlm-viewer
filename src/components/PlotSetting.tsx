@@ -4,15 +4,9 @@ import type { ComponentProps } from 'react'
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import { VStack, StackDivider, IconButton, useColorMode, useColorModeValue, Button, Flex } from '@chakra-ui/react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useLocalStorage } from 'usehooks-ts'
 
-import {
-  isOrbitState,
-  isStoredState,
-  projectState,
-  settingState,
-  dateSettingState,
-  isChosenState,
-} from '@atoms/PlotSettingAtom'
+import { projectState, settingState, dateSettingState } from '@atoms/PlotSettingAtom'
 import { ProjectSelect, TelemetrySelect, TestCaseSelect, Error } from '@components'
 import { stringToSelectOption } from '@functions'
 import { DayPicker, MySwitch } from '@parts'
@@ -28,9 +22,9 @@ export const PlotSetting = (props: Props) => {
   const { width, flexShrink } = props
   const { colorMode, toggleColorMode } = useColorMode()
   const sidebarBg = useColorModeValue('gray.50', 'gray.700')
-  const [isOrbit, setIsOrbit] = useRecoilState(isOrbitState)
-  const [isStored, setIsStored] = useRecoilState(isStoredState)
-  const setIsChosen = useSetRecoilState(isChosenState)
+  const [isOrbit, setIsOrbit] = useLocalStorage('IsOrbit', false)
+  const [isStored, setIsStored] = useLocalStorage('IsStored', false)
+  const [_, setIsChosen] = useLocalStorage('IsChosen', false)
   const setDate = useSetRecoilState(dateSettingState)
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState(false)

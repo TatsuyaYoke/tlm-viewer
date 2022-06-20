@@ -39,6 +39,7 @@
         "asar",
         "parens",
         "xanchor",
-        "OBCTIME"
+        "OBCTIME",
+        "usehooks"
     ]
 }

@@ -54,6 +54,7 @@
     "react-plotly.js": "^2.5.1",
     "recoil": "^0.7.0",
     "sqlite3": "^5.0.4",
+    "usehooks-ts": "^2.5.4",
     "vite": "^2.8.6",
     "zod": "^3.14.4"
   },
