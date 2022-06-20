@@ -25,6 +25,7 @@ export const PlotSetting = (props: Props) => {
   const [isOrbit, setIsOrbit] = useLocalStorage('IsOrbit', false)
   const [isStored, setIsStored] = useLocalStorage('IsStored', false)
   const [_, setIsChosen] = useLocalStorage('IsChosen', false)
+  const [projectIndex, setProjectIndex] = useLocalStorage('ProjectIndex', 0)
   const setDate = useSetRecoilState(dateSettingState)
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState(false)
@@ -58,10 +59,13 @@ export const PlotSetting = (props: Props) => {
       return
     }
     const settings = response.data
-    let settingIndex = 0
+    let settingIndex = projectIndex
 
     if (settings) {
-      if (project) settingIndex = settings.findIndex((element) => element.pjName === project.value)
+      if (project) {
+        settingIndex = settings.findIndex((element) => element.pjName === project.value)
+        setProjectIndex(settingIndex)
+      }
       const foundSetting = settings[settingIndex]
       if (foundSetting?.tlmId) {
         setSetting(foundSetting)
