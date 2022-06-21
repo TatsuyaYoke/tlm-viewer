@@ -126,10 +126,10 @@ export const GraphPlot = () => {
   const plot = async () => {
     initializeWarningError()
     if (setting) {
-      const { pjName, tlmId: tlmIdList, groundTestPath, orbitDatasetPath, testCase } = setting
+      const { pjName, tlmId: tlmIdList, testCase, ...restSetting } = setting
       if (!tlmIdList) return
 
-      if (isOrbit && !orbitDatasetPath) {
+      if (isOrbit && !restSetting.orbitDatasetPath) {
         setIsError(true)
         setErrorMessage(`Orbit telemetry for ${pjName} not found`)
         return
@@ -204,11 +204,10 @@ export const GraphPlot = () => {
         isOrbit: isOrbit,
         isStored: isStored,
         isChosen: isChosen,
-        groundTestPath: groundTestPath ?? '',
-        orbitDatasetPath: orbitDatasetPath ?? '',
         dateSetting: dateSetting,
         testCase: filteredTestCaseList,
         tlm: requestTlmList,
+        ...restSetting,
       }
 
       const response = await window.Main.getData(request)
