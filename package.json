@@ -6,7 +6,7 @@
   "author": {
     "name": "Yoke"
   },
-  "description": "Starter using Vite 2+ React +Typescript + Electron for fast prototyping.",
+  "description": "Quick Look TLM Viewer and output TLM as CSV",
   "keywords": [
     "vite",
     "react",
