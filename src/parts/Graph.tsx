@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import {
   Box,
@@ -45,6 +45,7 @@ export const Graph = (props: Props) => {
   const graphGridColor = useColorModeValue('#A0AEC0', '#636363')
   const graphLineColor = useColorModeValue('#A0AEC0', '#636363')
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const initialRef = useRef(null)
   const [axis, setAxis] = useState<AxisType>({
     x: {
       max: undefined,
@@ -228,7 +229,7 @@ export const Graph = (props: Props) => {
           />
         )}
       </Box>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} initialFocusRef={initialRef}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Set axis</ModalHeader>
@@ -241,6 +242,7 @@ export const Graph = (props: Props) => {
                   Min
                 </FormLabel>
                 <Input
+                  ref={initialRef}
                   w="250px"
                   placeholder="yyyy-MM-dd HH:mm:ss"
                   defaultValue={axis.x.min}

@@ -41,6 +41,11 @@ export type TlmListType = {
   tlm: MultiValue<SelectOptionType>
 }
 
+export type SavedTlmListType = {
+  tlmListName: SelectOptionType
+  tlm: MultiValue<SelectOptionType>[]
+}
+
 export const pjNameSchema = z.string().regex(/^DSX[0-9]{4}/)
 export const groundTestPathSchema = z.string()
 export const orbitDatasetPathSchema = z.string().regex(/^strix_/)

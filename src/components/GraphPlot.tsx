@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import {
   Box,
@@ -61,6 +61,7 @@ export const GraphPlot = () => {
 
   const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const initialRef = useRef(null)
   const [xaxisMax, setXaxisMax] = useState<string | undefined>(undefined)
   const [xaxisMin, setXaxisMin] = useState<string | undefined>(undefined)
   const [xaxisDiv, setXaxisDiv] = useState<number | undefined>(undefined)
@@ -286,17 +287,17 @@ export const GraphPlot = () => {
             noDisplayWhenSuccess={true}
           />
           <Spacer />
-          <Button colorScheme="teal" onClick={plot} mx="10" flexShrink={0} width="80px">
+          <Button colorScheme="teal" onClick={plot} mx="5" flexShrink={0} width="100px">
             Plot
           </Button>
           {responseTlmData && (
-            <Button colorScheme="teal" onClick={outputCsv} mr="10" flexShrink={0} width="80px">
+            <Button colorScheme="teal" onClick={outputCsv} mr="5" flexShrink={0} width="100px">
               CSV
             </Button>
           )}
           {responseTlmData && (
-            <Button colorScheme="teal" onClick={onOpen} mr="10" flexShrink={0} width="80px">
-              Axis
+            <Button colorScheme="teal" onClick={onOpen} mr="5" flexShrink={0} width="100px">
+              X-Axis Set
             </Button>
           )}
         </Flex>
@@ -318,7 +319,7 @@ export const GraphPlot = () => {
           )}
         </Flex>
       </Box>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} initialFocusRef={initialRef}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Set axis</ModalHeader>
@@ -331,6 +332,7 @@ export const GraphPlot = () => {
                   Min
                 </FormLabel>
                 <Input
+                  ref={initialRef}
                   w="250px"
                   placeholder="yyyy-MM-dd HH:mm:ss"
                   defaultValue={axis.x.min}
