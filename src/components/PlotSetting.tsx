@@ -7,7 +7,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { useLocalStorage } from 'usehooks-ts'
 
 import { projectState, settingState, dateSettingState } from '@atoms/PlotSettingAtom'
-import { ProjectSelect, TelemetrySelect, TestCaseSelect, Error } from '@components'
+import { ProjectSelect, TelemetrySelect, Error } from '@components'
 import { stringToSelectOption } from '@functions'
 import { DayPicker, MySwitch } from '@parts'
 
@@ -134,11 +134,6 @@ export const PlotSetting = (props: Props) => {
         </Flex>
       )}
       {!isError && <DayPicker selectDate={selectDate} />}
-      {!isError && !isOrbit && (
-        <TestCaseSelect
-          options={setting?.testCase ? setting?.testCase?.map((e) => stringToSelectOption(e)) : undefined}
-        />
-      )}
       {!isError && (
         <TelemetrySelect
           options={setting?.tlmId ? Object.keys(setting.tlmId).map((e) => stringToSelectOption(e)) : undefined}
