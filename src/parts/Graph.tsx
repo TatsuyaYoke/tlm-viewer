@@ -22,6 +22,7 @@ import {
   NumberInputField,
 } from '@chakra-ui/react'
 import Plot from 'react-plotly.js'
+import { useWindowSize } from 'usehooks-ts'
 
 import { checkDivSetting } from '@functions'
 import { dateGraphSchema, nonNullable, isNotString } from '@types'
@@ -34,11 +35,14 @@ type Props = {
   xMax: string | undefined
   xMin: string | undefined
   xDiv: number | undefined
+  columnNumber: number
+  graphHeight: number
+  markerSize: number
   activate: boolean
 }
 
 export const Graph = (props: Props) => {
-  const { graphNumber, graphData, xMax, xMin, xDiv, activate } = props
+  const { graphNumber, graphData, xMax, xMin, xDiv, activate, columnNumber, graphHeight, markerSize } = props
   console.log(`Graph No.${graphNumber} Rendering`)
   const graphBgColor = useColorModeValue('#FFFFFF', '#1A202C')
   const graphFontColor = useColorModeValue('#000000', '#FFFFFF')
@@ -68,6 +72,12 @@ export const Graph = (props: Props) => {
   const [yaxisDiv, setYaxisDiv] = useState<number | undefined>(undefined)
 
   const toast = useToast()
+
+  const [graphWidth, setGraphWidth] = useState<number>(680)
+  const { width } = useWindowSize()
+  useEffect(() => {
+    setGraphWidth((width - 600) / columnNumber)
+  }, [width, columnNumber])
 
   const activateAxis = () => {
     if (Number.isNaN(yaxisMax ?? NaN) || Number.isNaN(yaxisMin ?? NaN)) {
@@ -181,10 +191,13 @@ export const Graph = (props: Props) => {
               type: 'scattergl',
               mode: 'markers',
               name: element.tlmName,
+              marker: {
+                size: markerSize,
+              },
             }))}
             layout={{
-              width: 680,
-              height: 550,
+              width: graphWidth,
+              height: graphHeight,
               margin: {
                 l: 50,
                 r: 50,
@@ -221,7 +234,7 @@ export const Graph = (props: Props) => {
               plot_bgcolor: graphBgColor,
               paper_bgcolor: graphBgColor,
               showlegend: true,
-              legend: { orientation: 'h', x: 0, xanchor: 'left', y: -0.25 },
+              legend: { orientation: 'h', x: 0, xanchor: 'left', y: -10000 * graphHeight ** -1.65 },
             }}
             config={{
               responsive: false,

@@ -14,8 +14,11 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
   NumberInput,
   NumberInputField,
+  NumberInputStepper,
   Spacer,
   Spinner,
   Text,
@@ -23,7 +26,7 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
-import { useReadLocalStorage } from 'usehooks-ts'
+import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts'
 
 import { testCaseListState, settingState, dateSettingState } from '@atoms/PlotSettingAtom'
 import { Error } from '@components'
@@ -65,7 +68,7 @@ export const GraphPlot = () => {
   const [xaxisMax, setXaxisMax] = useState<string | undefined>(undefined)
   const [xaxisMin, setXaxisMin] = useState<string | undefined>(undefined)
   const [xaxisDiv, setXaxisDiv] = useState<number | undefined>(undefined)
-  const [xaxisActivate, setXaxisActivate] = useState<boolean>(false)
+  const [activate, setActivate] = useState<boolean>(false)
   const [axis, setAxis] = useState<AxisType>({
     x: {
       max: undefined,
@@ -78,6 +81,15 @@ export const GraphPlot = () => {
       div: undefined,
     },
   })
+
+  const [graphConfig, setGraphConfig] = useLocalStorage('GraphConfig', {
+    columnNumber: 3,
+    graphHeight: 500,
+    markerSize: 3,
+  })
+  const [columnNumber, setColumnNumber] = useState(graphConfig.columnNumber)
+  const [graphHeight, setGraphHeight] = useState(graphConfig.graphHeight)
+  const [markerSize, setMarkerSize] = useState(graphConfig.markerSize)
 
   const setPlot = async (
     response: ResponseDataType,
@@ -223,7 +235,7 @@ export const GraphPlot = () => {
     }
   }
 
-  const activateAxis = () => {
+  const activateSetting = () => {
     const xaxisMaxResult = dateGraphSchema.safeParse(xaxisMax)
     const xaxisMinResult = dateGraphSchema.safeParse(xaxisMin)
     if (!(xaxisMaxResult.success && xaxisMinResult.success)) {
@@ -254,7 +266,12 @@ export const GraphPlot = () => {
       newAxis.x.div = xaxisDiv
       return newAxis
     })
-    setXaxisActivate((prev) => !prev)
+    setGraphConfig({
+      columnNumber: columnNumber,
+      graphHeight: graphHeight,
+      markerSize: markerSize,
+    })
+    setActivate((prev) => !prev)
     onClose()
   }
 
@@ -297,7 +314,7 @@ export const GraphPlot = () => {
           )}
           {responseTlmData && (
             <Button colorScheme="teal" onClick={onOpen} mr="5" flexShrink={0} width="100px">
-              X-Axis Set
+              Graph Set
             </Button>
           )}
         </Flex>
@@ -311,7 +328,10 @@ export const GraphPlot = () => {
                 xMax={axis.x.max}
                 xMin={axis.x.min}
                 xDiv={axis.x.div}
-                activate={xaxisActivate}
+                columnNumber={graphConfig.columnNumber}
+                graphHeight={graphConfig.graphHeight}
+                markerSize={graphConfig.markerSize}
+                activate={activate}
               />
             ))
           ) : (
@@ -322,9 +342,73 @@ export const GraphPlot = () => {
       <Modal isOpen={isOpen} onClose={onClose} initialFocusRef={initialRef}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Set axis</ModalHeader>
+          <ModalHeader>Graph Set</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
+            <FormControl my="10px">
+              <Flex alignItems="center">
+                <FormLabel fontWeight="normal" m={0} mr="10px" w="130px">
+                  Column Number
+                </FormLabel>
+                <NumberInput
+                  w="160px"
+                  defaultValue={graphConfig.columnNumber}
+                  onChange={(_, value) => setColumnNumber(value)}
+                  step={1}
+                  min={1}
+                  max={5}
+                >
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+              </Flex>
+            </FormControl>
+            <FormControl my="10px">
+              <Flex alignItems="center">
+                <FormLabel fontWeight="normal" m={0} mr="10px" w="130px">
+                  Graph height
+                </FormLabel>
+                <NumberInput
+                  w="160px"
+                  defaultValue={graphConfig.graphHeight}
+                  onChange={(_, value) => setGraphHeight(value)}
+                  step={50}
+                  min={300}
+                  max={1200}
+                >
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+                <Text ml="10px">px</Text>
+              </Flex>
+            </FormControl>
+            <FormControl my="10px">
+              <Flex alignItems="center">
+                <FormLabel fontWeight="normal" m={0} mr="10px" w="130px">
+                  Marker size
+                </FormLabel>
+                <NumberInput
+                  w="160px"
+                  defaultValue={graphConfig.markerSize}
+                  onChange={(_, value) => setMarkerSize(value)}
+                  step={1}
+                  min={1}
+                  max={20}
+                >
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+              </Flex>
+            </FormControl>
             <Text fontWeight="bold">X-axis</Text>
             <FormControl my="10px">
               <Flex alignItems="center">
@@ -367,7 +451,7 @@ export const GraphPlot = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="teal" mr={3} onClick={activateAxis}>
+            <Button colorScheme="teal" mr={3} onClick={activateSetting}>
               Activate
             </Button>
             <Button onClick={onClose}>Cancel</Button>
