@@ -307,16 +307,26 @@ export const GraphPlot = () => {
           <Button colorScheme="teal" onClick={plot} mx="5" flexShrink={0} width="100px">
             Plot
           </Button>
-          {responseTlmData && (
-            <Button colorScheme="teal" onClick={outputCsv} mr="5" flexShrink={0} width="100px">
-              CSV
-            </Button>
-          )}
-          {responseTlmData && (
-            <Button colorScheme="teal" onClick={onOpen} mr="5" flexShrink={0} width="100px">
-              Graph Set
-            </Button>
-          )}
+          <Button
+            colorScheme="teal"
+            onClick={outputCsv}
+            mr="5"
+            flexShrink={0}
+            width="100px"
+            isDisabled={responseTlmData === null}
+          >
+            CSV
+          </Button>
+          <Button
+            colorScheme="teal"
+            onClick={onOpen}
+            mr="5"
+            flexShrink={0}
+            width="100px"
+            isDisabled={responseTlmData === null}
+          >
+            Graph Set
+          </Button>
         </Flex>
         <Flex wrap="wrap" mt="20px">
           {!isLoading ? (
