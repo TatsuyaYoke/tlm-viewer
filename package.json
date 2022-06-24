@@ -70,7 +70,7 @@
     "@typescript-eslint/parser": "5.16.0",
     "concurrently": "^7.0.0",
     "electron": "^17.1.2",
-    "electron-builder": "^22.5.1",
+    "electron-builder": "^5.5.0",
     "eslint": "8.11.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-prettier": "8.5.0",
