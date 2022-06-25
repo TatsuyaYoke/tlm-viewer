@@ -4,12 +4,13 @@ import * as fs from 'fs'
 import { join } from 'path'
 
 import * as csv from 'csv'
-import reload from 'electron-reload'
 
 import { convertToCsvData } from './functions'
 
 import type { MyIpcChannelDataType, MyIpcChannelType } from '../types'
 import type { IpcMainInvokeEvent } from 'electron'
+
+const reload = require('electron-reload')
 
 const myIpcMain = {
   handle: <T extends MyIpcChannelType>(
@@ -23,7 +24,7 @@ const myIpcMain = {
 
 if (isDev) {
   reload(__dirname, {
-    electron: join(__dirname, '../../node_modules/electron/dist/electron.exe'),
+    electron: join(__dirname, '../../node_modules/.bin/electron'),
   })
 }
 
